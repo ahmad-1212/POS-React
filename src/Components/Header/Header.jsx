@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Button from "../UI/Button";
 import Modal from "../UI/Modal";
-import Cart from "../../features/cart/Cart";
 import Tables from "../../features/tables/Tables";
 
 const RADIO_OPTION = ["dine in", "take away", "delivery"];
@@ -17,10 +16,10 @@ const Header = () => {
     setSelectedTable(tablenum);
   };
   return (
-    <header className="h-[80px] w-full flex gap-10 items-center sticky top-0 z-10 bg-white border-b-2 px-10">
-      <div className="flex items-center gap-5 hover-effect">
+    <header className="h-[70px] lg:h-[80px] w-full flex gap-3 sm:gap-10 items-center sticky top-0 z-10 bg-white border-b-2 px-4 md:px-10">
+      <div className="flex items-center gap-3 sm:gap-5 hover-effect">
         {RADIO_OPTION.map((opt) => (
-          <div className="flex items-center gap-3" key={opt}>
+          <div className="flex items-center gap-2 sm:gap-3" key={opt}>
             <input
               style={{ accentColor: "orangered" }}
               type="radio"
@@ -32,17 +31,17 @@ const Header = () => {
             />
             <label
               htmlFor={opt}
-              className="font-[700] text-[1.2rem] capitalize"
+              className="font-[700] text-[1rem] md:text-[1.2rem] capitalize"
             >
               {opt}
             </label>
           </div>
         ))}
       </div>
-      <div>
+      <div className="ml-auto lg:ml-10">
         <Modal>
           <Modal.Open>
-            <Button variant="dark" className="ml-10">
+            <Button variant="dark">
               {selectedTable ? selectedTable : "Choose Table"}
             </Button>
           </Modal.Open>

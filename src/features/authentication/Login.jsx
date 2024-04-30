@@ -22,6 +22,7 @@ const Login = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <h1 className="text-center font-[500] text-[2rem] ">Login</h1>
+      {/* Email Input */}
       <Input
         label="Email"
         type="email"
@@ -30,6 +31,7 @@ const Login = () => {
         id="email"
         error={errors?.email?.message}
       />
+      {/* Password Input */}
       <Input
         label="Password"
         required="Please enter you Password!"
@@ -39,6 +41,7 @@ const Login = () => {
         error={errors?.password?.message}
       />
 
+      {/* Login Button */}
       <Button type="submit" variant="dark" className="text-[1.4rem] mt-8">
         Login
       </Button>

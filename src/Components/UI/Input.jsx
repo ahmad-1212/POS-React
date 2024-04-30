@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 const Input = ({
   label,
   id,
@@ -91,6 +93,21 @@ const Input = ({
       />
     </div>
   );
+};
+
+Input.propTypes = {
+  label: PropTypes.string, // Label for the input
+  id: PropTypes.string.isRequired, // ID for the input (required)
+  type: PropTypes.string.isRequired, // Type of input (required)
+  register: PropTypes.func.isRequired, // Function for registering the input (required)
+  required: PropTypes.string, // Whether input is required
+  error: PropTypes.string, // Error message
+  minLength: PropTypes.number, // Minimum length for password input
+  getValues: PropTypes.func, // Function to get form values
+  disabled: PropTypes.bool, // Whether input is disabled
+  placeholder: PropTypes.string, // Placeholder text for the input
+  className: PropTypes.string, // Additional CSS classes for styling
+  textArea: PropTypes.bool, // Whether input is a textarea
 };
 
 export default Input;

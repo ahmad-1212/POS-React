@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 // import LoadingSpinner from "./LoadingSpinner";
+import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 
 const Button = ({
@@ -29,11 +30,12 @@ const Button = ({
 
   const variantType = {
     outlined:
-      "border-[2px] border-primary-300 hover:bg-primary-400 hover:text-white px-4 py-2 rounded-md",
+      "border-[2px] border-primary-300 hover:bg-primary-400 hover:text-white px-4 py-2 rounded-md hover:scale-105 hover:shadow-md",
     underline:
-      "border-b-[2px] border-primary-500 hover:bg-primary-400 hover:text-white px-3 py-2 transition-all rounded-sm",
-    primary: "bg-primary-200 py-2 px-8 rounded-md font-[500] text-[1.2rem]",
-    dark: "bg-gradient-to-br from-primary-300 to-primary-400  text-white py-2 px-4 rounded-md font-[500] text-[1rem] hover:bg-primary-400/90 transition-all",
+      "border-b-[2px] border-primary-500 hover:bg-primary-400 hover:text-white px-3 py-2 transition-all rounded-sm hover:scale-105 hover:shadow-md",
+    primary:
+      "bg-primary-200 py-2 px-8 rounded-md font-[500] text-[1.2rem] hover:scale-105 hover:shadow-md",
+    dark: "bg-gradient-to-br from-primary-300 to-primary-400  text-white py-2 px-4 rounded-md font-[500] text-[1rem] hover:bg-primary-400/90 transition-all hover:scale-105 hover:shadow-md hover:shadow-primary-200",
   };
   if (link)
     return (
@@ -70,6 +72,17 @@ const Button = ({
       {children}
     </button>
   );
+};
+
+Button.propTypes = {
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+  variant: PropTypes.oneOf(["primary", "outlined", "underline", "dark"]),
+  link: PropTypes.bool,
+  to: PropTypes.string,
+  isLoading: PropTypes.bool,
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export default Button;
