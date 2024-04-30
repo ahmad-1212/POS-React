@@ -7,13 +7,14 @@ const MainLayout = ({ children }) => {
   return (
     <div>
       <Header />
-      <Categories />
-      <main className="pl-[28rem] pr-[20rem] max-w-[1500px] mx-auto">
+      <aside className="fixed  inset-0 top-[80px] left-0 w-[28rem] pb-10 overflow-y-auto bg-white hight-screen ">
+        <Categories />
+      </aside>
+      <main className="pl-[28rem] pr-[22rem] max-w-[1500px] mx-auto">
         {children || <Outlet />}
       </main>
-      <aside className="fixed top-[80px] right-0 bg-gray-50 w-[20rem] pb-10 overflow-y-auto">
+      <aside className="fixed top-[80px] bottom-0 right-0 bg-white w-[22rem] pb-10 overflow-y-auto border-l-2 hight-screen overflow-x-hidden">
         <Cart />
-        <div>side bar left</div>
       </aside>
     </div>
   );

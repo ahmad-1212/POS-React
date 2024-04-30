@@ -40,3 +40,11 @@
 .hover-effect:hover :not(:hover) {
   opacity: 0.7;
 }
+
+.hight-screen {
+  min-height: calc(100dvh - 80px);
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
