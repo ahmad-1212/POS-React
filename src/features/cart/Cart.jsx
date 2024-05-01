@@ -1,6 +1,9 @@
 import Button from "../../Components/UI/Button";
 import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
+import { PiArrowLineRightBold } from "react-icons/pi";
+
+
 import { addCartItem } from "./cartSlice";
 import IconButton from "../../Components/UI/IconButton";
 
@@ -13,7 +16,9 @@ const Cart = ({ onSidebarHide }) => {
     <div className="px-4 py-3 h-full overflow-y-auto overflow-x-hidden scrollbar-hidden pb-10">
       <div className="flex-between mb-4">
         <h2 className="font-[700] text-[1.2rem] ">Current Order</h2>
-        <IconButton onClick={onSidebarHide}>&rarr;</IconButton>
+        <IconButton onClick={onSidebarHide}>
+          <PiArrowLineRightBold />
+        </IconButton>
       </div>
       {/* Cart Items */}
       <section>

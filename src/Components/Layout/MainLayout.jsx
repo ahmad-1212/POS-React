@@ -4,14 +4,16 @@ import Header from "../Header/Header";
 import Categories from "../../features/categories/Categories";
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { FaShoppingCart } from "react-icons/fa";
+
 import Button from "../UI/Button";
 import Overlay from "../UI/Overlay";
 import { useScreen } from "../../hooks/useScreen";
 
 const MainLayout = ({ children }) => {
-  const [showCart, setShowCart] = useState(true);
-  const [showButton, setShowButton] = useState(false);
   const { screen } = useScreen();
+  const [showButton, setShowButton] = useState(screen <= 1024);
+  const [showCart, setShowCart] = useState(screen > 1024);
 
   // Handle Show or Hide cart
   const handleShowCart = () => {
@@ -35,12 +37,16 @@ const MainLayout = ({ children }) => {
     <>
       {/* Show Cart Button */}
       <div
-        className={`fixed  right-[50px] top-[100px]  ${
+        className={`fixed  right-[50px] bottom-[100px] z-10  ${
           showButton ? "opacity-1" : "opacity-0 pointer-events-none"
         } transition-all duration-[1s]`}
       >
-        <Button variant="dark" onClick={handleShowCart}>
-          Show Cart
+        <Button
+          variant="dark"
+          className="shadow-lg w-[50px] h-[50px] "
+          onClick={handleShowCart}
+        >
+          <FaShoppingCart />
         </Button>
       </div>
 
