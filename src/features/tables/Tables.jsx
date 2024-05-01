@@ -8,7 +8,7 @@ const Tables = ({ onCloseModal, onSelectTable }) => {
       <h1 className="text-center py-5 text-[1.4rem] font-[700]">Tables</h1>
 
       <ul
-        className="p-10 w-[500px] flex flex-wrap gap-4 justify-center max-h-[70dvh] overflow-y-auto 
+        className="p-2 sm:p-5 md:p-10 flex flex-wrap gap-4 justify-center overflow-y-auto 
             "
       >
         {Array.from({ length: 20 }).map((table, i) => (

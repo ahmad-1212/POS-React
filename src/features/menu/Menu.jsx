@@ -4,8 +4,10 @@ import IconButton from "../../Components/UI/IconButton";
 
 const Menu = () => {
   return (
-    <section className="py-5 px-10 flex flex-col gap-4">
-      <h1 className="text-[2rem] font-[700]">Burgers</h1>
+    <section className="py-5 px-4 sm:px-10 flex flex-col gap-4">
+      <h1 className="text-[2rem] font-[700] uppercase tracking-wide">
+        Burgers
+      </h1>
       <ul className="menu-layout gap-4">
         {Array.from({ length: 20 }).map((item, i) => (
           <li
@@ -14,7 +16,7 @@ const Menu = () => {
           >
             <GiHamburger className="text-[1.8rem] text-primary-500" />
             <div>
-              <div className="flex-between">
+              <div className="flex-between cursor-col-resize">
                 <h2 className="font-[600] text-[1.3rem]">Burger</h2>
                 <IconButton className="text-primary-500">
                   <FaShoppingCart className="rotate-180" />

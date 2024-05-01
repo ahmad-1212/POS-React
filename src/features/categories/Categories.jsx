@@ -1,7 +1,7 @@
 const Categories = () => {
   return (
     <div className="p-5">
-      <h2 className="font-[700] text-[1.2rem] mb-3">Categories</h2>
+      <h2 className="font-[700] text-[1.4rem] mb-3">Categories</h2>
       {/* Categories list */}
       <ul className="grid grid-cols-2 gap-5">
         {Array.from({ length: 10 }).map((cat, i) => (

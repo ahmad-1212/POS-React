@@ -17,7 +17,7 @@ const Header = () => {
   };
   return (
     <header className="h-[70px] lg:h-[80px] w-full flex gap-3 sm:gap-10 items-center sticky top-0 z-10 bg-white border-b-2 px-4 md:px-10">
-      <div className="flex items-center gap-3 sm:gap-5 hover-effect">
+      <div className="hidden sm:flex items-center gap-3 sm:gap-5 hover-effect">
         {RADIO_OPTION.map((opt) => (
           <div className="flex items-center gap-2 sm:gap-3" key={opt}>
             <input
@@ -37,6 +37,13 @@ const Header = () => {
             </label>
           </div>
         ))}
+      </div>
+      <div className="block sm:hidden">
+        <select className=" border rounded-md py-2 px-4 bg-white text-gray-700 leading-tight focus:outline-none focus:border-primary-500 w-[150px]">
+          <option value="dine in">Dine in</option>
+          <option value="take away">Take Away</option>
+          <option value="delivery">Delivery</option>
+        </select>
       </div>
       <div className="ml-auto lg:ml-10">
         <Modal>

@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import { PiArrowLineRightBold } from "react-icons/pi";
 
-
 import { addCartItem } from "./cartSlice";
 import IconButton from "../../Components/UI/IconButton";
 
@@ -13,17 +12,17 @@ const Cart = ({ onSidebarHide }) => {
     dispatch(addCartItem("items::"));
   };
   return (
-    <div className="px-4 py-3 h-full overflow-y-auto overflow-x-hidden scrollbar-hidden pb-10">
+    <div className="px-4 py-3 h-full flex flex-col overflow-x-hidden">
       <div className="flex-between mb-4">
-        <h2 className="font-[700] text-[1.2rem] ">Current Order</h2>
+        <h2 className="font-[700] text-[1.4rem] ">Current Order</h2>
         <IconButton onClick={onSidebarHide}>
           <PiArrowLineRightBold />
         </IconButton>
       </div>
       {/* Cart Items */}
-      <section>
+      <section className="h-full overflow-y-auto  scrollbar-hidden">
         <ul className="flex flex-col gap-3 pb-16">
-          {Array.from({ length: 10 }).map((itm, i) => (
+          {Array.from({ length: 4 }).map((itm, i) => (
             <li
               key={i}
               className="flex items-center bg-gray-100 rounded-md py-2 px-3 gap-3"
@@ -54,12 +53,12 @@ const Cart = ({ onSidebarHide }) => {
         </ul>
       </section>
       {/* Total bill and print or send to kitchen Buttons */}
-      <section className="absolute bottom-0 w-full bg-white border-t-2 py-4 pr-5 z-30 flex flex-col gap-5">
+      <section className="mt-auto p-3 flex flex-col gap-3 border-t-2">
         <div className="flex justify-between font-[700] px-3">
           <span>Total:</span>
           <span>$88.80</span>
         </div>
-        <div className="flex justify-between px-3">
+        <div className="flex justify-between">
           <Button variant="dark" onClick={addItem}>
             Send to Kitchen
           </Button>

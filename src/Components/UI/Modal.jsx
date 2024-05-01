@@ -1,4 +1,10 @@
-import { cloneElement, createContext, useContext, useState } from "react";
+import {
+  cloneElement,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import PropTypes from "prop-types";
 import { createPortal } from "react-dom";
 import Overlay from "./Overlay";
@@ -7,6 +13,11 @@ const ModalContext = createContext();
 
 function Modal({ children }) {
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    if (showModal) document.body.style.overflow = "hidden";
+    if (!showModal) document.body.style.overflow = "visible";
+  }, [showModal]);
 
   return (
     <ModalContext.Provider value={{ showModal, setShowModal }}>
@@ -45,7 +56,7 @@ function Window({ children, closeOnOverlay = false, center = false }) {
       <div
         className={`fixed z-50 bg-white  rounded-md ${
           center ? "top-1/2 -translate-y-1/2 " : "top-0 mt-[5rem] "
-        } left-1/2 -translate-x-1/2 shadow-md`}
+        } left-1/2 -translate-x-1/2 shadow-md max-h-[70dvh] overflow-y-auto overflow-x-hidden w-[90%] sm:w-[500px]`}
       >
         {cloneElement(children, { onCloseModal: () => setShowModal(false) })}
       </div>
