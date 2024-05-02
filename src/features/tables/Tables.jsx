@@ -1,6 +1,11 @@
-const Tables = ({ onCloseModal, onSelectTable }) => {
+import { useSearchParams } from "react-router-dom";
+import PropTypes from "prop-types";
+const Tables = ({ onCloseModal }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const handleClick = (tableNum) => {
-    onSelectTable(`H${tableNum}`);
+    searchParams.set("table", `H${tableNum}`);
+    setSearchParams(searchParams);
     onCloseModal();
   };
   return (
@@ -23,6 +28,10 @@ const Tables = ({ onCloseModal, onSelectTable }) => {
       </ul>
     </>
   );
+};
+
+Tables.propTypes = {
+  onCloseModal: PropTypes.func,
 };
 
 export default Tables;

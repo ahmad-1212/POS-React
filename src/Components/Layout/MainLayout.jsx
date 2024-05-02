@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useSearchParams } from "react-router-dom";
 import Cart from "../../features/cart/Cart";
 import Header from "../Header/Header";
 import Categories from "../../features/categories/Categories";
@@ -9,11 +9,19 @@ import { FaShoppingCart } from "react-icons/fa";
 import Button from "../UI/Button";
 import Overlay from "../UI/Overlay";
 import { useScreen } from "../../hooks/useScreen";
+import { CATEGORIES } from "../../utils/constants";
 
 const MainLayout = ({ children }) => {
   const { screen } = useScreen();
   const [showButton, setShowButton] = useState(screen <= 1024);
   const [showCart, setShowCart] = useState(screen > 1024);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const category = searchParams.get("category");
+
+  const handleCategories = (cat) => {
+    searchParams.set("category", cat.toLowerCase());
+    setSearchParams(searchParams);
+  };
 
   // Handle Show or Hide cart
   const handleShowCart = () => {
@@ -54,7 +62,7 @@ const MainLayout = ({ children }) => {
         {/* Header */}
         <Header showCart={showCart} />
         {/* Left Sidebare with categories */}
-        <aside className="hidden md:block fixed inset-0 top-[80px] left-0 w-[18rem] lg:w-[22rem] pb-10 overflow-y-auto bg-white hight-screen ">
+        <aside className="hidden md:block fixed inset-0 top-[80px] left-0 w-[18rem] lg:w-[22rem] border-r-2  pb-10 overflow-y-auto bg-white hight-screen ">
           <Categories />
         </aside>
         <section className="md:hidden mt-5 px-4 sm:px-10  overflow-hidden">
@@ -63,16 +71,17 @@ const MainLayout = ({ children }) => {
           </h2>
 
           <ul className="flex flex-nowrap gap-3 overflow-x-auto scrollbar-hidden">
-            {Array.from({ length: 12 }).map((cat, i) => (
+            {CATEGORIES.map((cat, i) => (
               <li key={i}>
                 <button
+                  onClick={() => handleCategories(cat.name)}
                   className={`px-7 rounded-md py-2 font-[600]  uppercase tracking-wider  ${
-                    i === 0
+                    cat.name.toLowerCase() === category
                       ? "text-white bg-gradient-to-br from-primary-400 to-primary-400"
                       : "bg-gray-200 shadow-lg"
                   } hover:bg-gradient-to-br from-primary-400 to-primary-400 hover:text-white`}
                 >
-                  burgers
+                  {cat.name}
                 </button>
               </li>
             ))}

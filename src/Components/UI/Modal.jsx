@@ -41,7 +41,13 @@ Open.propTypes = {
 };
 
 // Modal Window to show the main content
-function Window({ children, closeOnOverlay = false, center = false }) {
+function Window({
+  children,
+  closeOnOverlay = false,
+  center = false,
+  zIndex,
+  scrollbar = true,
+}) {
   const { showModal, setShowModal } = useContext(ModalContext);
 
   if (!showModal) return null;
@@ -51,12 +57,14 @@ function Window({ children, closeOnOverlay = false, center = false }) {
       <Overlay
         show={showModal}
         onClick={() => closeOnOverlay && setShowModal(false)}
-        className="z-20"
+        className={zIndex}
       />
       <div
         className={`fixed z-50 bg-white  rounded-md ${
           center ? "top-1/2 -translate-y-1/2 " : "top-0 mt-[5rem] "
-        } left-1/2 -translate-x-1/2 shadow-md max-h-[70dvh] overflow-y-auto overflow-x-hidden w-[90%] sm:w-[500px]`}
+        } left-1/2 -translate-x-1/2 shadow-md max-h-[70dvh] overflow-y-auto ${
+          !scrollbar ? "scrollbar-hidden" : ""
+        } overflow-x-hidden w-[90%] sm:w-[500px]`}
       >
         {cloneElement(children, { onCloseModal: () => setShowModal(false) })}
       </div>
@@ -69,6 +77,8 @@ Window.propTypes = {
   children: PropTypes.node.isRequired,
   closeOnOverlay: PropTypes.bool,
   center: PropTypes.bool,
+  zIndex: PropTypes.string,
+  scrollbar: PropTypes.bool,
 };
 
 Modal.Open = Open;

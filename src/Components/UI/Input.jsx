@@ -13,6 +13,7 @@ const Input = ({
   placeholder,
   className = "",
   textArea = false,
+  showError = false,
   ...props
 }) => {
   const validate = {
@@ -91,6 +92,11 @@ const Input = ({
         } ${className}`}
         {...register(id, validate)}
       />
+      {showError && (
+        <span className="text-[0.8rem] sm:text-[0.8rem] -mt-2 text-red-500">
+          {error && error} &nbsp;
+        </span>
+      )}
     </div>
   );
 };
@@ -108,6 +114,7 @@ Input.propTypes = {
   placeholder: PropTypes.string, // Placeholder text for the input
   className: PropTypes.string, // Additional CSS classes for styling
   textArea: PropTypes.bool, // Whether input is a textarea
+  showError: PropTypes.bool,
 };
 
 export default Input;
