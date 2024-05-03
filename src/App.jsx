@@ -6,6 +6,9 @@ import LoginPage from "./pages/Auth/LoginPage";
 import NotFound from "./pages/NotFound";
 import HomePage from "./pages/HomePage";
 import MainLayout from "./Components/Layout/MainLayout";
+import DashboardPage from "./pages/DashboardPage";
+import DashboardLayout from "./Components/Layout/DashboardLayout";
+import OrdersPage from "./pages/OrdersPage";
 
 const App = () => {
   return (
@@ -16,6 +19,10 @@ const App = () => {
           <Route path="login" element={<LoginPage />} />
           <Route element={<MainLayout />}>
             <Route path="/home" element={<HomePage />} />
+          </Route>
+          <Route element={<DashboardLayout />}>
+            <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="orders" element={<OrdersPage />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />

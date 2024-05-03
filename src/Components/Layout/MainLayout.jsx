@@ -97,7 +97,7 @@ const MainLayout = ({ children }) => {
         </main>
         {/* Right sidebar with cart */}
         <aside
-          className={`fixed w-[22rem] top-0 lg:top-[80px] bottom-0 right-0 bg-white  ${
+          className={`fixed w-[90%] sm:w-[22rem] top-0 lg:top-[80px] bottom-0 right-0 bg-white  ${
             showCart ? "right-0" : "right-[-100dvw] opacity-0"
           } overflow-y-auto lg:border-l-2 hight-screen overflow-x-hidden transition-all duration-[1s] z-20`}
         >

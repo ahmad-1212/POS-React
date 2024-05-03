@@ -6,6 +6,9 @@
   body {
     @apply bg-gray-50 w-full min-h-[100dvh] overflow-x-hidden overflow-y-auto;
   }
+  ::selection {
+    @apply bg-primary-500 text-white;
+  }
 }
 
 @layer utilities {
@@ -47,4 +50,10 @@
 .menu-layout {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important; /*Chrome, Safari */
+    print-color-adjust: exact !important; /*Firefox*/
+  }
 }

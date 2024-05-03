@@ -21,12 +21,12 @@ const UserDeliveyDetailForm = ({ onCloseModal }) => {
           <HiX />
         </IconButton>
       </div>
-      <h1 className="p-10 pb-0 capitalize text-primary-500 text-[1.4rem] mt-3 font-[600]">
+      <h1 className="p-6 sm:p-10 pb-0 capitalize text-primary-500 text-[1.4rem] mt-3 font-[600]">
         Please fill out all the fields!
       </h1>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="p-10 flex flex-col gap-4"
+        className="p-6 sm:p-10 flex flex-col gap-2 sm:gap-4"
       >
         <Input
           register={register}

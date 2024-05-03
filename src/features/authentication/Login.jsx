@@ -17,7 +17,7 @@ const Login = () => {
 
   return (
     <form
-      className="w-[500px] bg-gray-50 px-12 py-16 rounded-md shadow-md flex flex-col gap-6"
+      className="w-[90%] sm:w-[500px] bg-gray-50 px-8 sm:px-12 py-8 sm:py-16 rounded-md shadow-md flex flex-col gap-6"
       onSubmit={handleSubmit(onSubmit)}
     >
       <h1 className="text-center font-[500] text-[2rem] ">Login</h1>
@@ -41,7 +41,11 @@ const Login = () => {
       />
 
       {/* Login Button */}
-      <Button type="submit" variant="dark" className="text-[1.4rem] mt-8">
+      <Button
+        type="submit"
+        variant="dark"
+        className="text-[1.4rem] mt-6 sm:mt-8"
+      >
         Login
       </Button>
       <div className="text-center text-[0.9rem] ">
