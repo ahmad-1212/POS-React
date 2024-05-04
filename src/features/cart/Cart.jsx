@@ -52,10 +52,15 @@ const Cart = ({ onSidebarHide }) => {
             <Button variant="dark">Print Invoice</Button>
           ) : (
             <Modal>
-              <Modal.Open>
+              <Modal.Open id="invoice">
                 <Button variant="dark">Print Invoice</Button>
               </Modal.Open>
-              <Modal.Window zIndex="z-50" closeOnOverlay scrollbar={false}>
+              <Modal.Window
+                id="invoice"
+                zIndex="z-50"
+                closeOnOverlay
+                scrollbar={false}
+              >
                 <UserDeliveyDetailForm />
               </Modal.Window>
             </Modal>

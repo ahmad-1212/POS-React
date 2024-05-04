@@ -60,7 +60,7 @@ const Button = ({
     >
       {isRippling ? (
         <span
-          className="ripple"
+          className="ripple bg-white/30"
           style={{
             left: coords.x,
             top: coords.y,

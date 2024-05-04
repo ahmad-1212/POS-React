@@ -1,6 +1,9 @@
 import { RxDashboard } from "react-icons/rx";
 import { FiCheckSquare } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
+import PropTypes from "prop-types";
+import { RxLayers } from "react-icons/rx";
+import { LuClipboardList } from "react-icons/lu";
 
 const LINKS = [
   {
@@ -13,11 +16,25 @@ const LINKS = [
     icon: <FiCheckSquare />,
     name: "orders",
   },
+  {
+    link: "/categories",
+    icon: <RxLayers />,
+    name: "categories",
+  },
+  {
+    link: "/products",
+    icon: <LuClipboardList />,
+    name: "porducts",
+  },
 ];
 
-const DashboardNav = () => {
+const DashboardNav = ({ collapseSidebar }) => {
   return (
-    <div className="flex flex-col pt-14 p-10 w-[18rem]">
+    <div
+      className={`flex flex-col pt-14 p-10 ${
+        collapseSidebar ? "pl-5" : ""
+      } w-[18rem] transition-all`}
+    >
       <nav>
         <ul className="flex flex-col gap-3">
           {LINKS.map((link) => (
@@ -39,6 +56,10 @@ const DashboardNav = () => {
       </nav>
     </div>
   );
+};
+
+DashboardNav.propTypes = {
+  collapseSidebar: PropTypes.bool,
 };
 
 export default DashboardNav;

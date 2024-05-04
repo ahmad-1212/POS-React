@@ -16,7 +16,7 @@ const DashboardLayout = ({ children }) => {
       <div
         onClick={() => setCollapseSidebar((prev) => !prev)}
         className={`fixed  -translate-x-1/2 z-20 text-[2rem] ${
-          collapseSidebar ? " -translate-x-1/2 left-[6rem]" : "left-[18rem]"
+          collapseSidebar ? " -translate-x-1/2 left-[4.7rem]" : "left-[18rem]"
         } transition-all duration-500 bg-transparent w-[2.8rem] h-[2.8rem] flex-center border-2 border-primary-200 cursor-pointer rounded-full text-primary-500`}
       >
         {collapseSidebar ? (
@@ -27,14 +27,14 @@ const DashboardLayout = ({ children }) => {
       </div>
       <aside
         className={`${
-          collapseSidebar ? "w-[6rem]" : "w-[18rem]"
+          collapseSidebar ? "w-[4.7rem]" : "w-[18rem]"
         } h-[100dvh] fixed top-0 left-0 bg-white border-r-2 transition-all duration-500 overflow-x-hidden`}
       >
         <DashboardNav collapseSidebar={collapseSidebar} />
       </aside>
       <main
         className={`${
-          collapseSidebar ? "pl-[6rem]" : "pl-[18rem]"
+          collapseSidebar ? "pl-[4.7rem]" : "pl-[18rem]"
         } h-screen w-full transition-all duration-500`}
       >
         <header className=" bg-white px-10 flex-end h-[70px] border-b-2">

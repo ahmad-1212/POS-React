@@ -12,15 +12,18 @@ import Overlay from "./Overlay";
 const ModalContext = createContext();
 
 function Modal({ children }) {
-  const [showModal, setShowModal] = useState(false);
+  const [openId, setOpenId] = useState("");
+
+  const open = (id) => setOpenId(id);
+  const close = () => setOpenId("");
 
   useEffect(() => {
-    if (showModal) document.body.style.overflow = "hidden";
-    if (!showModal) document.body.style.overflow = "visible";
-  }, [showModal]);
+    if (openId) document.body.style.overflow = "hidden";
+    if (!openId) document.body.style.overflow = "visible";
+  }, [openId]);
 
   return (
-    <ModalContext.Provider value={{ showModal, setShowModal }}>
+    <ModalContext.Provider value={{ openId, open, close }}>
       {children}
     </ModalContext.Provider>
   );
@@ -31,13 +34,17 @@ Modal.propTypes = {
 };
 
 // Modal Button to open the Modal
-function Open({ children }) {
-  const { setShowModal } = useContext(ModalContext);
-  return cloneElement(children, { onClick: () => setShowModal(true) });
+function Open({ children, id }) {
+  const { open } = useContext(ModalContext);
+  const handleClick = () => {
+    open(id);
+  };
+  return cloneElement(children, { onClick: handleClick });
 }
 
 Open.propTypes = {
   children: PropTypes.node.isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 // Modal Window to show the main content
@@ -47,16 +54,17 @@ function Window({
   center = false,
   zIndex,
   scrollbar = true,
+  id,
 }) {
-  const { showModal, setShowModal } = useContext(ModalContext);
+  const { openId, close } = useContext(ModalContext);
 
-  if (!showModal) return null;
+  if (id !== openId) return null;
 
   return createPortal(
     <>
       <Overlay
-        show={showModal}
-        onClick={() => closeOnOverlay && setShowModal(false)}
+        show={id === openId}
+        onClick={() => closeOnOverlay && close()}
         className={zIndex}
       />
       <div
@@ -66,7 +74,7 @@ function Window({
           !scrollbar ? "scrollbar-hidden" : ""
         } overflow-x-hidden w-[90%] sm:w-[500px]`}
       >
-        {cloneElement(children, { onCloseModal: () => setShowModal(false) })}
+        {cloneElement(children, { onCloseModal: close })}
       </div>
     </>,
     document.getElementById("overlay")
@@ -79,6 +87,7 @@ Window.propTypes = {
   center: PropTypes.bool,
   zIndex: PropTypes.string,
   scrollbar: PropTypes.bool,
+  id: PropTypes.string.isRequired,
 };
 
 Modal.Open = Open;

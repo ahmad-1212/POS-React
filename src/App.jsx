@@ -9,6 +9,8 @@ import MainLayout from "./Components/Layout/MainLayout";
 import DashboardPage from "./pages/DashboardPage";
 import DashboardLayout from "./Components/Layout/DashboardLayout";
 import OrdersPage from "./pages/OrdersPage";
+import ProductsPage from "./pages/ProductsPage";
+import CategoriesPage from "./pages/CategoriesPage";
 
 const App = () => {
   return (
@@ -23,6 +25,8 @@ const App = () => {
           <Route element={<DashboardLayout />}>
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="orders" element={<OrdersPage />} />
+            <Route path="categories" element={<CategoriesPage />} />
+            <Route path="products" element={<ProductsPage />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />

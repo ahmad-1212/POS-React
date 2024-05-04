@@ -44,7 +44,7 @@ const Menu = () => {
         </>
       )}
 
-      {type !== "dine in" && category && (
+      {type !== "dine in" && type && category && (
         <>
           <h1 className="text-[2rem] font-[700] uppercase tracking-wide">
             {category}

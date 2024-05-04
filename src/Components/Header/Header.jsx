@@ -110,46 +110,45 @@ const Header = () => {
       {type === "dine in" && (
         <div className="ml-auto lg:ml-10">
           <Modal>
-            <Modal.Open>
+            <Modal.Open id="chooseTable">
               <Button variant="dark">{table ? table : "Choose Table"}</Button>
             </Modal.Open>
-            <Modal.Window closeOnOverlay={true} zIndex="z-50">
+            <Modal.Window id="chooseTable" closeOnOverlay={true} zIndex="z-50">
               <Tables />
             </Modal.Window>
           </Modal>
         </div>
       )}
-      {type !== "dine in" && type && (
-        <div className="ml-auto">
-          <Modal>
-            <Modal.Open>
-              <Button variant="dark">Active Orders</Button>
-            </Modal.Open>
-            <Modal.Window zIndex="z-50" closeOnOverlay>
-              <div className="p-10">
-                <h1 className="text-center text-[1.5rem] font-[600] mb-4">
-                  Active Orders
-                </h1>
-                <ul className="grid grid-cols-2 justify-center gap-y-6 gap-x-4 flex-wrap">
-                  {ORDERS.map((ord) => (
-                    <li key={ord.name} className="flex gap-3">
-                      <div className="w-[50px] h-[50px] flex-center bg-red-400 text-white text-[1.2rem] rounded-lg">
-                        H1
+
+      <div className="ml-auto">
+        <Modal>
+          <Modal.Open>
+            <Button variant="dark">Active Orders</Button>
+          </Modal.Open>
+          <Modal.Window zIndex="z-50" closeOnOverlay>
+            <div className="p-10">
+              <h1 className="text-center text-[1.5rem] font-[600] mb-4">
+                Active Orders
+              </h1>
+              <ul className="grid grid-cols-2 justify-center gap-y-6 gap-x-4 flex-wrap">
+                {ORDERS.map((ord) => (
+                  <li key={ord.name} className="flex gap-3">
+                    <div className="w-[50px] h-[50px] flex-center bg-red-400 text-white text-[1.2rem] rounded-lg">
+                      H1
+                    </div>
+                    <div>
+                      <h3 className="capitalize font-[600]">{ord.name}</h3>
+                      <div className="font-[500] text-[0.9rem] text-gray-400">
+                        {ord.items} items
                       </div>
-                      <div>
-                        <h3 className="capitalize font-[600]">{ord.name}</h3>
-                        <div className="font-[500] text-[0.9rem] text-gray-400">
-                          {ord.items} items
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Modal.Window>
-          </Modal>
-        </div>
-      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Modal.Window>
+        </Modal>
+      </div>
     </header>
   );
 };
