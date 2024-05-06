@@ -2,7 +2,6 @@ import { MdDeleteForever } from "react-icons/md";
 import PropTypes, { object } from "prop-types";
 import IconButton from "../../Components/UI/IconButton";
 import ConfirmDelete from "../../Components/UI/ConfirmDelete";
-import ProductForm from "./ProductForm";
 import { ImPen } from "react-icons/im";
 import Modal from "../../Components/UI/Modal";
 import { useNavigate } from "react-router-dom";
@@ -29,13 +28,15 @@ const ProductsTable = ({ products }) => {
               className={`${i % 2 !== 0 ? "bg-primary-100" : "bg-white"}`}
             >
               <Modal>
-                <td className="px-3 py-2 font-[600]">Burger</td>
-                <td className="px-3 py-2">Cheesy Burger</td>
-                <td className="px-3 py-2 font-[600]">$17.99</td>
+                <td className="px-3 py-2 font-[600] capitalize">
+                  {prod.category}
+                </td>
+                <td className="px-3 py-2">{prod.name}</td>
+                <td className="px-3 py-2 font-[600]">${prod.price}</td>
                 {/* Edit Button */}
                 <td className="px-3 py-2 w-[10%]">
                   <IconButton
-                    onClick={() => navigate(`edit/12412`)}
+                    onClick={() => navigate(`edit/${prod.id}`)}
                     className={`text-primary-500 text-[1.3rem] ${
                       i % 2 !== 0 ? "hover:bg-primary-200" : ""
                     }`}

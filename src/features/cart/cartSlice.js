@@ -11,11 +11,9 @@ const cartSlice = createSlice({
   reducers: {
     // Add Item to cart
     addCartItem(state, action) {
-      const item = state.items.find(
-        (item) => item.name === action.payload.name
-      );
+      console.log(action.payload);
+      const item = state.items.find((item) => item.id === action.payload.id);
       if (item) {
-        action.payload = item.name;
         cartSlice.caseReducers.increaseItemQuantity(state, action);
       } else {
         state.items.push({ ...action.payload, quantity: 1 });
@@ -24,13 +22,13 @@ const cartSlice = createSlice({
     },
     // Increase item quantity in cart
     increaseItemQuantity(state, action) {
-      const item = state.items.find((itm) => itm.name === action.payload);
+      const item = state.items.find((itm) => itm.id === action.payload.id);
       item.quantity++;
       state.totalPrice += item.price;
     },
     // Decrease item quantity in cart
     decreaseItemQuantity(state, action) {
-      const item = state.items.find((itm) => itm.name === action.payload);
+      const item = state.items.find((itm) => itm.id === action.payload.id);
       if (item.quantity === 1) {
         state.totalPrice -= item.price;
         return cartSlice.caseReducers.deleteItem(state, action);
@@ -41,7 +39,7 @@ const cartSlice = createSlice({
     },
     // Delete Item from the cart
     deleteItem(state, action) {
-      state.items = state.items.filter((item) => item.name !== action.payload);
+      state.items = state.items.filter((item) => item.id !== action.payload.id);
     },
     // Clear the cart
     clearCart(state, action) {},

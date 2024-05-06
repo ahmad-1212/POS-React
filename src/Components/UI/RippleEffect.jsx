@@ -18,7 +18,7 @@ const RippleEffect = ({ children, onClick }) => {
 
   return (
     <div
-      className="relative overflow-hidden"
+      className="relative overflow-hidden w-full h-full"
       onClick={(e) => {
         const rect = e.target.getBoundingClientRect();
         setCoords({ x: e.clientX - rect.left, y: e.clientY - rect.top });
@@ -27,7 +27,7 @@ const RippleEffect = ({ children, onClick }) => {
     >
       {isRippling ? (
         <span
-          className="ripple bg-primary-500/10"
+          className="ripple bg-primary-500/10 h-full w-full"
           style={{
             left: coords.x,
             top: coords.y,

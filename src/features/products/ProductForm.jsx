@@ -6,6 +6,7 @@ import { useState } from "react";
 import { HiX } from "react-icons/hi";
 
 const ProductForm = ({ edit, product }) => {
+  console.log(product);
   const {
     register,
     formState: { errors },

@@ -1,12 +1,16 @@
 import { useSearchParams } from "react-router-dom";
 
 import MenuItem from "./MenuItem";
+import { categories } from "../../Data/data";
 
 const Menu = () => {
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
   const type = searchParams.get("type");
   const table = searchParams.get("table");
+
+  const items = categories[category];
+  console.log(category, items);
 
   return (
     <section className="py-5 px-4 sm:px-10 flex flex-col gap-4">
@@ -37,7 +41,7 @@ const Menu = () => {
             {category}
           </h1>
           <ul className="menu-layout gap-4">
-            {Array.from({ length: 20 }).map((item, i) => (
+            {items.map((item, i) => (
               <MenuItem item={item} key={i} category={category} />
             ))}
           </ul>
@@ -50,7 +54,7 @@ const Menu = () => {
             {category}
           </h1>
           <ul className="menu-layout gap-4">
-            {Array.from({ length: 20 }).map((item, i) => (
+            {items.map((item, i) => (
               <MenuItem item={item} key={i} category={category} />
             ))}
           </ul>

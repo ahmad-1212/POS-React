@@ -3,8 +3,27 @@ import { MdOutlineAddCircleOutline } from "react-icons/md";
 import Button from "../../Components/UI/Button";
 
 import ProductsTable from "./ProductsTable";
+import { allProducts } from "../../Data/data";
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const Products = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [selectValue, setSelectValue] = useState(searchParams.get("cat"));
+
+  let products;
+  if (selectValue) {
+    products = allProducts.filter((prod) => prod.category === selectValue);
+  }
+  if (selectValue === "all" || !selectValue) {
+    products = allProducts;
+  }
+  const handleSelect = (e) => {
+    searchParams.set("cat", e.target.value);
+    setSearchParams(searchParams);
+    setSelectValue(e.target.value);
+  };
+
   return (
     <section className="py-10 flex flex-col gap-8">
       <div className="flex items-center">
@@ -28,7 +47,24 @@ const Products = () => {
           <span>Add New</span>
         </Button>
       </div>
-      <ProductsTable products={Array.from({ length: 10, name: "burger" })} />
+      <div className="flex justify-end">
+        <select
+          className="border-primary-200 px-5 py-2 rounded-md cursor-pointer border-2 outline-none bg-transparent font-[600] text-primary-500 "
+          onChange={handleSelect}
+          value={selectValue}
+        >
+          <option default value="all">
+            All
+          </option>
+          <option value="burger">Burgers</option>
+          <option value="sandwich">Sandwiches</option>
+          <option value="salad">Salads</option>
+          <option value="dessert">Dessert</option>
+          <option value="pizza">Pizza</option>
+          <option value="fries">Fries</option>
+        </select>
+      </div>
+      <ProductsTable products={products} />
     </section>
   );
 };

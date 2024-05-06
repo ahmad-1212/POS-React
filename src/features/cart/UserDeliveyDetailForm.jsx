@@ -21,7 +21,7 @@ const UserDeliveyDetailForm = ({ onCloseModal }) => {
           <HiX />
         </IconButton>
       </div>
-      <h1 className="p-6 sm:p-10 pb-0 capitalize text-primary-500 text-[1.4rem] mt-3 font-[600]">
+      <h1 className="p-6 sm:p-10 sm:pb-0 pb-0 capitalize text-primary-500 text-[1.4rem] mt-3 font-[600]">
         Please fill out all the fields!
       </h1>
       <form
