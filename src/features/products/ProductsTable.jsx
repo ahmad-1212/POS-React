@@ -5,8 +5,10 @@ import ConfirmDelete from "../../Components/UI/ConfirmDelete";
 import ProductForm from "./ProductForm";
 import { ImPen } from "react-icons/im";
 import Modal from "../../Components/UI/Modal";
+import { useNavigate } from "react-router-dom";
 
 const ProductsTable = ({ products }) => {
+  const navigate = useNavigate();
   console.log(products);
   return (
     <div className="w-full">
@@ -33,8 +35,7 @@ const ProductsTable = ({ products }) => {
                 {/* Edit Button */}
                 <td className="px-3 py-2 w-[10%]">
                   <IconButton
-                    link
-                    to={`edit/2342`}
+                    onClick={() => navigate(`edit/12412`)}
                     className={`text-primary-500 text-[1.3rem] ${
                       i % 2 !== 0 ? "hover:bg-primary-200" : ""
                     }`}
