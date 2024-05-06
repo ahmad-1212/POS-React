@@ -11,6 +11,8 @@ import DashboardLayout from "./Components/Layout/DashboardLayout";
 import OrdersPage from "./pages/OrdersPage";
 import ProductsPage from "./pages/ProductsPage";
 import CategoriesPage from "./pages/CategoriesPage";
+import AddProductPage from "./pages/AddProductPage";
+import EditProductPage from "./pages/EditProductPage";
 
 const App = () => {
   return (
@@ -27,6 +29,11 @@ const App = () => {
             <Route path="orders" element={<OrdersPage />} />
             <Route path="categories" element={<CategoriesPage />} />
             <Route path="products" element={<ProductsPage />} />
+            <Route path="products/add-product" element={<AddProductPage />} />
+            <Route
+              path="products/edit/:productId"
+              element={<EditProductPage />}
+            />
           </Route>
 
           <Route path="*" element={<NotFound />} />

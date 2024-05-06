@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Input from "../../Components/UI/Input";
 import { useForm } from "react-hook-form";
 import Button from "../../Components/UI/Button";
+import { useState } from "react";
 
 const CategoryForm = ({ onCloseModal, edit = false, category }) => {
   const {
@@ -10,10 +11,20 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
     formState: { errors },
     handleSubmit,
   } = useForm({ defaultValues: edit ? { categoryName: category.name } : {} });
+  const [imgUrl, setImgUrl] = useState(edit && category?.image);
 
   const onSubmit = (data) => {
     console.log(data);
   };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+
+    setImgUrl(url);
+  };
+  console.log(imgUrl);
 
   return (
     <div>
@@ -34,7 +45,7 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
           error={errors?.categoryName?.message}
           showError
         />
-        {edit && !category.image && (
+        {!imgUrl && (
           <label
             htmlFor="image"
             className="w-[170px] h-[170px] border-2 flex-center cursor-pointer text-gray-400 font-[600] hover:bg-gray-100"
@@ -42,10 +53,27 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
             + Add Image
           </label>
         )}
-        <input type="file" accept="image/*" id="image" hidden />
-        {edit && category.image && (
+        <input
+          type="file"
+          accept="image/*"
+          id="image"
+          hidden
+          onChange={handleImageChange}
+        />
+        {imgUrl && (
           <div className="w-[170px] h-[170px] hover:bg-gray-100 overflow-hidden">
-            <img src={category.image} className="w-full h-full object-cover" />
+            <img src={imgUrl} className="w-full h-full object-cover" />
+          </div>
+        )}
+
+        {imgUrl && (
+          <div className="flex">
+            <label
+              htmlFor="image"
+              className="px-5 py-2 bg-primary-500 rounded-md cursor-pointer hover:scale-105 transition-all  text-white"
+            >
+              Change Image
+            </label>
           </div>
         )}
 

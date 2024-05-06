@@ -32,30 +32,15 @@ const ProductsTable = ({ products }) => {
                 <td className="px-3 py-2 font-[600]">$17.99</td>
                 {/* Edit Button */}
                 <td className="px-3 py-2 w-[10%]">
-                  <Modal.Open id="edit">
-                    <IconButton
-                      className={`text-primary-500 text-[1.3rem] ${
-                        i % 2 !== 0 ? "hover:bg-primary-200" : ""
-                      }`}
-                    >
-                      <ImPen />
-                    </IconButton>
-                  </Modal.Open>
-                  <Modal.Window
-                    id="edit"
-                    closeOnOverlay
-                    zIndex="z-50"
-                    scrollbar={false}
+                  <IconButton
+                    link
+                    to={`edit/2342`}
+                    className={`text-primary-500 text-[1.3rem] ${
+                      i % 2 !== 0 ? "hover:bg-primary-200" : ""
+                    }`}
                   >
-                    <ProductForm
-                      edit
-                      product={{
-                        name: "Chessy Burger",
-                        price: 17.99,
-                        category: "burger",
-                      }}
-                    />
-                  </Modal.Window>
+                    <ImPen />
+                  </IconButton>
                 </td>
                 {/* Delete Button */}
                 <td className="px-3 py-2 w-[10%]">
@@ -67,7 +52,7 @@ const ProductsTable = ({ products }) => {
                   <Modal.Window id="delete" center closeOnOverlay zIndex="z-50">
                     <ConfirmDelete
                       onConfirm={() => {}}
-                      message="Are you sure you want to delete this category?"
+                      message="Are you sure you want to delete this Product?"
                     />
                   </Modal.Window>
                 </td>

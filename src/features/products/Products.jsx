@@ -1,8 +1,7 @@
 import { IoSearchOutline } from "react-icons/io5";
 import { MdOutlineAddCircleOutline } from "react-icons/md";
 import Button from "../../Components/UI/Button";
-import Modal from "../../Components/UI/Modal";
-import ProductForm from "./ProductForm";
+
 import ProductsTable from "./ProductsTable";
 
 const Products = () => {
@@ -18,22 +17,16 @@ const Products = () => {
       </div>
       <div className="flex-between border-b-2 border-primary-200/30 pb-5">
         <h1 className="text-[1.5rem] font-[600]">Products</h1>
-        <Modal>
-          <Modal.Open id="addCategory">
-            <Button variant="dark" className="flex items-center gap-3">
-              <MdOutlineAddCircleOutline className="text-[1.3rem]" />
-              <span>Add New</span>
-            </Button>
-          </Modal.Open>
-          <Modal.Window
-            id="addCategory"
-            closeOnOverlay
-            scrollbar={false}
-            zIndex="z-50"
-          >
-            <ProductForm edit={false} />
-          </Modal.Window>
-        </Modal>
+
+        <Button
+          variant="dark"
+          link
+          to="add-product"
+          className="flex items-center gap-3"
+        >
+          <MdOutlineAddCircleOutline className="text-[1.3rem]" />
+          <span>Add New</span>
+        </Button>
       </div>
       <ProductsTable products={Array.from({ length: 10, name: "burger" })} />
     </section>

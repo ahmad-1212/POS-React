@@ -4,8 +4,14 @@ import { NavLink } from "react-router-dom";
 import PropTypes from "prop-types";
 import { RxLayers } from "react-icons/rx";
 import { LuClipboardList } from "react-icons/lu";
+import { GoHome } from "react-icons/go";
 
 const LINKS = [
+  {
+    link: "/home",
+    icon: <GoHome />,
+    name: "home",
+  },
   {
     link: "/dashboard",
     icon: <RxDashboard />,
