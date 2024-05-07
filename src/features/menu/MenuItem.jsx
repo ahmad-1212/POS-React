@@ -36,6 +36,7 @@ const MenuItem = ({ item, category }) => {
           <div className="flex justify-end">
             <img
               src={img}
+              loading="lazy"
               className="w-[4rem] h-[4rem] rounded-full object-cover border-[3px] border-primary-500/40"
             />
           </div>

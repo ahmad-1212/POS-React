@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { RxLayers } from "react-icons/rx";
 import { LuClipboardList } from "react-icons/lu";
 import { GoHome } from "react-icons/go";
+import { IoSettingsOutline } from "react-icons/io5";
 
 const LINKS = [
   {
@@ -32,9 +33,14 @@ const LINKS = [
     icon: <LuClipboardList />,
     name: "porducts",
   },
+  {
+    link: "/settings",
+    icon: <IoSettingsOutline />,
+    name: "settings",
+  },
 ];
 
-const DashboardNav = ({ collapseSidebar }) => {
+const DashboardNav = ({ collapseSidebar, onClick }) => {
   return (
     <div
       className={`flex flex-col pt-14 p-10 ${
@@ -46,6 +52,7 @@ const DashboardNav = ({ collapseSidebar }) => {
           {LINKS.map((link) => (
             <li key={link.name}>
               <NavLink
+                onClick={() => onClick?.()}
                 to={link.link}
                 className={({ isActive }) =>
                   isActive
@@ -66,6 +73,7 @@ const DashboardNav = ({ collapseSidebar }) => {
 
 DashboardNav.propTypes = {
   collapseSidebar: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export default DashboardNav;

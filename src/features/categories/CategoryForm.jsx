@@ -24,7 +24,6 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
 
     setImgUrl(url);
   };
-  console.log(imgUrl);
 
   return (
     <div>

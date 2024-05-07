@@ -7,38 +7,80 @@ import {
 
 import DashboardNav from "../Nav/DashboardNav";
 import { useState } from "react";
+import { IoMenu } from "react-icons/io5";
+
 import Menu from "../UI/Menu";
+import { useScreen } from "../../hooks/useScreen";
+import Overlay from "../UI/Overlay";
+import { HiX } from "react-icons/hi";
+import IconButton from "../UI/IconButton";
 
 const DashboardLayout = ({ children }) => {
-  const [collapseSidebar, setCollapseSidebar] = useState(false);
+  const { screen } = useScreen();
+  const [collapseSidebar, setCollapseSidebar] = useState(screen < 768);
+  const [showSidebar, setShowSidebar] = useState(false);
   return (
     <>
-      <div
-        onClick={() => setCollapseSidebar((prev) => !prev)}
-        className={`fixed  -translate-x-1/2 z-20 text-[2rem] ${
-          collapseSidebar ? " -translate-x-1/2 left-[4.7rem]" : "left-[18rem]"
-        } transition-all duration-500 bg-transparent w-[2.8rem] h-[2.8rem] flex-center border-2 border-primary-200 cursor-pointer rounded-full text-primary-500`}
-      >
-        {collapseSidebar ? (
-          <MdKeyboardDoubleArrowRight />
-        ) : (
-          <MdKeyboardDoubleArrowLeft />
-        )}
-      </div>
-      <aside
-        className={`${
-          collapseSidebar ? "w-[4.7rem]" : "w-[18rem]"
-        } h-[100dvh] fixed top-0 left-0 bg-white border-r-2 transition-all duration-500 overflow-x-hidden`}
-      >
-        <DashboardNav collapseSidebar={collapseSidebar} />
-      </aside>
+      {screen >= 768 && (
+        <div
+          onClick={() => setCollapseSidebar((prev) => !prev)}
+          className={`fixed  -translate-x-1/2 z-20 text-[2rem] ${
+            collapseSidebar ? " -translate-x-1/2 left-[4.7rem]" : "left-[18rem]"
+          } transition-all duration-500 bg-transparent w-[2.8rem] h-[2.8rem] flex-center border-2 border-primary-200 cursor-pointer rounded-full text-primary-500`}
+        >
+          {collapseSidebar ? (
+            <MdKeyboardDoubleArrowRight />
+          ) : (
+            <MdKeyboardDoubleArrowLeft />
+          )}
+        </div>
+      )}
+      {screen >= 640 && (
+        <aside
+          className={`${
+            collapseSidebar ? "w-[4.7rem]" : "sm:w-[18rem]"
+          } h-[100dvh] fixed top-0 left-0 bg-white border-r-2 transition-all duration-500 overflow-x-hidden`}
+        >
+          <DashboardNav collapseSidebar={collapseSidebar} />
+        </aside>
+      )}
+      {screen < 640 && (
+        <>
+          <Overlay
+            show={showSidebar}
+            onClick={() => setShowSidebar(false)}
+            className="z-40"
+          />
+          <aside
+            className={`w-[80dvw] flex justify-center fixed top-0 bg-gray-100 h-[100dvh] z-50 ${
+              showSidebar ? "left-0" : "left-[-100dvw]"
+            } transition-all`}
+          >
+            <IconButton
+              className="absolute top-[1rem] left-[1rem] text-primary-500 text-[1.5rem]"
+              onClick={() => setShowSidebar(false)}
+            >
+              <HiX />
+            </IconButton>
+            <DashboardNav onClick={() => setShowSidebar(false)} />
+          </aside>
+        </>
+      )}
       <main
         className={`${
-          collapseSidebar ? "pl-[4.7rem]" : "pl-[18rem]"
+          collapseSidebar ? "pl-0 sm:pl-[4.7rem]" : "pl-[18rem]"
         } h-screen w-full transition-all duration-500`}
       >
         <header className=" bg-white px-10 flex-end h-[70px] border-b-2">
-          <div className="relative">
+          {screen < 640 && (
+            <div>
+              <IoMenu
+                className="text-[1.5rem] cursor-pointer"
+                onClick={() => setShowSidebar((prev) => !prev)}
+              />
+            </div>
+          )}
+          <div className="relative ml-auto">
             <Menu>
               <Menu.Open>
                 <div className="relative w-[3rem] h-[3rem] rounded-full overflow-hidden cursor-pointer">
@@ -68,7 +110,7 @@ const DashboardLayout = ({ children }) => {
             </Menu>
           </div>
         </header>
-        <div className="flex flex-col px-10 max-w-[1200px] mx-auto  overflow-hidden pb-20">
+        <div className="flex flex-col px-5 md:px-10 max-w-[1200px] mx-auto  overflow-hidden pb-20">
           {children || <Outlet />}
         </div>
       </main>

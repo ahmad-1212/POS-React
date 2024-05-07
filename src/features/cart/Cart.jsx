@@ -26,8 +26,8 @@ const Cart = ({ onSidebarHide }) => {
       {/* Cart Items */}
       <section
         className={`h-full ${
-          !cart.items.length ? "overflow-y-hidden" : "overflow-y-auto"
-        } scrollbar-hidden`}
+          !cart.items.length ? "overflow-y-hidden" : " custom-scrollbar"
+        }`}
       >
         {!cart.items.length && (
           <p className="text-primary-500 h-full flex-center">

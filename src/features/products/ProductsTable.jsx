@@ -10,7 +10,7 @@ const ProductsTable = ({ products }) => {
   const navigate = useNavigate();
   console.log(products);
   return (
-    <div className="w-full">
+    <div className="w-full min-w-[98%] border-2 border-primary-100 overflow-x-auto custom-scrollbar">
       <table className="w-full border-2 border-primary-100">
         <thead>
           <tr className="text-start px-3 bg-primary-500 text-white text-[1.2rem] border-2 border-primary-500">

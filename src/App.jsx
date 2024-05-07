@@ -13,6 +13,7 @@ import ProductsPage from "./pages/ProductsPage";
 import CategoriesPage from "./pages/CategoriesPage";
 import AddProductPage from "./pages/AddProductPage";
 import EditProductPage from "./pages/EditProductPage";
+import SettingsPage from "./pages/SettingsPage";
 
 const App = () => {
   return (
@@ -34,6 +35,7 @@ const App = () => {
               path="products/edit/:productId"
               element={<EditProductPage />}
             />
+            <Route path="settings" element={<SettingsPage />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />

@@ -3,6 +3,7 @@ import Button from "../UI/Button";
 import Modal from "../UI/Modal";
 import Tables from "../../features/tables/Tables";
 import { useSearchParams } from "react-router-dom";
+import { useScreen } from "../../hooks/useScreen";
 
 const RADIO_OPTION = ["dine in", "take away", "delivery"];
 const ORDERS = [
@@ -46,6 +47,7 @@ const Header = () => {
   const [selectValue, setSelectValue] = useState(
     searchParams.get("type") || ""
   );
+  const { screen } = useScreen();
   const type = searchParams.get("type");
   const table = searchParams.get("table");
 
@@ -70,10 +72,10 @@ const Header = () => {
   };
 
   return (
-    <header className="h-[70px] lg:h-[80px] w-full flex gap-3 sm:gap-10 items-center sticky top-0 z-10 bg-white border-b-2 px-4 md:px-10">
+    <header className="h-[70px] lg:h-[80px] w-full flex  gap-3 md:gap-10 items-center sticky top-0 z-10 bg-white border-b-2 px-4 md:px-10">
       <div className="hidden sm:flex items-center gap-3 sm:gap-5 hover-effect">
         {RADIO_OPTION.map((opt) => (
-          <div className="flex items-center gap-2 sm:gap-3" key={opt}>
+          <div className="flex items-center gap-1 md:gap-3" key={opt}>
             <input
               style={{ accentColor: "orangered" }}
               type="radio"
@@ -111,7 +113,9 @@ const Header = () => {
         <div className="ml-auto lg:ml-10">
           <Modal>
             <Modal.Open id="chooseTable">
-              <Button variant="dark">{table ? table : "Choose Table"}</Button>
+              <Button variant="dark">
+                {table ? table : `${screen < 500 ? "Table" : "Choose Table"}`}
+              </Button>
             </Modal.Open>
             <Modal.Window id="chooseTable" closeOnOverlay={true} zIndex="z-50">
               <Tables />
@@ -122,10 +126,12 @@ const Header = () => {
 
       <div className="ml-auto">
         <Modal>
-          <Modal.Open>
-            <Button variant="dark">Active Orders</Button>
+          <Modal.Open id="activeOrders">
+            <Button variant="dark">
+              {screen < 500 ? "Orders" : "Active Orders"}
+            </Button>
           </Modal.Open>
-          <Modal.Window zIndex="z-50" closeOnOverlay>
+          <Modal.Window id="activeOrders" zIndex="z-50" closeOnOverlay>
             <div className="p-10">
               <h1 className="text-center text-[1.5rem] font-[600] mb-4">
                 Active Orders

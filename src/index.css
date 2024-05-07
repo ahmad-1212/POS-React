@@ -87,3 +87,18 @@
 .Toastify__toast-body {
   align-items: start;
 }
+
+.custom-scrollbar {
+  overflow-y: auto;
+  border-radius: 5px;
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: #faa679 transparent; /* For Firefox */
+}
+
+table,
+thead,
+tbody,
+tr,
+td {
+  border-collapse: collapse;
+}

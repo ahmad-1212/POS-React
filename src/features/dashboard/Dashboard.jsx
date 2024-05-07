@@ -68,8 +68,8 @@ const Dashboard = () => {
             <Button variant="dark">Search</Button>
           </div>
         </div>
-        <div className="w-full">
-          <table className="w-full border-2 border-primary-100 rounded-lg">
+        <div className="w-full min-w-[400px] overflow-x-auto">
+          <table className="w-full border-2 border-primary-100 rounded-lg min-w-[400px] overflow-x-auto">
             <thead className="text-[1.2rem] bg-primary-100 text-primary-500">
               <tr>
                 <th className="py-3">Order ID</th>

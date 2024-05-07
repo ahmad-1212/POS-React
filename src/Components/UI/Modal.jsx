@@ -68,7 +68,7 @@ function Window({
         className={zIndex}
       />
       <div
-        className={`fixed z-50 bg-white  rounded-md ${
+        className={`fixed z-50 bg-white custom-scrollbar rounded-md ${
           center ? "top-1/2 -translate-y-1/2 " : "top-0 mt-[5rem] "
         } left-1/2 -translate-x-1/2 shadow-md max-h-[70dvh] overflow-y-auto ${
           !scrollbar ? "scrollbar-hidden" : ""

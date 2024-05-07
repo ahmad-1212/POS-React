@@ -9,7 +9,7 @@ import ConfirmDelete from "../../Components/UI/ConfirmDelete";
 
 const CategoriesTable = ({ categories }) => {
   return (
-    <div className="w-full">
+    <div className="w-full min-w-[98%] overflow-x-auto custom-scrollbar border-2 border-primary-100">
       <table className="w-full border-2 border-primary-100">
         <thead>
           <tr className="text-start px-3 bg-primary-500 text-white text-[1.2rem] border-2 border-primary-500">
