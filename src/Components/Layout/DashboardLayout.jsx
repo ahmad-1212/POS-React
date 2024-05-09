@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
@@ -19,6 +20,9 @@ const DashboardLayout = ({ children }) => {
   const { screen } = useScreen();
   const [collapseSidebar, setCollapseSidebar] = useState(screen < 768);
   const [showSidebar, setShowSidebar] = useState(false);
+  useEffect(() => {
+    document.title = "POS | Dashboard";
+  }, []);
   return (
     <>
       {screen >= 768 && (

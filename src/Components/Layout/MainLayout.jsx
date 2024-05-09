@@ -1,4 +1,5 @@
 import { Outlet, useSearchParams } from "react-router-dom";
+import {useEffect } from 'react'
 import Cart from "../../features/cart/Cart";
 import Header from "../Header/Header";
 import Categories from "../../features/categories/Categories";
@@ -40,6 +41,10 @@ const MainLayout = ({ children }) => {
       setShowButton(false);
     }
   };
+
+  useEffect(()=>{
+    document.title = 'POS | Point of Sale Application'
+  },[])
 
   return (
     <>

@@ -61,7 +61,6 @@ const UserForm = ({ edit, user }) => {
             id="role"
             className="outline-none border-2 px-4 py-2 rounded-md  bg-transparent disabled:opacity-80 disabled:bg-gray-300 disabled:cursor-not-allowed focus:border-gray-600"
           >
-            <option defaultValue>Role</option>
             <option value="cashier">Cashier</option>
             <option value="manager">Manager</option>
             <option value="kitchen staff">Kitchen Staff</option>

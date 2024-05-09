@@ -22,7 +22,7 @@ const RippleEffect = ({ children, onClick }) => {
       onClick={(e) => {
         const rect = e.target.getBoundingClientRect();
         setCoords({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-        onClick && onClick(e);
+        onClick?.(e);
       }}
     >
       {isRippling ? (
