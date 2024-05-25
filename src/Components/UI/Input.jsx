@@ -40,7 +40,7 @@ const Input = ({
         {label && (
           <label
             htmlFor={id}
-            className={`font-[600] text-[0.9rem] sm:text-[1.2rem] ${
+            className={`text-[0.9rem] font-[600] sm:text-[1.2rem] ${
               error ? "text-red-500" : ""
             }`}
           >
@@ -53,7 +53,7 @@ const Input = ({
           type={type}
           id={id}
           disabled={disabled}
-          className={`outline-none border-2 px-4 py-2 rounded-md  bg-transparent disabled:opacity-80 disabled:bg-gray-300 disabled:cursor-not-allowed ${
+          className={`rounded-md border-2 bg-transparent px-4 py-2  outline-none disabled:cursor-not-allowed disabled:bg-gray-300 disabled:opacity-80 ${
             error && "border-red-500"
           } ${
             !error && " border-gray-300 text-[1.1rem] focus:border-gray-600"
@@ -61,7 +61,7 @@ const Input = ({
           {...register(id, validate)}
         />
 
-        <span className="text-[0.8rem] sm:text-[0.8rem] -mt-2 text-red-500">
+        <span className="-mt-2 text-[0.8rem] text-red-500 sm:text-[0.8rem]">
           {error && error} &nbsp;
         </span>
       </div>
@@ -72,7 +72,7 @@ const Input = ({
       {label && (
         <label
           htmlFor={id}
-          className={`font-[500] text-[1rem] sm:text-[1rem] md:text-[1.2rem] ${
+          className={`text-[1rem] font-[500] sm:text-[1rem] md:text-[1.2rem] ${
             error ? "text-red-500" : ""
           }`}
         >
@@ -85,15 +85,15 @@ const Input = ({
         type={type}
         id={id}
         disabled={disabled}
-        className={`outline-none border-2 px-4 py-2 rounded-md  bg-transparent disabled:opacity-80 disabled:bg-gray-300 disabled:cursor-not-allowed ${
+        className={`rounded-md border-2 bg-transparent px-4 py-2  outline-none disabled:cursor-not-allowed disabled:bg-gray-300 disabled:opacity-80 ${
           error && "border-red-500"
         } ${
-          !error && " border-gray-300 text-[1.1rem] focus:border-gray-600"
+          !error && " border-gray-300 text-[1.1rem] focus:border-primary-400"
         } ${className}`}
         {...register(id, validate)}
       />
       {showError && (
-        <span className="text-[0.8rem] sm:text-[0.8rem] -mt-2 text-red-500">
+        <span className="-mt-2 text-[0.8rem] text-red-500 sm:text-[0.8rem]">
           {error && error} &nbsp;
         </span>
       )}

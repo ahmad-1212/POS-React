@@ -11,7 +11,6 @@ const cartSlice = createSlice({
   reducers: {
     // Add Item to cart
     addCartItem(state, action) {
-      console.log(action.payload);
       const item = state.items.find((item) => item.id === action.payload.id);
       if (item) {
         cartSlice.caseReducers.increaseItemQuantity(state, action);

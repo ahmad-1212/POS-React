@@ -6,7 +6,7 @@ import Button from "../../Components/UI/Button";
 import CategoryForm from "./CategoryForm";
 import CategoriesTable from "./CategoriesTable";
 
-import { CATEGORIES } from "../../utils/constants";
+import { CATEGORIES } from "../../Data/data";
 
 const CategoriesList = () => {
   return (

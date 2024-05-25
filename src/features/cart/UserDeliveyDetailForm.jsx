@@ -12,7 +12,6 @@ const UserDeliveyDetailForm = ({ onCloseModal }) => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
   };
   return (
     <>

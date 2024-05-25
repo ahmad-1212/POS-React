@@ -1,10 +1,9 @@
 import PropTypes from "prop-types";
-import { CATEGORIES } from "../../utils/constants";
+import { CATEGORIES } from "../../Data/data";
 import { useDispatch } from "react-redux";
 import { decreaseItemQuantity, increaseItemQuantity } from "./cartSlice";
 const CartItem = ({ itm }) => {
   const dispatch = useDispatch();
-  console.log(itm);
 
   return (
     <li className="flex items-center bg-gray-100 rounded-md py-2 px-3 gap-3">

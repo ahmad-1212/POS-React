@@ -10,7 +10,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import Button from "../UI/Button";
 import Overlay from "../UI/Overlay";
 import { useScreen } from "../../hooks/useScreen";
-import { CATEGORIES } from "../../utils/constants";
+import { CATEGORIES } from "../../Data/data";
 
 const MainLayout = ({ children }) => {
   const { screen } = useScreen();

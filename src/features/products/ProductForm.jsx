@@ -6,7 +6,6 @@ import { useState } from "react";
 import { HiX } from "react-icons/hi";
 
 const ProductForm = ({ edit, product }) => {
-  console.log(product);
   const {
     register,
     formState: { errors },
@@ -22,7 +21,7 @@ const ProductForm = ({ edit, product }) => {
       : {},
   });
   const [ingredients, setIngredients] = useState(
-    (edit && product.ingredients) || []
+    (edit && product.ingredients) || [],
   );
   const [error, setError] = useState("");
 
@@ -31,13 +30,13 @@ const ProductForm = ({ edit, product }) => {
     if (error) setError("");
 
     const values = getValues();
-    console.log(values);
     if (!values.ingredients || !values.quantity) return;
     setIngredients((prev) => [
       ...prev,
       {
         ingredient: values.ingredients,
         quantity: values.quantity,
+        unit: values.unit,
         id: Date.now() + Math.floor(Math.random() * 1000),
       },
     ]);
@@ -56,7 +55,7 @@ const ProductForm = ({ edit, product }) => {
   return (
     <div>
       <form
-        className="p-5 flex flex-col gap-3 rounded-md mt-4 bg-white shadow-md"
+        className="mt-4 flex flex-col gap-3 rounded-md bg-white p-5 shadow-md"
         onSubmit={handleSubmit(onSubmit)}
       >
         <Input
@@ -68,7 +67,7 @@ const ProductForm = ({ edit, product }) => {
           error={errors?.productName?.message}
           showError
         />
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+        <div className="grid grid-cols-1 gap-x-8 sm:grid-cols-2">
           <Input
             label="Category"
             register={register}
@@ -99,29 +98,39 @@ const ProductForm = ({ edit, product }) => {
             label="Ingredient"
             type="text"
           />
-          <Input
-            register={register}
-            id="quantity"
-            label="Quantity"
-            min={0}
-            type="number"
-          />
+          <div className="flex  gap-2 ">
+            <Input
+              className="w-full"
+              register={register}
+              type="text"
+              id="unit"
+              label="Unit"
+            />
+            <Input
+              register={register}
+              id="quantity"
+              label="Quantity"
+              min={0}
+              type="number"
+              className="w-full"
+            />
+          </div>
         </div>
         <div>
           <Button variant="dark" type="button" onClick={handleAddIngredient}>
             Add Ingredient
           </Button>
-          <ul className="flex items-center gap-3 flex-wrap mt-3">
+          <ul className="mt-3 flex flex-wrap items-center gap-3">
             {ingredients?.map((ing, i) => (
               <li
                 key={ing.ingredient + i}
-                className="bg-primary-100 text-primary-500 py-1 px-2 font-[600] flex items-center gap-5 rounded-md"
+                className="flex items-center gap-5 rounded-md bg-primary-100 px-2 py-1 font-[600] text-primary-500"
               >
                 <span>
-                  {ing.ingredient}: {ing.quantity}
+                  {ing.ingredient}: {ing.quantity} {ing.unit}
                 </span>
                 <HiX
-                  className="hover:scale-110 transition-all cursor-pointer"
+                  className="cursor-pointer transition-all hover:scale-110"
                   onClick={() => removeIng(ing.id)}
                 />
               </li>
@@ -129,9 +138,9 @@ const ProductForm = ({ edit, product }) => {
           </ul>
         </div>
 
-        <div className="flex justify-end mt-5">
+        <div className="mt-5 flex justify-end">
           {error && (
-            <p className="bg-red-100 text-red-500 py-2 px-3 mr-auto">{error}</p>
+            <p className="mr-auto bg-red-100 px-3 py-2 text-red-500">{error}</p>
           )}
           <Button type="submit" className="px-10" variant="dark">
             Save

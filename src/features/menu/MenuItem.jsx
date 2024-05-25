@@ -5,16 +5,16 @@ import { LuSalad, LuDessert, LuSandwich } from "react-icons/lu";
 import { useDispatch } from "react-redux";
 import { addCartItem } from "../cart/cartSlice";
 import RippleEffect from "../../Components/UI/RippleEffect";
-import { CATEGORIES } from "../../utils/constants";
+import { CATEGORIES } from "../../Data/data";
 
-const ICONS = {
-  burger: <GiHamburger />,
-  fries: <GiFrenchFries />,
-  salad: <LuSalad />,
-  dessert: <LuDessert />,
-  pizza: <GiFullPizza />,
-  sandwich: <LuSandwich />,
-};
+// const ICONS = {
+//   burger: <GiHamburger />,
+//   fries: <GiFrenchFries />,
+//   salad: <LuSalad />,
+//   dessert: <LuDessert />,
+//   pizza: <GiFullPizza />,
+//   sandwich: <LuSandwich />,
+// };
 
 const MenuItem = ({ item, category }) => {
   const dispatch = useDispatch();
