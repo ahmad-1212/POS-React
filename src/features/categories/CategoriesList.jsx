@@ -5,21 +5,32 @@ import Modal from "../../Components/UI/Modal";
 import Button from "../../Components/UI/Button";
 import CategoryForm from "./CategoryForm";
 import CategoriesTable from "./CategoriesTable";
-
-import { CATEGORIES } from "../../Data/data";
+import { useSearchParams } from "react-router-dom";
 
 const CategoriesList = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const handleSearch = (e) => {
+    if (!e.target.value) {
+      searchParams.delete("search");
+    } else {
+      searchParams.set("search", e.target.value);
+    }
+    setSearchParams(searchParams);
+  };
+
   return (
-    <section className="py-10 flex flex-col gap-8">
+    <section className="flex flex-col gap-8 py-10">
       <div className="flex items-center">
         <input
           type="text"
+          onChange={handleSearch}
           placeholder="Search here..."
-          className="outline-none w-full md:w-1/2 py-2 px-5 bg-transparent border-2 border-primary-200 focus:border-primary-300 rounded-3xl placeholder:text-primary-200"
+          className="peer w-full rounded-3xl border-2 border-primary-200 bg-transparent px-5 py-2 outline-none placeholder:text-primary-200 focus:border-primary-300 md:w-1/2"
         />
-        <IoSearchOutline className="-ml-8 text-[1.2rem] text-primary-200 cursor-pointer" />
+        <IoSearchOutline className=" -ml-8 cursor-pointer text-[1.2rem] text-primary-200 peer-focus:text-primary-500" />
       </div>
-      <div className="flex-between gap-3 flex-wrap border-b-2 border-primary-200/30 pb-5">
+      <div className="flex-between flex-wrap gap-3 border-b-2 border-primary-200/30 pb-5">
         <h1 className="text-[2rem] font-[600]">Categories</h1>
         <Modal>
           <Modal.Open id="addCategory">
@@ -38,7 +49,7 @@ const CategoriesList = () => {
           </Modal.Window>
         </Modal>
       </div>
-      <CategoriesTable categories={CATEGORIES} />
+      <CategoriesTable />
     </section>
   );
 };

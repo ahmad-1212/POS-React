@@ -4,6 +4,10 @@ import Input from "../../Components/UI/Input";
 import { useForm } from "react-hook-form";
 import Button from "../../Components/UI/Button";
 import { useState } from "react";
+import {
+  useUpdateCategoryMutation,
+  useCreateCategoryMutation,
+} from "../../services/apiCategories";
 
 const CategoryForm = ({ onCloseModal, edit = false, category }) => {
   const {
@@ -12,9 +16,25 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
     handleSubmit,
   } = useForm({ defaultValues: edit ? { categoryName: category.name } : {} });
   const [imgUrl, setImgUrl] = useState(edit && category?.image);
+  const [image, setImage] = useState(null);
+  const [createCategory, { isLoading, isSuccess: isCreated }] =
+    useCreateCategoryMutation();
+  const [update, { isLoading: isUpdating, isSuccess: isUpdated }] =
+    useUpdateCategoryMutation();
 
-  const onSubmit = (data) => {
+  if (isUpdated || isCreated) onCloseModal();
+
+  const onSubmit = async (data) => {
     console.log(data);
+    if (edit) {
+      update({ id: category.id, name: data.categoryName });
+    } else {
+      const formData = new FormData();
+      formData.append("name", data.categoryName);
+      formData.append("image", image);
+      formData.append("categoryID", Math.random() * 10000000000);
+      createCategory(formData);
+    }
   };
 
   const handleImageChange = (e) => {
@@ -23,16 +43,17 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
     const url = URL.createObjectURL(file);
 
     setImgUrl(url);
+    setImage(file);
   };
 
   return (
     <div>
-      <div className="py-3 flex justify-center items-center gap-3 bg-primary-500 text-white text-[1.4rem] font-[600]">
+      <div className="flex items-center justify-center gap-3 bg-primary-500 py-3 text-[1.4rem] font-[600] text-white">
         <RxLayers />
         <span>{edit ? "Edit" : "Add new"} Category</span>
       </div>
       <form
-        className="p-5 flex flex-col gap-3 mt-4"
+        className="mt-4 flex flex-col gap-3 p-5"
         onSubmit={handleSubmit(onSubmit)}
       >
         <Input
@@ -47,7 +68,7 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
         {!imgUrl && (
           <label
             htmlFor="image"
-            className="w-[170px] h-[170px] border-2 flex-center cursor-pointer text-gray-400 font-[600] hover:bg-gray-100"
+            className="flex-center h-[170px] w-[170px] cursor-pointer border-2 font-[600] text-gray-400 hover:bg-gray-100"
           >
             + Add Image
           </label>
@@ -60,8 +81,8 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
           onChange={handleImageChange}
         />
         {imgUrl && (
-          <div className="w-[170px] h-[170px] hover:bg-gray-100 overflow-hidden">
-            <img src={imgUrl} className="w-full h-full object-cover" />
+          <div className="h-[170px] w-[170px] overflow-hidden hover:bg-gray-100">
+            <img src={imgUrl} className="h-full w-full object-cover" />
           </div>
         )}
 
@@ -69,16 +90,21 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
           <div className="flex">
             <label
               htmlFor="image"
-              className="px-5 py-2 bg-primary-500 rounded-md cursor-pointer hover:scale-105 transition-all  text-white"
+              className="cursor-pointer rounded-md bg-primary-500 px-5 py-2 text-white transition-all  hover:scale-105"
             >
               Change Image
             </label>
           </div>
         )}
 
-        <div className="flex justify-end mt-5">
-          <Button type="submit" className="px-10" variant="dark">
-            Save
+        <div className="mt-5 flex justify-end">
+          <Button
+            disabled={isLoading}
+            type="submit"
+            className="px-10"
+            variant="dark"
+          >
+            {isLoading || isUpdating ? "Loading..." : "Save"}
           </Button>
         </div>
       </form>
