@@ -1,18 +1,25 @@
-import { LuClipboardList } from "react-icons/lu";
-import ProductForm from "./ProductForm";
-import { useParams } from "react-router-dom";
-import { allProducts } from "../../Data/data";
+import { LuClipboardList } from 'react-icons/lu';
+import ProductForm from './ProductForm';
+import { useParams } from 'react-router-dom';
+import { useGetProductWithIdQuery } from '../../services/apiProducts';
+import Spinner from '../../Components/UI/Spinner';
 
 const EditProduct = () => {
   const { productId } = useParams();
-  const product = allProducts.find((prd) => prd.id === +productId);
+  const { data, isLoading } = useGetProductWithIdQuery(productId);
+
   return (
-    <section className="py-10 flex flex-col gap-5 w-[100%] lg:w-[80%] max-w-[800px] mx-auto">
-      <div className="flex-center uppercase tracking-wide bg-primary-500 text-white font-[600] py-2 rounded-md gap-3 text-[1.5rem]">
+    <section className="mx-auto flex w-[100%] max-w-[800px] flex-col gap-5 py-10 lg:w-[80%]">
+      <div className="flex-center gap-3 rounded-md bg-primary-500 py-2 text-[1.5rem] font-[600] uppercase tracking-wide text-white shadow-lg ">
         <LuClipboardList />
         <h1>Edit Product</h1>
       </div>
-      <ProductForm edit product={product} />
+      {data && !isLoading && <ProductForm edit product={data} />}
+      {isLoading && (
+        <div className="mx-auto mt-20">
+          <Spinner />
+        </div>
+      )}
     </section>
   );
 };

@@ -1,5 +1,5 @@
-import PropTypes from "prop-types";
-import { useEffect } from "react";
+import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 
 const ConfirmDelete = ({
   onCloseModal,
@@ -9,11 +9,12 @@ const ConfirmDelete = ({
   isSuccess,
   reset,
 }) => {
-  if (isSuccess) {
-    onCloseModal();
-    reset();
-  }
-
+  useEffect(() => {
+    if (isSuccess) {
+      onCloseModal();
+      reset?.();
+    }
+  }, [isSuccess, onCloseModal, reset]);
   return (
     <div className="flex flex-col gap-5 sm:gap-10">
       <div className="w-full bg-primary-500 text-white">
@@ -33,7 +34,7 @@ const ConfirmDelete = ({
           type="button"
           className="rounded-md px-5 py-2 text-[0.9rem] font-[600] uppercase tracking-wide text-red-500 hover:bg-red-400 hover:text-white sm:text-[1rem]"
         >
-          {isLoading ? "Deleting..." : "Confirm"}
+          {isLoading ? 'Deleting...' : 'Confirm'}
         </button>
       </div>
     </div>
@@ -44,6 +45,9 @@ ConfirmDelete.propTypes = {
   onCloseModal: PropTypes.func,
   message: PropTypes.string.isRequired,
   onConfirm: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool,
+  isSuccess: PropTypes.bool,
+  reset: PropTypes.func,
 };
 
 export default ConfirmDelete;

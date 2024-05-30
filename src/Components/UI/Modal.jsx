@@ -1,25 +1,26 @@
 import {
   cloneElement,
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useState,
-} from "react";
-import PropTypes from "prop-types";
-import { createPortal } from "react-dom";
-import Overlay from "./Overlay";
+} from 'react';
+import PropTypes from 'prop-types';
+import { createPortal } from 'react-dom';
+import Overlay from './Overlay';
 
 const ModalContext = createContext();
 
 function Modal({ children }) {
-  const [openId, setOpenId] = useState("");
+  const [openId, setOpenId] = useState('');
 
-  const open = (id) => setOpenId(id);
-  const close = () => setOpenId("");
+  const open = id => setOpenId(id);
+  const close = useCallback(() => setOpenId(''), []);
 
   useEffect(() => {
-    if (openId) document.body.style.overflow = "hidden";
-    if (!openId) document.body.style.overflow = "visible";
+    if (openId) document.body.style.overflow = 'hidden';
+    if (!openId) document.body.style.overflow = 'visible';
   }, [openId]);
 
   return (
@@ -68,16 +69,16 @@ function Window({
         className={zIndex}
       />
       <div
-        className={`fixed z-50 bg-white custom-scrollbar rounded-md ${
-          center ? "top-1/2 -translate-y-1/2 " : "top-0 mt-[5rem] "
-        } left-1/2 -translate-x-1/2 shadow-md max-h-[70dvh] overflow-y-auto ${
-          !scrollbar ? "scrollbar-hidden" : ""
-        } overflow-x-hidden w-[90%] sm:w-[500px]`}
+        className={`custom-scrollbar fixed z-50 rounded-md bg-white ${
+          center ? 'top-1/2 -translate-y-1/2 ' : 'top-0 mt-[5rem] '
+        } left-1/2 max-h-[70dvh] -translate-x-1/2 overflow-y-auto shadow-md ${
+          !scrollbar ? 'scrollbar-hidden' : ''
+        } w-[90%] overflow-x-hidden sm:w-[500px]`}
       >
         {cloneElement(children, { onCloseModal: close })}
       </div>
     </>,
-    document.getElementById("overlay")
+    document.getElementById('overlay'),
   );
 }
 

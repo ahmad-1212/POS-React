@@ -1,33 +1,46 @@
-import { useSearchParams } from "react-router-dom";
-import { CATEGORIES } from "../../Data/data";
+import { useSearchParams } from 'react-router-dom';
+import { useGetCategoriesQuery } from '../../services/apiCategories';
+import Spinner from '../../Components/UI/Spinner';
 
 const Categories = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { data, isLoading } = useGetCategoriesQuery();
+  console.log(data);
 
-  const handleCategory = (cat) => {
-    searchParams.set("category", cat.toLowerCase());
+  const handleCategory = cat => {
+    searchParams.set('category', cat);
     setSearchParams(searchParams);
   };
   return (
     <div className="p-5">
-      <h2 className="font-[700] text-[1.4rem] mb-3">Categories</h2>
+      <h2 className="mb-3 text-[1.4rem] font-[700]">Categories</h2>
+      {isLoading && (
+        <div className="mx-auto mt-20 w-max ">
+          <Spinner />
+        </div>
+      )}
       {/* Categories list */}
-      <ul className="grid grid-cols-2 gap-5">
-        {CATEGORIES.map((cat, i) => (
-          <li
-            onClick={() => handleCategory(cat.name)}
-            key={i}
-            className="cursor-pointer hover:scale-105 transition-all border-2 border-gray-100"
-          >
-            <div>
-              <img src={cat.image} className="w-full h-[100px] object-cover" />
-            </div>
-            <h2 className="text-center font-[600] text-primary-500 uppercase tracking-wider">
-              {cat.name}
-            </h2>
-          </li>
-        ))}
-      </ul>
+      {data && !isLoading && (
+        <ul className="grid grid-cols-2 gap-5">
+          {data?.results?.map((cat, i) => (
+            <li
+              onClick={() => handleCategory(cat.name)}
+              key={i}
+              className="cursor-pointer border-2 border-gray-100 transition-all hover:scale-105"
+            >
+              <div>
+                <img
+                  src={cat.image}
+                  className="h-[100px] w-full object-cover"
+                />
+              </div>
+              <h2 className="text-center font-[600] uppercase tracking-wider text-primary-500">
+                {cat.name}
+              </h2>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

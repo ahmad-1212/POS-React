@@ -14,6 +14,7 @@ import CategoriesPage from "./pages/CategoriesPage";
 import AddProductPage from "./pages/AddProductPage";
 import EditProductPage from "./pages/EditProductPage";
 import SettingsPage from "./pages/SettingsPage";
+import IngredientsPage from "./pages/IngredientsPage";
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
               path="products/edit/:productId"
               element={<EditProductPage />}
             />
+            <Route path="ingredients" element={<IngredientsPage />} />
             <Route path="settings" element={<SettingsPage />} />
           </Route>
 

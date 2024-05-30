@@ -1,10 +1,10 @@
-import { LuClipboardList } from "react-icons/lu";
-import ProductForm from "./ProductForm";
+import { LuClipboardList } from 'react-icons/lu';
+import ProductForm from './ProductForm';
 
 const AddProduct = () => {
   return (
-    <section className="py-10 flex flex-col gap-5 w-[100%] lg:w-[80%] max-w-[800px] mx-auto">
-      <div className="flex-center uppercase tracking-wide bg-primary-500 text-white font-[600] py-2 rounded-md gap-3 text-[1.5rem]">
+    <section className="mx-auto flex w-[100%] max-w-[800px] flex-col gap-5 py-10 lg:w-[80%]">
+      <div className="flex-center gap-3 rounded-md bg-primary-500 py-2 text-[1.5rem] font-[600] uppercase tracking-wide text-white shadow-lg">
         <LuClipboardList />
         <h1>Add Product</h1>
       </div>

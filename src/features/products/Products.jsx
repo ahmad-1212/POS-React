@@ -3,38 +3,67 @@ import { MdOutlineAddCircleOutline } from "react-icons/md";
 import Button from "../../Components/UI/Button";
 
 import ProductsTable from "./ProductsTable";
-import { allProducts } from "../../Data/data";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { useGetProductsQuery } from "../../services/apiProducts";
+import Spinner from "../../Components/UI/Spinner";
+import { useGetCategoriesQuery } from "../../services/apiCategories";
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [selectValue, setSelectValue] = useState(searchParams.get("cat") || "");
+  const { data, isLoading } = useGetProductsQuery();
+  const { data: categories, isLoading: isCateogryLoading } =
+    useGetCategoriesQuery();
+  const [products, setProducts] = useState(data);
 
-  let products;
-  if (selectValue) {
-    products = allProducts.filter((prod) => prod.category === selectValue);
-  }
-  if (selectValue === "all" || !selectValue) {
-    products = allProducts;
-  }
+  const selectValue = searchParams.get("cat" ?? "all");
+  // Get all categories
+  const options = categories?.results?.map((cat) => cat.name);
+
+  // Handle filter category
   const handleSelect = (e) => {
     searchParams.set("cat", e.target.value);
     setSearchParams(searchParams);
-    setSelectValue(e.target.value);
   };
 
+  // Handle Search
+  const handleSearch = (e) => {
+    const regExp = new RegExp(e.target.value, "i");
+    const filterProducts = data?.filter((prod) => {
+      if (selectValue !== "all" && prod.category.name === selectValue) {
+        return regExp.test(prod.name);
+      } else {
+        return regExp.test(prod.name);
+      }
+    });
+    setProducts(filterProducts);
+  };
+
+  // Filter products on the basis of category
+  useEffect(() => {
+    if (!data) return;
+    if (!selectValue || selectValue === "all") {
+      setProducts(data);
+    } else if (selectValue) {
+      const filterProducts = data?.filter(
+        (prod) => prod.category.name === selectValue,
+      );
+      setProducts(filterProducts);
+    }
+  }, [selectValue, data]);
+
   return (
-    <section className="py-10 flex flex-col gap-8">
+    <section className="flex flex-col gap-8 py-10">
       <div className="flex items-center">
         <input
+          onChange={handleSearch}
           type="text"
           placeholder="Search here..."
-          className="outline-none w-full md:w-1/2 py-2 px-5 bg-transparent border-2 border-primary-200 focus:border-primary-300 rounded-3xl placeholder:text-primary-200"
+          className="w-full rounded-3xl border-2 border-primary-200 bg-transparent px-5 py-2 outline-none placeholder:text-primary-200 focus:border-primary-300 md:w-1/2"
         />
-        <IoSearchOutline className="-ml-8 text-[1.2rem] text-primary-200 cursor-pointer" />
+        <IoSearchOutline className="-ml-8 cursor-pointer text-[1.2rem] text-primary-200" />
       </div>
-      <div className="flex-between gap-3 flex-wrap border-b-2 border-primary-200/30 pb-5">
+      <div className="flex-between flex-wrap gap-3 border-b-2 border-primary-200/30 pb-5">
         <h1 className="text-[2rem] font-[600]">Products</h1>
 
         <Button
@@ -49,22 +78,30 @@ const Products = () => {
       </div>
       <div className="flex justify-end">
         <select
-          className="border-primary-200 px-5 py-2 rounded-md cursor-pointer border-2 outline-none bg-transparent font-[600] text-primary-500 "
+          disabled={isCateogryLoading}
+          className="cursor-pointer rounded-md border-2 border-primary-200 bg-transparent px-5 py-2 font-[600] text-primary-500 outline-none "
           onChange={handleSelect}
           value={selectValue}
         >
           <option default value="all">
             All
           </option>
-          <option value="burger">Burgers</option>
-          <option value="sandwich">Sandwiches</option>
-          <option value="salad">Salads</option>
-          <option value="dessert">Dessert</option>
-          <option value="pizza">Pizza</option>
-          <option value="fries">Fries</option>
+          {options?.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
         </select>
       </div>
-      <ProductsTable products={products} />
+      {products && !isLoading && <ProductsTable products={products} />}
+      {isLoading && (
+        <div className="mx-auto mt-20">
+          <Spinner />
+        </div>
+      )}
+      {data && !products?.length && selectValue && (
+        <p className="mt-20 text-center text-primary-500">No products found!</p>
+      )}
     </section>
   );
 };

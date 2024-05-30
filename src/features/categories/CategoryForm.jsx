@@ -1,13 +1,13 @@
-import { RxLayers } from "react-icons/rx";
-import PropTypes from "prop-types";
-import Input from "../../Components/UI/Input";
-import { useForm } from "react-hook-form";
-import Button from "../../Components/UI/Button";
-import { useState } from "react";
+import { RxLayers } from 'react-icons/rx';
+import PropTypes from 'prop-types';
+import Input from '../../Components/UI/Input';
+import { useForm } from 'react-hook-form';
+import Button from '../../Components/UI/Button';
+import { useState } from 'react';
 import {
   useUpdateCategoryMutation,
   useCreateCategoryMutation,
-} from "../../services/apiCategories";
+} from '../../services/apiCategories';
 
 const CategoryForm = ({ onCloseModal, edit = false, category }) => {
   const {
@@ -24,20 +24,22 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
 
   if (isUpdated || isCreated) onCloseModal();
 
-  const onSubmit = async (data) => {
-    console.log(data);
+  const onSubmit = async data => {
     if (edit) {
-      update({ id: category.id, name: data.categoryName });
+      const formData = new FormData();
+      formData.append('name', data.categoryName);
+      if (image) formData.append('image', image);
+      update({ id: category.id, formData });
     } else {
       const formData = new FormData();
-      formData.append("name", data.categoryName);
-      formData.append("image", image);
-      formData.append("categoryID", Math.random() * 10000000000);
+      formData.append('name', data.categoryName);
+      formData.append('image', image);
+
       createCategory(formData);
     }
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = e => {
     const file = e.target.files[0];
     if (!file) return;
     const url = URL.createObjectURL(file);
@@ -50,7 +52,7 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
     <div>
       <div className="flex items-center justify-center gap-3 bg-primary-500 py-3 text-[1.4rem] font-[600] text-white">
         <RxLayers />
-        <span>{edit ? "Edit" : "Add new"} Category</span>
+        <span>{edit ? 'Edit' : 'Add new'} Category</span>
       </div>
       <form
         className="mt-4 flex flex-col gap-3 p-5"
@@ -64,6 +66,8 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
           type="text"
           error={errors?.categoryName?.message}
           showError
+          disabled={isLoading || isUpdating}
+          autoFocus
         />
         {!imgUrl && (
           <label
@@ -79,6 +83,7 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
           id="image"
           hidden
           onChange={handleImageChange}
+          disabled={isLoading || isUpdating}
         />
         {imgUrl && (
           <div className="h-[170px] w-[170px] overflow-hidden hover:bg-gray-100">
@@ -104,7 +109,7 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
             className="px-10"
             variant="dark"
           >
-            {isLoading || isUpdating ? "Loading..." : "Save"}
+            {isLoading || isUpdating ? 'Loading...' : 'Save'}
           </Button>
         </div>
       </form>

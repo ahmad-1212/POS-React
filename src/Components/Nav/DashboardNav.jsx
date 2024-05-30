@@ -1,63 +1,69 @@
-import { RxDashboard } from "react-icons/rx";
-import { FiCheckSquare } from "react-icons/fi";
-import { NavLink } from "react-router-dom";
-import PropTypes from "prop-types";
-import { RxLayers } from "react-icons/rx";
-import { LuClipboardList } from "react-icons/lu";
-import { GoHome } from "react-icons/go";
-import { IoSettingsOutline } from "react-icons/io5";
+import { NavLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
+import { RxDashboard, RxLayers } from 'react-icons/rx';
+import { FiCheckSquare } from 'react-icons/fi';
+import { LuClipboardList } from 'react-icons/lu';
+import { GoHome } from 'react-icons/go';
+import { IoSettingsOutline } from 'react-icons/io5';
+import { FaRegListAlt } from 'react-icons/fa';
 
 const LINKS = [
   {
-    link: "/home",
+    link: '/home',
     icon: <GoHome />,
-    name: "home",
+    name: 'home',
   },
   {
-    link: "/dashboard",
+    link: '/dashboard',
     icon: <RxDashboard />,
-    name: "dashboard",
+    name: 'dashboard',
   },
   {
-    link: "/orders",
+    link: '/orders',
     icon: <FiCheckSquare />,
-    name: "orders",
+    name: 'orders',
   },
   {
-    link: "/categories",
+    link: '/categories',
     icon: <RxLayers />,
-    name: "categories",
+    name: 'categories',
   },
   {
-    link: "/products",
+    link: '/products',
     icon: <LuClipboardList />,
-    name: "porducts",
+    name: 'porducts',
   },
   {
-    link: "/settings",
+    link: '/ingredients',
+    icon: <FaRegListAlt />,
+    name: 'ingredients',
+  },
+  {
+    link: '/settings',
     icon: <IoSettingsOutline />,
-    name: "settings",
+    name: 'settings',
   },
 ];
 
 const DashboardNav = ({ collapseSidebar, onClick }) => {
   return (
     <div
-      className={`flex flex-col pt-14 p-10 ${
-        collapseSidebar ? "pl-5" : ""
+      className={`flex flex-col p-10 pt-14 ${
+        collapseSidebar ? 'pl-5' : ''
       } w-[18rem] transition-all`}
     >
       <nav>
         <ul className="flex flex-col gap-3">
-          {LINKS.map((link) => (
+          {LINKS.map(link => (
             <li key={link.name}>
               <NavLink
                 onClick={() => onClick?.()}
                 to={link.link}
                 className={({ isActive }) =>
                   isActive
-                    ? `bg-primary-500 flex items-center text-[1.3rem] font-[400] text-white capitalize px-4 py-2 rounded-md gap-5`
-                    : "flex items-center gap-5 text-[1.3rem] font-[400] capitalize px-4 py-2 rounded-md hover:bg-primary-500 hover:text-white transition-all "
+                    ? `flex items-center gap-5 rounded-md bg-primary-500 px-4 py-2 text-[1.3rem] font-[400] capitalize text-white`
+                    : 'flex items-center gap-5 rounded-md px-4 py-2 text-[1.3rem] font-[400] capitalize transition-all hover:bg-primary-500 hover:text-white '
                 }
               >
                 <span>{link.icon}</span>

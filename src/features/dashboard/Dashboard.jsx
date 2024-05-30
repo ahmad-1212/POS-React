@@ -1,6 +1,5 @@
 import { MdAutoGraph } from "react-icons/md";
-import { LiaMoneyBillWaveSolid } from "react-icons/lia";
-import { FaRegListAlt } from "react-icons/fa";
+import { LiaMoneyBillWaveSolid, LiaClipboardListSolid } from "react-icons/lia";
 
 import {
   AreaChart,
@@ -90,7 +89,6 @@ const data = [
 
 const Dashboard = () => {
   const [searchParams, setSetSearchparam] = useSearchParams();
-  console.log(data);
   const last = +searchParams.get("last") || 7;
   const handleLast = (last) => {
     searchParams.set("last", last);
@@ -145,7 +143,7 @@ const Dashboard = () => {
           </div>
           <div className="flex flex-1 items-center gap-3 self-stretch rounded-md bg-white px-3 py-4 shadow-sm">
             <div className="flex-center h-[4rem] w-[4rem] rounded-full bg-red-100 text-[2rem] text-red-500">
-              <FaRegListAlt />
+              <LiaClipboardListSolid />
             </div>
             <div className="flex flex-col justify-between">
               <h4 className="text-[0.8rem] font-[600] uppercase tracking-wide text-gray-500">

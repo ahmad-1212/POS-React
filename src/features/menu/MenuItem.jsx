@@ -1,11 +1,12 @@
-import PropTypes from "prop-types";
-import { GiHamburger } from "react-icons/gi";
-import { GiFrenchFries, GiFullPizza } from "react-icons/gi";
-import { LuSalad, LuDessert, LuSandwich } from "react-icons/lu";
-import { useDispatch } from "react-redux";
-import { addCartItem } from "../cart/cartSlice";
-import RippleEffect from "../../Components/UI/RippleEffect";
-import { CATEGORIES } from "../../Data/data";
+import PropTypes from 'prop-types';
+import { GiHamburger } from 'react-icons/gi';
+import { GiFrenchFries, GiFullPizza } from 'react-icons/gi';
+import { LuSalad, LuDessert, LuSandwich } from 'react-icons/lu';
+import { useDispatch } from 'react-redux';
+import { addCartItem } from '../cart/cartSlice';
+import RippleEffect from '../../Components/UI/RippleEffect';
+import { CATEGORIES } from '../../Data/data';
+import { useGetCategoriesQuery } from '../../services/apiCategories';
 
 // const ICONS = {
 //   burger: <GiHamburger />,
@@ -18,32 +19,33 @@ import { CATEGORIES } from "../../Data/data";
 
 const MenuItem = ({ item, category }) => {
   const dispatch = useDispatch();
-  const img = CATEGORIES.find(
-    (ct) => ct.name.toLowerCase() === category.toLowerCase()
-  ).image;
+  const { data: categories } = useGetCategoriesQuery();
+
+  const img = categories?.results?.find(cat => cat.name === category).image;
+
   return (
     <li
-      className="w-full shadow-sm cursor-pointer hover:shadow-lg overflow-hidden  rounded-lg hover:scale-105 bg-white"
+      className="w-full cursor-pointer overflow-hidden rounded-lg bg-white  shadow-sm hover:scale-105 hover:shadow-lg"
       onClick={() => dispatch(addCartItem({ ...item, img }))}
     >
       <RippleEffect>
-        <div className=" p-3 shadow-sm border-1 bg-white flex flex-col justify-between h-full">
+        <div className=" border-1 flex h-full flex-col justify-between bg-white p-3 shadow-sm">
           {/* <div className="text-[1.2rem] text-primary-500">
             {ICONS[category]}
           </div> */}
 
-          <h2 className="font-[600] text-[0.9rem]">{item.name}</h2>
+          <h2 className="text-[0.9rem] font-[600]">{item.name}</h2>
           <div className="flex justify-end">
             <img
               src={img}
               loading="lazy"
-              className="w-[4rem] h-[4rem] rounded-full object-cover border-[3px] border-primary-500/40"
+              className="h-[4rem] w-[4rem] rounded-full border-[3px] border-primary-500/40 object-cover"
             />
           </div>
           <div className="">
-            <span className="font-[700] text-primary-500 text-[1rem]">
-              {" "}
-              ${item.price}/
+            <span className="text-[1rem] font-[700] text-primary-500">
+              {' '}
+              Rs. {item.price}/
             </span>
             <span className="text-[500] text-gray-400">pcs</span>
           </div>

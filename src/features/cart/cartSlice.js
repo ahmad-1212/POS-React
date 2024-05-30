@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   items: [],
@@ -6,28 +6,34 @@ const initialState = {
 };
 
 const cartSlice = createSlice({
-  name: "cart",
+  name: 'cart',
   initialState,
   reducers: {
     // Add Item to cart
     addCartItem(state, action) {
-      const item = state.items.find((item) => item.id === action.payload.id);
+      console.log(action.payload);
+      const item = state.items.find(item => item.id === action.payload.id);
+      console.log(item);
       if (item) {
         cartSlice.caseReducers.increaseItemQuantity(state, action);
       } else {
-        state.items.push({ ...action.payload, quantity: 1 });
-        state.totalPrice += action.payload.price;
+        state.items.push({
+          ...action.payload,
+          quantity: 1,
+          price: +action.payload.price,
+        });
+        state.totalPrice += +action.payload.price;
       }
     },
     // Increase item quantity in cart
     increaseItemQuantity(state, action) {
-      const item = state.items.find((itm) => itm.id === action.payload.id);
+      const item = state.items.find(itm => itm.id === action.payload.id);
       item.quantity++;
       state.totalPrice += item.price;
     },
     // Decrease item quantity in cart
     decreaseItemQuantity(state, action) {
-      const item = state.items.find((itm) => itm.id === action.payload.id);
+      const item = state.items.find(itm => itm.id === action.payload.id);
       if (item.quantity === 1) {
         state.totalPrice -= item.price;
         return cartSlice.caseReducers.deleteItem(state, action);
@@ -38,7 +44,7 @@ const cartSlice = createSlice({
     },
     // Delete Item from the cart
     deleteItem(state, action) {
-      state.items = state.items.filter((item) => item.id !== action.payload.id);
+      state.items = state.items.filter(item => item.id !== action.payload.id);
     },
     // Clear the cart
     clearCart(state, action) {},

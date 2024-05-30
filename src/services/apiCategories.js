@@ -10,27 +10,26 @@ export const apiCategories = apiBase.injectEndpoints({
     }),
     createCategory: build.mutation({
       query(body) {
-        console.log(body);
         return {
           url: "/categories/",
           method: "POST",
           body,
         };
       },
+      transformErrorResponse: (res) => console.log(res),
       invalidatesTags: ["categories"],
     }),
     updateCategory: build.mutation({
       query(data) {
-        const { id, ...body } = data;
-        console.log(body);
+        const { id, formData: body } = data;
         return {
           url: `/categories/${id}/`,
           method: "PATCH",
           body,
         };
       },
-      transformResponse: (res, meta, arg) => res.data,
-      transformErrorResponse: (res, meta, arg) => res.error,
+      transformResponse: (res) => res.data,
+      transformErrorResponse: (res) => res.error,
       invalidatesTags: ["categories"],
     }),
     deleteCategory: build.mutation({
