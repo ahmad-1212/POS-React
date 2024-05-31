@@ -9,7 +9,7 @@ const apiProducts = apiBase.injectEndpoints({
 
     getProductWithId: build.query({
       query: id => `/products/${id}/`,
-      providesTags: (result, error, id) => [{ type: 'product', id }],
+      providesTags: (_, __, id) => [{ type: 'product', id }],
     }),
 
     createProduct: build.mutation({
@@ -25,13 +25,17 @@ const apiProducts = apiBase.injectEndpoints({
 
     updateProduct: build.mutation({
       query({ id, data }) {
+        console.log(data);
         return {
           url: `/products/${id}/`,
           method: 'PUT',
           body: data,
         };
       },
-      invalidatesTags: ['products'],
+      invalidatesTags: (_, __, { id }) => [
+        { type: 'product', id },
+        { type: 'products' },
+      ],
     }),
     deleteProduct: build.mutation({
       query: id => ({

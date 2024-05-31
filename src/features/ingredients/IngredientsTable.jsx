@@ -27,8 +27,7 @@ const IngredientsTable = () => {
             <thead>
               <tr className="border-2 border-primary-500 bg-primary-500 px-3 text-start text-[1.2rem] text-white">
                 <th className="px-3 py-2 text-start">Name</th>
-                <th className="px-3 py-2 text-start">Quantity</th>
-                <th className="px-3 py-2 text-start">Unit</th>
+                <th className="w-[40%] px-3 py-2 text-start">Unit</th>
                 <th className="px-3 py-2 text-start">Edit</th>
                 <th className="px-3 py-2 text-start">Delete</th>
               </tr>
@@ -41,7 +40,6 @@ const IngredientsTable = () => {
                 >
                   <Modal>
                     <td className="px-3 py-2 font-[600]">{ing.name}</td>
-                    <td className="px-3 py-2 font-[600]">{ing.quantity}</td>
                     <td className="px-3 py-2 font-[600]">{ing.unit}</td>
                     {/* Edit Button */}
                     <td className="w-[10%] px-3 py-2">

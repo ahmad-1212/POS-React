@@ -6,9 +6,12 @@ import { useEffect, useState } from 'react';
 import { HiX } from 'react-icons/hi';
 import { useGetCategoriesQuery } from '../../services/apiCategories';
 import { useGetIngredientsQuery } from '../../services/apiIngredients';
-import { useCreateProductMutation } from '../../services/apiProducts';
+import {
+  useCreateProductMutation,
+  useUpdateProductMutation,
+} from '../../services/apiProducts';
 
-const ProductForm = ({ edit = false, product }) => {
+const ProductForm = ({ edit = false, product, productId }) => {
   const {
     register,
     formState: { errors },
@@ -17,6 +20,7 @@ const ProductForm = ({ edit = false, product }) => {
     control,
     setValue,
     reset,
+    setError: setFormError,
   } = useForm({
     defaultValues: edit
       ? {
@@ -31,7 +35,14 @@ const ProductForm = ({ edit = false, product }) => {
     control,
   });
   const [ingredients, setIngredients] = useState(
-    (edit && product.ingredients) || [],
+    (edit &&
+      product.ingredients.map(itm => ({
+        ingredientID: itm.ingredient.ingredientID,
+        quantity: itm.quantity,
+        unit: itm.ingredient.unit,
+        name: itm.ingredient.name,
+      }))) ||
+      [],
   );
   const [error, setError] = useState('');
   const { data: catData, isLoading: isCategoryLoading } =
@@ -41,21 +52,31 @@ const ProductForm = ({ edit = false, product }) => {
     createProduct,
     { isLoading: isCreating, isSuccess, reset: resetCreateProdState },
   ] = useCreateProductMutation();
+  const [updateProduct, { isLoading: isUpdating, isSuccess: isUpdated }] =
+    useUpdateProductMutation();
   // Add Ingredients
   const handleAddIngredient = () => {
     if (error) setError('');
+    if (errors.quantity) setFormError('quantity', {});
 
     const values = getValues();
     const ing = ingData.results.find(
       itm => values.ingredient === itm.ingredientID,
     );
-    const newIng = { ...ing, tempID: Date.now() * 1000000 + Math.random() };
-    setIngredients(prev => [...prev, newIng]);
-  };
+    const isIngExists = ingredients.find(
+      itm => itm.ingredientID === ing.ingredientID,
+    );
 
+    if (isIngExists) return;
+    if (!values.quantity)
+      return setFormError('quantity', { message: 'Please add quantity here!' });
+    setIngredients(prev => [...prev, { ...ing, quantity: values.quantity }]);
+  };
+  console.log(errors);
   // REmove an ingredient
   const removeIng = id => {
-    setIngredients(ingredients.filter(ing => ing.tempID !== id));
+    console.log(id);
+    setIngredients(ingredients.filter(ing => ing.ingredientID !== id));
   };
 
   const onSubmit = data => {
@@ -65,23 +86,21 @@ const ProductForm = ({ edit = false, product }) => {
 
     // Get All ingredients ID's
     const allIng = {};
-    ingredients.forEach(ing => {
-      if (allIng[ing.ingredientID]) {
-        allIng[ing.ingredientID] += 1;
-      } else {
-        allIng[ing.ingredientID] = 1;
-      }
-    });
+    ingredients.forEach(ing => (allIng[ing.ingredientID] = ing.quantity));
 
     const preparedData = {
       name: data.productName,
       categoryID: catData.results.find(cat => cat.name === data.category)
         .categoryID,
-      price: data.price,
+      price: +data.price,
       ingredients: allIng,
     };
 
-    createProduct(preparedData);
+    if (edit) {
+      updateProduct({ id: productId, data: preparedData });
+    } else {
+      createProduct(preparedData);
+    }
   };
 
   useEffect(() => {
@@ -97,13 +116,14 @@ const ProductForm = ({ edit = false, product }) => {
       setTimeout(() => resetCreateProdState(), 3000);
     }
   }, [isSuccess, reset, resetCreateProdState]);
-
+  console.log(ingredients);
   return (
     <div>
       <form
         className="mt-4 flex flex-col gap-3 rounded-md bg-white p-5 shadow-md"
         onSubmit={handleSubmit(onSubmit)}
       >
+        {/* Product Name */}
         <Input
           label="Product Name"
           register={register}
@@ -115,6 +135,7 @@ const ProductForm = ({ edit = false, product }) => {
           autoFocus
         />
         <div className="grid grid-cols-1 gap-x-8 sm:grid-cols-2">
+          {/* Category */}
           <div
             className="
           flex flex-col gap-3"
@@ -140,6 +161,7 @@ const ProductForm = ({ edit = false, product }) => {
             <span></span>
           </div>
 
+          {/* Price */}
           <Input
             label="Price"
             register={register}
@@ -154,6 +176,7 @@ const ProductForm = ({ edit = false, product }) => {
         </div>
 
         <div className="grid grid-cols-2 gap-x-3 sm:gap-x-8">
+          {/* Ingredients */}
           <div
             className="
           flex flex-col gap-3"
@@ -179,6 +202,7 @@ const ProductForm = ({ edit = false, product }) => {
             </select>
             <span></span>
           </div>
+          {/* Unit */}
           <div className="flex  gap-2 ">
             <Input
               className="w-full"
@@ -187,6 +211,7 @@ const ProductForm = ({ edit = false, product }) => {
               id="unit"
               label="Unit"
             />
+            {/* Quantity */}
             <Input
               register={register}
               id="quantity"
@@ -194,6 +219,8 @@ const ProductForm = ({ edit = false, product }) => {
               min={0}
               type="number"
               className="w-full"
+              error={errors?.quantity?.message}
+              showError
             />
           </div>
         </div>
@@ -201,6 +228,7 @@ const ProductForm = ({ edit = false, product }) => {
           <Button variant="dark" type="button" onClick={handleAddIngredient}>
             Add Ingredient
           </Button>
+          {/* Display ingredients */}
           <ul className="mt-3 flex flex-wrap items-center gap-3">
             {ingredients?.map((ing, i) => (
               <li
@@ -212,23 +240,28 @@ const ProductForm = ({ edit = false, product }) => {
                 </span>
                 <HiX
                   className="cursor-pointer transition-all hover:scale-110"
-                  onClick={() => removeIng(ing.tempID)}
+                  onClick={() => removeIng(ing.ingredientID)}
                 />
               </li>
             ))}
           </ul>
         </div>
 
+        {/* Display error or success message */}
         <div className="mt-5 flex justify-end">
-          {(error || isSuccess) && (
+          {(error || isSuccess || isUpdated) && (
             <p
-              className={`mr-auto bg-${isSuccess ? 'green' : 'red'}-100 px-3 py-2 text-${isSuccess ? 'green' : 'red'}-500`}
+              className={`mr-auto bg-${isSuccess || isUpdated ? 'green' : 'red'}-100 px-3 py-2 text-${isSuccess || isUpdated ? 'green' : 'red'}-500`}
             >
-              {isSuccess ? 'Your product is added successfully!' : error}
+              {isSuccess
+                ? 'Your product is added successfully!'
+                : isUpdated
+                  ? 'Your product has successfully updated!'
+                  : error}
             </p>
           )}
           <Button type="submit" className="px-10" variant="dark">
-            {isCreating ? 'Saving...' : 'Save'}
+            {isCreating || isUpdating ? 'Saving...' : 'Save'}
           </Button>
         </div>
       </form>

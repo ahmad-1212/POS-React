@@ -7,6 +7,8 @@ import { LuClipboardList } from 'react-icons/lu';
 import { GoHome } from 'react-icons/go';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { FaRegListAlt } from 'react-icons/fa';
+import { MdOutlineInventory2 } from 'react-icons/md';
+import NavItem from './NavItem';
 
 const LINKS = [
   {
@@ -23,6 +25,16 @@ const LINKS = [
     link: '/orders',
     icon: <FiCheckSquare />,
     name: 'orders',
+  },
+  {
+    link: '/main-inventory',
+    icon: <MdOutlineInventory2 />,
+    name: 'inventories',
+    extended: true,
+    links: [
+      { link: '/main-inventory', name: 'Main Inventory' },
+      { link: '/kitchen-inventory', name: 'Kitchen Inventory' },
+    ],
   },
   {
     link: '/categories',
@@ -55,21 +67,8 @@ const DashboardNav = ({ collapseSidebar, onClick }) => {
     >
       <nav>
         <ul className="flex flex-col gap-3">
-          {LINKS.map(link => (
-            <li key={link.name}>
-              <NavLink
-                onClick={() => onClick?.()}
-                to={link.link}
-                className={({ isActive }) =>
-                  isActive
-                    ? `flex items-center gap-5 rounded-md bg-primary-500 px-4 py-2 text-[1.3rem] font-[400] capitalize text-white`
-                    : 'flex items-center gap-5 rounded-md px-4 py-2 text-[1.3rem] font-[400] capitalize transition-all hover:bg-primary-500 hover:text-white '
-                }
-              >
-                <span>{link.icon}</span>
-                <span>{link.name}</span>
-              </NavLink>
-            </li>
+          {LINKS.map((link, i) => (
+            <NavItem key={i} link={link} onClick={onClick} />
           ))}
         </ul>
       </nav>

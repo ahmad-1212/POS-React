@@ -40,7 +40,6 @@ const IngredientForm = ({ edit = false, ingredient, onCloseModal }) => {
     } else {
       createIngredient({
         name: data.ingredient,
-        quantity: data.quantity,
         unit: data.unit,
       });
     }
@@ -68,15 +67,7 @@ const IngredientForm = ({ edit = false, ingredient, onCloseModal }) => {
           error={errors?.ingredient?.message}
           showError
         />
-        <Input
-          label="Quantity"
-          register={register}
-          required="Quantity is required!"
-          id="quantity"
-          type="number"
-          error={errors?.quantity?.message}
-          showError
-        />
+
         <Input
           label="Unit"
           required="Unit is required!"

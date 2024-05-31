@@ -14,7 +14,9 @@ const EditProduct = () => {
         <LuClipboardList />
         <h1>Edit Product</h1>
       </div>
-      {data && !isLoading && <ProductForm edit product={data} />}
+      {data && !isLoading && (
+        <ProductForm edit product={data} productId={productId} />
+      )}
       {isLoading && (
         <div className="mx-auto mt-20">
           <Spinner />
