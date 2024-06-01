@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { CATEGORIES } from '../../Data/data';
 import { useDispatch } from 'react-redux';
 import { decreaseItemQuantity, increaseItemQuantity } from './cartSlice';
 const CartItem = ({ itm }) => {

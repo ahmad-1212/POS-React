@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import Input from '../../Components/UI/Input';
 import { useForm } from 'react-hook-form';
 import Button from '../../Components/UI/Button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   useUpdateCategoryMutation,
   useCreateCategoryMutation,
 } from '../../services/apiCategories';
+import { toast } from 'react-toastify';
 
 const CategoryForm = ({ onCloseModal, edit = false, category }) => {
   const {
@@ -21,8 +22,6 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
     useCreateCategoryMutation();
   const [update, { isLoading: isUpdating, isSuccess: isUpdated }] =
     useUpdateCategoryMutation();
-
-  if (isUpdated || isCreated) onCloseModal();
 
   const onSubmit = async data => {
     if (edit) {
@@ -47,6 +46,17 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
     setImgUrl(url);
     setImage(file);
   };
+
+  useEffect(() => {
+    if (isCreated) {
+      toast.success('Category successfully created!');
+      onCloseModal();
+    }
+    if (isUpdated) {
+      toast.success('Category successfully updated!');
+      onCloseModal();
+    }
+  }, [isCreated, isUpdated, onCloseModal]);
 
   return (
     <div>

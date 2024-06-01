@@ -3,7 +3,7 @@ import { apiBase } from './apiBase';
 const apiIngredients = apiBase.injectEndpoints({
   endpoints: build => ({
     getIngredients: build.query({
-      query: () => '/ingredients/',
+      query: page => `/ingredients/?page=${page}`,
       providesTags: ['ingredients'],
     }),
     createIngredient: build.mutation({
@@ -25,6 +25,7 @@ const apiIngredients = apiBase.injectEndpoints({
       invalidatesTags: ['ingredients'],
     }),
   }),
+  overrideExisting: false,
 });
 
 export const {
@@ -32,4 +33,5 @@ export const {
   useCreateIngredientMutation,
   useUpdateIngredientMutation,
   useDeleteIngredientMutation,
+  usePrefetch,
 } = apiIngredients;

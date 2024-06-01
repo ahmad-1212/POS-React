@@ -15,6 +15,7 @@ const apiKitchenInventory = apiBase.injectEndpoints({
       invalidatesTags: ['kitchen-inventory', 'main-inventory'],
     }),
   }),
+  overrideExisting: false,
 });
 
 export const { useGetKitchenInventoryQuery, useSendToMainMutation } =

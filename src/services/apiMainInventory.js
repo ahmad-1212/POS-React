@@ -31,6 +31,8 @@ const apiMainInventory = apiBase.injectEndpoints({
       invalidatesTags: ['main-inventory', 'kitchen-inventory'],
     }),
   }),
+  overrideExisting:false,
+
 });
 
 export const {

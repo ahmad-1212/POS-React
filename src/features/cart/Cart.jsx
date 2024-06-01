@@ -6,19 +6,47 @@ import { PiArrowLineRightBold } from 'react-icons/pi';
 import IconButton from '../../Components/UI/IconButton';
 import CartItem from './CartItem';
 import { useSearchParams } from 'react-router-dom';
-import Modal from '../../Components/UI/Modal';
-import UserDeliveyDetailForm from './UserDeliveyDetailForm';
-import { useCreateCartMutation } from '../../services/apiCart';
+
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
+import { useCreateOrderMutation } from '../../services/apiOrders';
 
 const Cart = ({ onSidebarHide }) => {
   const [searchParams] = useSearchParams();
+  const [addOrder, { isLoading: isAdding, isSuccess: isAdded, error }] =
+    useCreateOrderMutation();
   const cart = useSelector(state => state.cart);
-  const [createCart, { isLoading: isCartCreating, isSuccess: isCartCreated }] =
-    useCreateCartMutation();
 
+  const table = searchParams.get('table');
   const type = searchParams.get('type');
 
-  const submitCartData = () => {};
+  const createOrder = () => {
+    const products = {};
+    cart.items.forEach(itm => (products[itm.productID] = itm.quantity));
+    let data = {};
+    if (type === 'dine in') {
+      data = {
+        option: type.toLowerCase().replace(' ', '_'),
+        table,
+        products,
+      };
+    } else {
+      data = {
+        option: type.toLowerCase().replace(' ', '_'),
+        products,
+        customer_name: cart.userInfo.name,
+        address: cart.userInfo.address,
+        phone_number: cart.userInfo.phoneNumber,
+      };
+    }
+
+    addOrder(data);
+  };
+
+  useEffect(() => {
+    if (isAdded) toast.success('Order successfully created!');
+    if (error) toast.error(error?.data?.error);
+  }, [isAdded, error]);
 
   return (
     <div className="flex h-full flex-col overflow-x-hidden px-4 py-3">
@@ -53,29 +81,16 @@ const Cart = ({ onSidebarHide }) => {
         </div>
         <div className="flex justify-between">
           <Button
-            disabled={isCartCreating}
+            disabled={isAdded || !cart?.items.length}
             variant="dark"
-            onClick={submitCartData}
+            onClick={createOrder}
           >
-            {isCartCreating ? 'Loading...' : 'Send to Kitchen'}
+            {isAdding ? 'Loading...' : 'Send to Kitchen'}
           </Button>
-          {type !== 'delivery' ? (
-            <Button variant="dark">Print Invoice</Button>
-          ) : (
-            <Modal>
-              <Modal.Open id="invoice">
-                <Button variant="dark">Print Invoice</Button>
-              </Modal.Open>
-              <Modal.Window
-                id="invoice"
-                zIndex="z-50"
-                closeOnOverlay
-                scrollbar={false}
-              >
-                <UserDeliveyDetailForm />
-              </Modal.Window>
-            </Modal>
-          )}
+
+          <Button disabled={!cart?.items.length} variant="dark">
+            Print Invoice
+          </Button>
         </div>
       </section>
     </div>

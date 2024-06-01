@@ -1,123 +1,24 @@
-import Button from "../../Components/UI/Button";
+import Button from '../../Components/UI/Button';
+import DataTable from '../../Components/UI/DataTable';
+import { useGetOrdersQuery } from '../../services/apiOrders';
 
 const Orders = () => {
+  const { data } = useGetOrdersQuery();
+  console.log(data);
   return (
-    <section className="py-10  flex flex-col gap-3">
-      <div className="flex-between gap-3 flex-wrap">
+    <section className="flex  flex-col gap-3 py-10">
+      <div className="flex-between flex-wrap gap-3">
         <h1 className="text-[2rem] font-[600]">Orders</h1>
-        <div className="flex gap-3 items-center flex-1 justify-end">
+        <div className="flex flex-1 items-center justify-end gap-3">
           <input
-            className="px-4 py-2 outline-none border-2 border-primary-100 focus:border-primary-200 min-w-[200px] w-[70%] md:w-[40%] text-[0.9rem] rounded-3xl placeholder:text-primary-200 focus:w-[45%] transition-all"
+            className="w-[70%] min-w-[200px] rounded-3xl border-2 border-primary-100 px-4 py-2 text-[0.9rem] outline-none transition-all placeholder:text-primary-200 focus:w-[45%] focus:border-primary-200 md:w-[40%]"
             placeholder="Search here..."
             type="text"
           />
           <Button variant="dark">Search</Button>
         </div>
       </div>
-      <div className="w-full min-w-[98%] border-2 border-primary-100 overflow-x-auto custom-scrollbar">
-        <table className="w-full border-2 border-primary-100 rounded-lg">
-          <thead className="text-[1.2rem] bg-primary-100 text-primary-500">
-            <tr>
-              <th className="py-3">Order ID</th>
-              <th className="py-3">Name</th>
-              <th className="py-3">Items</th>
-              <th className="py-3">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="text-center border-2 border-primary-100">
-              <td className="py-2 px-3">
-                #{Math.floor(Math.random() * 1000000)}
-              </td>
-              <td className="py-2 px-3">Maximillian</td>
-              <td className="py-2 px-3">4</td>
-              <td className="py-2 px-3 text-primary-500 font-[600]">
-                In Progress
-              </td>
-            </tr>
-            <tr className="text-center border-2 border-primary-100">
-              <td className="py-2 px-3">
-                #{Math.floor(Math.random() * 1000000)}
-              </td>
-              <td className="py-2 px-3">Maximillian</td>
-              <td className="py-2 px-3">4</td>
-              <td className="py-2 px-3 text-primary-500 font-[600]">
-                In Progress
-              </td>
-            </tr>
-            <tr className="text-center border-2 border-primary-100">
-              <td className="py-2 px-3">
-                #{Math.floor(Math.random() * 1000000)}
-              </td>
-              <td className="py-2 px-3">Maximillian</td>
-              <td className="py-2 px-3">4</td>
-              <td className="py-2 px-3 text-primary-500 font-[600]">
-                In Progress
-              </td>
-            </tr>
-            <tr className="text-center border-2 border-primary-100">
-              <td className="py-2 px-3">
-                #{Math.floor(Math.random() * 1000000)}
-              </td>
-              <td className="py-2 px-3">Maximillian</td>
-              <td className="py-2 px-3">4</td>
-              <td className="py-2 px-3 text-primary-500 font-[600]">
-                In Progress
-              </td>
-            </tr>
-            <tr className="text-center border-2 border-primary-100">
-              <td className="py-2 px-3">
-                #{Math.floor(Math.random() * 1000000)}
-              </td>
-              <td className="py-2 px-3">Maximillian</td>
-              <td className="py-2 px-3">4</td>
-              <td className="py-2 px-3 text-primary-500 font-[600]">
-                In Progress
-              </td>
-            </tr>
-            <tr className="text-center border-2 border-primary-100">
-              <td className="py-2 px-3">
-                #{Math.floor(Math.random() * 1000000)}
-              </td>
-              <td className="py-2 px-3">Maximillian</td>
-              <td className="py-2 px-3">4</td>
-              <td className="py-2 px-3 text-primary-500 font-[600]">
-                In Progress
-              </td>
-            </tr>
-            <tr className="text-center border-2 border-primary-100">
-              <td className="py-2 px-3">
-                #{Math.floor(Math.random() * 1000000)}
-              </td>
-              <td className="py-2 px-3">Maximillian</td>
-              <td className="py-2 px-3">4</td>
-              <td className="py-2 px-3 text-primary-500 font-[600]">
-                In Progress
-              </td>
-            </tr>
-            <tr className="text-center border-2 border-primary-100">
-              <td className="py-2 px-3">
-                #{Math.floor(Math.random() * 1000000)}
-              </td>
-              <td className="py-2 px-3">Maximillian</td>
-              <td className="py-2 px-3">4</td>
-              <td className="py-2 px-3 text-primary-500 font-[600]">
-                In Progress
-              </td>
-            </tr>
-            <tr className="text-center border-2 border-primary-100">
-              <td className="py-2 px-3">
-                #{Math.floor(Math.random() * 1000000)}
-              </td>
-              <td className="py-2 px-3">Maximillian</td>
-              <td className="py-2 px-3">4</td>
-              <td className="py-2 px-3 text-primary-500 font-[600]">
-                In Progress
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <DataTable head={['Name', 'Email', 'Type', 'Date']} />
     </section>
   );
 };

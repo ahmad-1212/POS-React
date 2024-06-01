@@ -1,83 +1,87 @@
-import { useState } from "react";
-import Button from "../UI/Button";
-import Modal from "../UI/Modal";
-import Tables from "../../features/tables/Tables";
-import { useSearchParams } from "react-router-dom";
-import { useScreen } from "../../hooks/useScreen";
+import { useState } from 'react';
+import Button from '../UI/Button';
+import Modal from '../UI/Modal';
+import Tables from '../../features/tables/Tables';
+import { useSearchParams } from 'react-router-dom';
+import { useScreen } from '../../hooks/useScreen';
+import { useDispatch } from 'react-redux';
+import { addUserInfo } from '../../features/cart/cartSlice';
 
-const RADIO_OPTION = ["dine in", "take away", "delivery"];
+const RADIO_OPTION = ['dine in', 'take away', 'delivery'];
 const ORDERS = [
   {
-    name: "John Smith",
+    name: 'John Smith',
     items: 4,
   },
   {
-    name: "Mathew",
+    name: 'Mathew',
     items: 3,
   },
   {
-    name: "William",
+    name: 'William',
     items: 1,
   },
   {
-    name: "Alax",
+    name: 'Alax',
     items: 6,
   },
   {
-    name: "John Smith",
+    name: 'John Smith',
     items: 4,
   },
   {
-    name: "Mathew",
+    name: 'Mathew',
     items: 3,
   },
   {
-    name: "William",
+    name: 'William',
     items: 1,
   },
   {
-    name: "Alax",
+    name: 'Alax',
     items: 6,
   },
 ];
 
 const Header = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [radioOpt, setRadioOpt] = useState(searchParams.get("type"));
+  const [radioOpt, setRadioOpt] = useState(searchParams.get('type'));
   const [selectValue, setSelectValue] = useState(
-    searchParams.get("type") || ""
+    searchParams.get('type') || '',
   );
+  const dispatch = useDispatch();
   const { screen } = useScreen();
-  const type = searchParams.get("type");
-  const table = searchParams.get("table");
+  const type = searchParams.get('type');
+  const table = searchParams.get('table');
 
   // Set type in the header
-  const setType = (typ) => {
-    searchParams.set("type", typ.toLowerCase());
-    searchParams.delete("table");
+  const setType = typ => {
+    searchParams.set('type', typ.toLowerCase());
+    searchParams.delete('table');
     setSearchParams(searchParams);
+    dispatch(addUserInfo(null));
   };
 
   // Handle type change
-  const handleRadioChange = (e) => {
+  const handleRadioChange = e => {
     setType(e.target.value);
-    if (e.target.value === radioOpt) return setRadioOpt("");
+    if (e.target.value === radioOpt) return setRadioOpt('');
     setRadioOpt(e.target.value);
   };
 
   // handle select change that displays only on mobile devices
-  const handleSelectChange = (e) => {
+  const handleSelectChange = e => {
     setType(e.target.value);
     setSelectValue(e.target.value);
   };
 
   return (
-    <header className="h-[70px] lg:h-[80px] w-full flex  gap-3 md:gap-10 items-center sticky top-0 z-10 bg-white border-b-2 px-4 md:px-10">
-      <div className="hidden sm:flex items-center gap-3 sm:gap-5 hover-effect">
-        {RADIO_OPTION.map((opt) => (
+    <header className="sticky top-0 z-10 flex  h-[70px] w-full items-center gap-3 border-b-2 bg-white px-4 md:gap-10 md:px-10 lg:h-[80px]">
+      <div className="hover-effect hidden items-center gap-3 sm:flex sm:gap-5">
+        {RADIO_OPTION.map(opt => (
           <div className="flex items-center gap-1 md:gap-3" key={opt}>
             <input
-              style={{ accentColor: "orangered" }}
+              style={{ accentColor: 'orangered' }}
               type="radio"
               id={opt}
               value={opt}
@@ -87,7 +91,7 @@ const Header = () => {
             />
             <label
               htmlFor={opt}
-              className="font-[700] text-[1rem] md:text-[1.2rem] capitalize"
+              className="text-[1rem] font-[700] capitalize md:text-[1.2rem]"
             >
               {opt}
             </label>
@@ -98,7 +102,7 @@ const Header = () => {
         <select
           onChange={handleSelectChange}
           value={selectValue}
-          className=" border rounded-md py-2 px-4 bg-white text-gray-700 leading-tight focus:outline-none focus:border-primary-500 w-[150px]"
+          className=" w-[150px] rounded-md border bg-white px-4 py-2 leading-tight text-gray-700 focus:border-primary-500 focus:outline-none"
         >
           <option disabled defaultValue value="">
             Please select any type
@@ -109,12 +113,12 @@ const Header = () => {
         </select>
       </div>
       {/* Table only display when type is dine in */}
-      {type === "dine in" && (
+      {type === 'dine in' && (
         <div className="ml-auto lg:ml-10">
           <Modal>
             <Modal.Open id="chooseTable">
               <Button variant="dark">
-                {table ? table : `${screen < 500 ? "Table" : "Choose Table"}`}
+                {table ? table : `${screen < 500 ? 'Table' : 'Choose Table'}`}
               </Button>
             </Modal.Open>
             <Modal.Window id="chooseTable" closeOnOverlay={true} zIndex="z-50">
@@ -128,23 +132,23 @@ const Header = () => {
         <Modal>
           <Modal.Open id="activeOrders">
             <Button variant="dark">
-              {screen < 500 ? "Orders" : "Active Orders"}
+              {screen < 500 ? 'Orders' : 'Active Orders'}
             </Button>
           </Modal.Open>
           <Modal.Window id="activeOrders" zIndex="z-50" closeOnOverlay>
             <div className="p-10">
-              <h1 className="text-center text-[1.5rem] font-[600] mb-4">
+              <h1 className="mb-4 text-center text-[1.5rem] font-[600]">
                 Active Orders
               </h1>
-              <ul className="grid grid-cols-2 justify-center gap-y-6 gap-x-4 flex-wrap">
-                {ORDERS.map((ord) => (
+              <ul className="grid grid-cols-2 flex-wrap justify-center gap-x-4 gap-y-6">
+                {ORDERS.map(ord => (
                   <li key={ord.name} className="flex gap-3">
-                    <div className="w-[50px] h-[50px] flex-center bg-red-400 text-white text-[1.2rem] rounded-lg">
+                    <div className="flex-center h-[50px] w-[50px] rounded-lg bg-red-400 text-[1.2rem] text-white">
                       H1
                     </div>
                     <div>
-                      <h3 className="capitalize font-[600]">{ord.name}</h3>
-                      <div className="font-[500] text-[0.9rem] text-gray-400">
+                      <h3 className="font-[600] capitalize">{ord.name}</h3>
+                      <div className="text-[0.9rem] font-[500] text-gray-400">
                         {ord.items} items
                       </div>
                     </div>

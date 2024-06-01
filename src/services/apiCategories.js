@@ -1,45 +1,49 @@
 // Ensure you use the correct import for RTK Query
-import { apiBase } from "./apiBase"; // Ensure this is correctly configured and exported
+import { apiBase } from './apiBase'; // Ensure this is correctly configured and exported
 
 // Inject endpoints into the base API
 export const apiCategories = apiBase.injectEndpoints({
-  endpoints: (build) => ({
+  endpoints: build => ({
+    // Get categories
     getCategories: build.query({
-      query: () => "/categories",
-      providesTags: ["categories"],
+      query: () => '/categories',
+      providesTags: ['categories'],
     }),
     createCategory: build.mutation({
       query(body) {
         return {
-          url: "/categories/",
-          method: "POST",
+          url: '/categories/',
+          method: 'POST',
           body,
         };
       },
-      transformErrorResponse: (res) => console.log(res),
-      invalidatesTags: ["categories"],
+
+      invalidatesTags: ['categories'],
     }),
+
+    // Update category
     updateCategory: build.mutation({
       query(data) {
         const { id, formData: body } = data;
         return {
           url: `/categories/${id}/`,
-          method: "PATCH",
+          method: 'PATCH',
           body,
         };
       },
-      transformResponse: (res) => res.data,
-      transformErrorResponse: (res) => res.error,
-      invalidatesTags: ["categories"],
+
+      invalidatesTags: ['categories'],
     }),
+
+    // Delete Category
     deleteCategory: build.mutation({
       query(id) {
         return {
           url: `/categories/${id}/`,
-          method: "DELETE",
+          method: 'DELETE',
         };
       },
-      invalidatesTags: ["categories"],
+      invalidatesTags: ['categories'],
     }),
   }),
   overrideExisting: false, // Prevents overriding existing endpoints if set to true

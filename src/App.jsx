@@ -1,5 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 
+import 'react-toastify/dist/ReactToastify.css';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
 import LoginPage from './pages/Auth/LoginPage';
@@ -21,6 +23,7 @@ import KitchenInventoryPage from './pages/KitchenInventoryPage';
 const App = () => {
   return (
     <BrowserRouter>
+      <ToastContainer />
       <Provider store={store}>
         <Routes>
           <Route index path="/" element={<Navigate to="/login" />} />
