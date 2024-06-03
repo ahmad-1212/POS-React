@@ -6,15 +6,27 @@ const apiOrders = apiBase.injectEndpoints({
       query: () => '/orders/',
       providesTags: ['orders'],
     }),
+    getOrderByID: build.mutation({
+      query: id => `orders/${id}/?include_cart=true`,
+    }),
     createOrder: build.mutation({
       query: data => ({
         url: '/orders/',
         method: 'POST',
         body: data,
       }),
+      invalidatesTags: ['active-orders'],
     }),
-    getActiveOrders: build.mutation({
-      query: () => '',
+    getActiveOrders: build.query({
+      query: () => '/orders/?include_cart=true&acitve_only=true',
+      providesTags: ['active-orders'],
+    }),
+    updateOrder: build.mutation({
+      query: ({ id, data }) => ({
+        url: `/orders/${id}/`,
+        method: 'PUT',
+        body: data,
+      }),
     }),
   }),
   overrideExisting: false,
@@ -23,5 +35,7 @@ const apiOrders = apiBase.injectEndpoints({
 export const {
   useGetOrdersQuery,
   useCreateOrderMutation,
-  useGetActiveOrdersMutation,
+  useGetActiveOrdersQuery,
+  useGetOrderByIDMutation,
+  useUpdateOrderMutation,
 } = apiOrders;

@@ -1,31 +1,40 @@
-import { useSearchParams } from "react-router-dom";
-import PropTypes from "prop-types";
+import { useSearchParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { useGetTablesQuery } from '../../services/apiTables';
+import Spinner from '../../Components/UI/Spinner';
 const Tables = ({ onCloseModal }) => {
+  const { data: tables, isLoading } = useGetTablesQuery();
   const [searchParams, setSearchParams] = useSearchParams();
-
-  const handleClick = (tableNum) => {
-    searchParams.set("table", `H${tableNum}`);
+  console.log(tables);
+  const handleClick = tableNum => {
+    searchParams.set('table', `${tableNum}`);
     setSearchParams(searchParams);
     onCloseModal();
   };
   return (
     <>
-      <h1 className="text-center py-5 text-[1.4rem] font-[700]">Tables</h1>
-
-      <ul
-        className="p-2 sm:p-5 md:p-10 flex flex-wrap gap-4 justify-center overflow-y-auto 
+      <h1 className="py-5 text-center text-[1.4rem] font-[700]">Tables</h1>
+      {isLoading && (
+        <div className="flex-center my-20">
+          <Spinner />
+        </div>
+      )}
+      {tables?.results && !isLoading && (
+        <ul
+          className="flex flex-wrap justify-center gap-4 overflow-y-auto p-2 sm:p-5 md:p-10 
             "
-      >
-        {Array.from({ length: 20 }).map((table, i) => (
-          <li
-            onClick={() => handleClick(i + 1)}
-            key={i}
-            className="p-5 w-[80px] flex-center bg-green-400 text-white rounded-lg font-[600] text-[1.3rem] cursor-pointer hover:scale-105"
-          >
-            <div>H{i + 1}</div>
-          </li>
-        ))}
-      </ul>
+        >
+          {tables?.results?.map((table, i) => (
+            <li
+              onClick={() => !table.is_reserved && handleClick(table.number)}
+              key={i}
+              className={`flex-center w-[80px] cursor-pointer rounded-lg ${table.is_reserved ? 'cursor-not-allowed bg-red-400' : 'bg-green-400 hover:scale-105'} p-5 text-[1.3rem] font-[600] text-white `}
+            >
+              <div>H{table.number}</div>
+            </li>
+          ))}
+        </ul>
+      )}
     </>
   );
 };

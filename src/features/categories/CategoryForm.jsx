@@ -18,11 +18,16 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
   } = useForm({ defaultValues: edit ? { categoryName: category.name } : {} });
   const [imgUrl, setImgUrl] = useState(edit && category?.image);
   const [image, setImage] = useState(null);
-  const [createCategory, { isLoading, isSuccess: isCreated }] =
-    useCreateCategoryMutation();
-  const [update, { isLoading: isUpdating, isSuccess: isUpdated }] =
-    useUpdateCategoryMutation();
+  const [
+    createCategory,
+    { isLoading, isSuccess: isCreated, error: createError },
+  ] = useCreateCategoryMutation();
+  const [
+    update,
+    { isLoading: isUpdating, isSuccess: isUpdated, error: updateError },
+  ] = useUpdateCategoryMutation();
 
+  // Handle form submission
   const onSubmit = async data => {
     if (edit) {
       const formData = new FormData();
@@ -30,6 +35,7 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
       if (image) formData.append('image', image);
       update({ id: category.id, formData });
     } else {
+      if (!image) return toast.error('Please provide an Image!');
       const formData = new FormData();
       formData.append('name', data.categoryName);
       formData.append('image', image);
@@ -38,6 +44,7 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
     }
   };
 
+  // handle image change
   const handleImageChange = e => {
     const file = e.target.files[0];
     if (!file) return;
@@ -47,6 +54,7 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
     setImage(file);
   };
 
+  // Handle success or error state
   useEffect(() => {
     if (isCreated) {
       toast.success('Category successfully created!');
@@ -56,7 +64,9 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
       toast.success('Category successfully updated!');
       onCloseModal();
     }
-  }, [isCreated, isUpdated, onCloseModal]);
+    if (createError) console.log(createError);
+    if (updateError) console.log(updateError);
+  }, [isCreated, isUpdated, onCloseModal, createError, updateError]);
 
   return (
     <div>
@@ -68,6 +78,7 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
         className="mt-4 flex flex-col gap-3 p-5"
         onSubmit={handleSubmit(onSubmit)}
       >
+        {/* Category Name */}
         <Input
           label="Category Name"
           register={register}
@@ -79,6 +90,7 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
           disabled={isLoading || isUpdating}
           autoFocus
         />
+        {/* Image */}
         {!imgUrl && (
           <label
             htmlFor="image"

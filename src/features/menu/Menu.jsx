@@ -7,11 +7,12 @@ import { useSelector } from 'react-redux';
 import Button from '../../Components/UI/Button';
 import Modal from '../../Components/UI/Modal';
 import UserInfoForm from './UserInfoForm';
+import Spinner from '../../Components/UI/Spinner';
 
 const Menu = () => {
   const [searchParams] = useSearchParams();
   const category = searchParams.get('category');
-  const { data } = useGetProductsQuery();
+  const { data, isLoading } = useGetProductsQuery();
   const [products, setProducts] = useState(null);
   const userInfo = useSelector(state => state.cart.userInfo);
   const type = searchParams.get('type');
@@ -22,7 +23,7 @@ const Menu = () => {
   }, [category, data]);
 
   return (
-    <section className="flex flex-col gap-4 px-4 py-5 sm:px-10">
+    <section className="mb-10 flex flex-col gap-4 px-4 py-5 sm:px-10">
       {/* IF no type is selected */}
       {!type && (
         <h1 className="mt-28 text-center text-[1.6rem] text-[600] text-primary-500">
@@ -50,7 +51,7 @@ const Menu = () => {
       )}
 
       {/* If type is dine in and table is selected and category is selected */}
-      {type === 'dine in' && table && category && (
+      {type === 'dine in' && table && category && !isLoading && (
         <>
           <h1 className="text-[2rem] font-[700] uppercase tracking-wide">
             {category}
@@ -82,8 +83,14 @@ const Menu = () => {
         </div>
       )}
 
+      {type && category && userInfo && isLoading && (
+        <div className="mx-auto my-20">
+          <Spinner />
+        </div>
+      )}
+
       {/* If type is not dine in and type is selected and user info is added */}
-      {type !== 'dine in' && type && category && userInfo && (
+      {type !== 'dine in' && type && category && userInfo && !isLoading && (
         <>
           <h1 className="text-[2rem] font-[700] uppercase tracking-wide">
             {category}

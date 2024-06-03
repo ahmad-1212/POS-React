@@ -10,6 +10,7 @@ import {
   useAddItemToMainInventoryMutation,
   useUpdateItemOfMainInventoryMutation,
 } from '../../services/apiMainInventory';
+import { toast } from 'react-toastify';
 
 const MainInventoryForm = ({ edit, item, onCloseModal }) => {
   const {
@@ -20,7 +21,8 @@ const MainInventoryForm = ({ edit, item, onCloseModal }) => {
     getValues,
     formState: { errors },
   } = useForm();
-  const { data: ingData, isLoading: isIngLoading } = useGetIngredientsQuery();
+  const { data: ingData, isLoading: isIngLoading } =
+    useGetIngredientsQuery('1');
   const [addItem, { isLoading, isSuccess, reset: resetAddState }] =
     useAddItemToMainInventoryMutation();
   const [
@@ -32,6 +34,7 @@ const MainInventoryForm = ({ edit, item, onCloseModal }) => {
     control,
     name: 'ingredient',
   });
+
   const onSubmit = data => {
     if (edit) {
       updateItem({ id: item.id, data: { quantity: data.quantity } });
@@ -41,19 +44,31 @@ const MainInventoryForm = ({ edit, item, onCloseModal }) => {
   };
 
   useEffect(() => {
-    if (isUpdated || isSuccess) {
-      isUpdated ? resetUpdateState() : resetAddState();
+    if (isUpdated) {
+      resetUpdateState();
       onCloseModal();
+      toast.success(`${item.ingredient.name} data updated!`);
     }
-  }, [isUpdated, isSuccess, resetUpdateState, resetAddState, onCloseModal]);
+    if (isSuccess) {
+      resetAddState();
+      onCloseModal();
+      toast.success('Stock successfully added!');
+    }
+  }, [
+    isUpdated,
+    isSuccess,
+    resetUpdateState,
+    resetAddState,
+    onCloseModal,
+    item,
+  ]);
 
   useEffect(() => {
-    if (!ingData || !edit) return;
-
+    if (!ingData?.results || !edit) return;
     setValue('ingredient', item.ingredient.id);
     setValue('unit', item.ingredient.unit);
     setValue('quantity', item.quantity);
-  }, [ingData, edit, item, setValue]);
+  }, [ingData?.results, edit, item, setValue]);
 
   useEffect(() => {
     const ingID = getValues().ingredient;

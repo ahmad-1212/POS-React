@@ -8,6 +8,7 @@ import {
   useUpdateIngredientMutation,
 } from '../../services/apiIngredients';
 import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const IngredientForm = ({ edit = false, ingredient, onCloseModal }) => {
   const {
@@ -24,10 +25,12 @@ const IngredientForm = ({ edit = false, ingredient, onCloseModal }) => {
       : {},
   });
 
-  const [createIngredient, { isLoading, isSuccess }] =
+  const [createIngredient, { isLoading, isSuccess, reset }] =
     useCreateIngredientMutation();
-  const [updateIngredient, { isLoading: isUpdating, isSuccess: isUpdated }] =
-    useUpdateIngredientMutation();
+  const [
+    updateIngredient,
+    { isLoading: isUpdating, isSuccess: isUpdated, reset: resetUpdateState },
+  ] = useUpdateIngredientMutation();
 
   const onSubmit = data => {
     if (edit) {
@@ -46,8 +49,17 @@ const IngredientForm = ({ edit = false, ingredient, onCloseModal }) => {
   };
 
   useEffect(() => {
-    if (isSuccess || isUpdated) onCloseModal();
-  }, [isSuccess, isUpdated, onCloseModal]);
+    if (isSuccess) {
+      toast.success('Ingredient successfully added!');
+      onCloseModal();
+      reset();
+    }
+    if (isUpdated) {
+      toast.success('Ingredient successfully updated!');
+      onCloseModal();
+      resetUpdateState();
+    }
+  }, [isSuccess, isUpdated, onCloseModal, reset, resetUpdateState]);
   return (
     <div>
       <div className="flex items-center justify-center gap-3 bg-primary-500 py-3 text-[1.4rem] font-[600] text-white">

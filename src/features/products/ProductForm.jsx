@@ -10,6 +10,7 @@ import {
   useCreateProductMutation,
   useUpdateProductMutation,
 } from '../../services/apiProducts';
+import { toast } from 'react-toastify';
 
 const ProductForm = ({ edit = false, product, productId }) => {
   const {
@@ -72,7 +73,6 @@ const ProductForm = ({ edit = false, product, productId }) => {
       return setFormError('quantity', { message: 'Please add quantity here!' });
     setIngredients(prev => [...prev, { ...ing, quantity: values.quantity }]);
   };
-  console.log(errors);
   // REmove an ingredient
   const removeIng = id => {
     console.log(id);
@@ -114,9 +114,12 @@ const ProductForm = ({ edit = false, product, productId }) => {
       reset();
       setIngredients([]);
       setTimeout(() => resetCreateProdState(), 3000);
+      toast.success('Your product is added successfully!');
     }
-  }, [isSuccess, reset, resetCreateProdState]);
-  console.log(ingredients);
+    if (isUpdated) {
+      toast.success('Your product is updated successfully!');
+    }
+  }, [isSuccess, reset, resetCreateProdState, isUpdated]);
   return (
     <div>
       <form
@@ -205,6 +208,7 @@ const ProductForm = ({ edit = false, product, productId }) => {
           {/* Unit */}
           <div className="flex  gap-2 ">
             <Input
+              disabled={true}
               className="w-full"
               register={register}
               type="text"
@@ -249,17 +253,7 @@ const ProductForm = ({ edit = false, product, productId }) => {
 
         {/* Display error or success message */}
         <div className="mt-5 flex justify-end">
-          {(error || isSuccess || isUpdated) && (
-            <p
-              className={`mr-auto bg-${isSuccess || isUpdated ? 'green' : 'red'}-100 px-3 py-2 text-${isSuccess || isUpdated ? 'green' : 'red'}-500`}
-            >
-              {isSuccess
-                ? 'Your product is added successfully!'
-                : isUpdated
-                  ? 'Your product has successfully updated!'
-                  : error}
-            </p>
-          )}
+          {error && <p className={`-100 mr-auto px-3 py-2 `}>{error}</p>}
           <Button type="submit" className="px-10" variant="dark">
             {isCreating || isUpdating ? 'Saving...' : 'Save'}
           </Button>

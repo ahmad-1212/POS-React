@@ -4,26 +4,50 @@ import { useForm } from 'react-hook-form';
 import Input from '../../Components/UI/Input';
 import Button from '../../Components/UI/Button';
 import { useSendToKitchenMutation } from '../../services/apiMainInventory';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 const SendToKitchenForm = ({ item }) => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
+    getValues,
   } = useForm({
     defaultValues: {
       name: item.ingredient.name,
       unit: item.ingredient.unit,
+      quantity: item.quantity,
     },
   });
-  const [sendToKitchen, { isLoading, isSuccess, reset }] =
+  const [sendToKitchen, { isLoading, isSuccess, error, reset }] =
     useSendToKitchenMutation();
+
+  // Handle submit to send data to kitchen
   const onSubmit = data => {
     sendToKitchen({
       id: item.ingredient.id,
       data: { quantity: +data.quantity },
     });
   };
-  console.log(errors);
+
+  useEffect(() => {
+    setValue('name', item.ingredient.name);
+    setValue('unit', item.ingredient.unit);
+    setValue('quantity', item.quantity);
+  }, [item, setValue]);
+
+  // Handle success or error state
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(
+        ` ${getValues().quantity} ${item.ingredient.unit}, ${item.ingredient.name} successfully send to kitchen!`,
+      );
+      reset();
+    }
+    if (error) console.log(error);
+  }, [isSuccess, error, item, reset, getValues]);
+
   return (
     <div className="mb-8">
       <div className="flex items-center justify-center gap-3 bg-primary-500 py-3 text-[1.4rem] font-[600] text-white">

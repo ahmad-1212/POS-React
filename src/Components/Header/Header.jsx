@@ -1,47 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '../UI/Button';
 import Modal from '../UI/Modal';
 import Tables from '../../features/tables/Tables';
 import { useSearchParams } from 'react-router-dom';
 import { useScreen } from '../../hooks/useScreen';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addUserInfo } from '../../features/cart/cartSlice';
+import ActiveOrders from '../../features/orders/ActiveOrders';
 
 const RADIO_OPTION = ['dine in', 'take away', 'delivery'];
-const ORDERS = [
-  {
-    name: 'John Smith',
-    items: 4,
-  },
-  {
-    name: 'Mathew',
-    items: 3,
-  },
-  {
-    name: 'William',
-    items: 1,
-  },
-  {
-    name: 'Alax',
-    items: 6,
-  },
-  {
-    name: 'John Smith',
-    items: 4,
-  },
-  {
-    name: 'Mathew',
-    items: 3,
-  },
-  {
-    name: 'William',
-    items: 1,
-  },
-  {
-    name: 'Alax',
-    items: 6,
-  },
-];
 
 const Header = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -49,6 +16,8 @@ const Header = () => {
   const [selectValue, setSelectValue] = useState(
     searchParams.get('type') || '',
   );
+  const items = useSelector(state => state.cart.items);
+  const isOrderPlaced = items.some(itm => itm.lock);
   const dispatch = useDispatch();
   const { screen } = useScreen();
   const type = searchParams.get('type');
@@ -64,9 +33,8 @@ const Header = () => {
 
   // Handle type change
   const handleRadioChange = e => {
+    if (items.length > 0 && type) return;
     setType(e.target.value);
-    if (e.target.value === radioOpt) return setRadioOpt('');
-    setRadioOpt(e.target.value);
   };
 
   // handle select change that displays only on mobile devices
@@ -74,6 +42,10 @@ const Header = () => {
     setType(e.target.value);
     setSelectValue(e.target.value);
   };
+
+  useEffect(() => {
+    setRadioOpt(type);
+  }, [type]);
 
   return (
     <header className="sticky top-0 z-10 flex  h-[70px] w-full items-center gap-3 border-b-2 bg-white px-4 md:gap-10 md:px-10 lg:h-[80px]">
@@ -115,16 +87,30 @@ const Header = () => {
       {/* Table only display when type is dine in */}
       {type === 'dine in' && (
         <div className="ml-auto lg:ml-10">
-          <Modal>
-            <Modal.Open id="chooseTable">
-              <Button variant="dark">
-                {table ? table : `${screen < 500 ? 'Table' : 'Choose Table'}`}
-              </Button>
-            </Modal.Open>
-            <Modal.Window id="chooseTable" closeOnOverlay={true} zIndex="z-50">
-              <Tables />
-            </Modal.Window>
-          </Modal>
+          {isOrderPlaced ? (
+            <Button disabled={true} variant="dark">
+              {table
+                ? `H${table}`
+                : `${screen < 500 ? 'Table' : 'Choose Table'}`}
+            </Button>
+          ) : (
+            <Modal>
+              <Modal.Open id="chooseTable">
+                <Button variant="dark">
+                  {table
+                    ? `H${table}`
+                    : `${screen < 500 ? 'Table' : 'Choose Table'}`}
+                </Button>
+              </Modal.Open>
+              <Modal.Window
+                id="chooseTable"
+                closeOnOverlay={true}
+                zIndex="z-50"
+              >
+                <Tables />
+              </Modal.Window>
+            </Modal>
+          )}
         </div>
       )}
 
@@ -136,26 +122,7 @@ const Header = () => {
             </Button>
           </Modal.Open>
           <Modal.Window id="activeOrders" zIndex="z-50" closeOnOverlay>
-            <div className="p-10">
-              <h1 className="mb-4 text-center text-[1.5rem] font-[600]">
-                Active Orders
-              </h1>
-              <ul className="grid grid-cols-2 flex-wrap justify-center gap-x-4 gap-y-6">
-                {ORDERS.map(ord => (
-                  <li key={ord.name} className="flex gap-3">
-                    <div className="flex-center h-[50px] w-[50px] rounded-lg bg-red-400 text-[1.2rem] text-white">
-                      H1
-                    </div>
-                    <div>
-                      <h3 className="font-[600] capitalize">{ord.name}</h3>
-                      <div className="text-[0.9rem] font-[500] text-gray-400">
-                        {ord.items} items
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <ActiveOrders />
           </Modal.Window>
         </Modal>
       </div>

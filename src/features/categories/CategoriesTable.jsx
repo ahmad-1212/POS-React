@@ -96,6 +96,7 @@ const CategoriesTable = () => {
                         <ConfirmDelete
                           onConfirm={() => deleteCategory(cat.id)}
                           message="Are you sure you want to delete this category?"
+                          successMessage={`Category "${cat.name}" successfully deleted!`}
                           isLoading={isDeleting}
                           isSuccess={isSuccess}
                           reset={reset}

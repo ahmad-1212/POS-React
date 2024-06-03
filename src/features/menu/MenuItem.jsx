@@ -1,27 +1,14 @@
 import PropTypes from 'prop-types';
-import { GiHamburger } from 'react-icons/gi';
-import { GiFrenchFries, GiFullPizza } from 'react-icons/gi';
-import { LuSalad, LuDessert, LuSandwich } from 'react-icons/lu';
+
 import { useDispatch } from 'react-redux';
 import { addCartItem } from '../cart/cartSlice';
 import RippleEffect from '../../Components/UI/RippleEffect';
-import { CATEGORIES } from '../../Data/data';
 import { useGetCategoriesQuery } from '../../services/apiCategories';
-
-// const ICONS = {
-//   burger: <GiHamburger />,
-//   fries: <GiFrenchFries />,
-//   salad: <LuSalad />,
-//   dessert: <LuDessert />,
-//   pizza: <GiFullPizza />,
-//   sandwich: <LuSandwich />,
-// };
 
 const MenuItem = ({ item, category }) => {
   const dispatch = useDispatch();
   const { data: categories } = useGetCategoriesQuery();
-
-  const img = categories?.results?.find(cat => cat.name === category).image;
+  const img = categories?.results?.find(cat => cat.name === category)?.image;
 
   return (
     <li

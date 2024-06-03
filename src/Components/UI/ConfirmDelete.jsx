@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const ConfirmDelete = ({
   onCloseModal,
@@ -8,13 +9,15 @@ const ConfirmDelete = ({
   isLoading,
   isSuccess,
   reset,
+  successMessage,
 }) => {
   useEffect(() => {
     if (isSuccess) {
+      if (successMessage) toast.success(successMessage);
       onCloseModal();
       reset?.();
     }
-  }, [isSuccess, onCloseModal, reset]);
+  }, [isSuccess, onCloseModal, reset, successMessage]);
   return (
     <div className="flex flex-col gap-5 sm:gap-10">
       <div className="w-full bg-primary-500 text-white">
@@ -48,6 +51,7 @@ ConfirmDelete.propTypes = {
   isLoading: PropTypes.bool,
   isSuccess: PropTypes.bool,
   reset: PropTypes.func,
+  successMessage: PropTypes.string,
 };
 
 export default ConfirmDelete;

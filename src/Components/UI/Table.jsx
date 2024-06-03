@@ -2,11 +2,9 @@ import PropTypes from 'prop-types';
 
 const Table = ({ children, className = '' }) => {
   return (
-    <div
-      className={`custom-scrollbar relative flex  w-full min-w-[98%] flex-col overflow-x-auto border-2 ${className}`}
-    >
-      <table className="w-full border-2 border-primary-100">{children}</table>
-    </div>
+    <table className={`w-full border-2 border-primary-100 ${className}`}>
+      {children}
+    </table>
   );
 };
 
@@ -16,7 +14,7 @@ Table.propTypes = {
 };
 
 const Head = ({ children, className = '' }) => {
-  return <th className={className}>{children}</th>;
+  return <thead className={className}>{children}</thead>;
 };
 
 Head.propTypes = {
@@ -33,8 +31,17 @@ Row.propTypes = {
   className: PropTypes.string,
 };
 
+const Data = ({ children, className = '' }) => {
+  return <td className={className}>{children}</td>;
+};
+
+Data.propTypes = {
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+};
+
 const Body = ({ children, className = '' }) => {
-  return <tb className={className}>{children}</tb>;
+  return <tbody className={className}>{children}</tbody>;
 };
 
 Body.propTypes = {
@@ -44,6 +51,7 @@ Body.propTypes = {
 
 Table.Head = Head;
 Table.Row = Row;
+Table.Data = Data;
 Table.Body = Body;
 
 export default Table;

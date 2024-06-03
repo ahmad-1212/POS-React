@@ -4,7 +4,6 @@ import { useGetOrdersQuery } from '../../services/apiOrders';
 
 const Orders = () => {
   const { data } = useGetOrdersQuery();
-  console.log(data);
   return (
     <section className="flex  flex-col gap-3 py-10">
       <div className="flex-between flex-wrap gap-3">
@@ -18,7 +17,20 @@ const Orders = () => {
           <Button variant="dark">Search</Button>
         </div>
       </div>
-      <DataTable head={['Name', 'Email', 'Type', 'Date']} />
+      <DataTable
+        head={['Name', 'Email', 'Type', 'Date']}
+        data={data}
+        edit
+        del
+        render={item => (
+          <>
+            <td className="px-3 py-2 text-start">name</td>
+            <td className="px-3 py-2">email</td>
+            <td className="px-3 py-2">Type</td>
+            <td className="px-3 py-2">date</td>
+          </>
+        )}
+      />
     </section>
   );
 };

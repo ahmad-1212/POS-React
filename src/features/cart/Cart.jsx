@@ -1,5 +1,5 @@
 import Button from '../../Components/UI/Button';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { PiArrowLineRightBold } from 'react-icons/pi';
 
@@ -9,18 +9,28 @@ import { useSearchParams } from 'react-router-dom';
 
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { useCreateOrderMutation } from '../../services/apiOrders';
+import {
+  useCreateOrderMutation,
+  useUpdateOrderMutation,
+} from '../../services/apiOrders';
+import { clearCart, lockItems } from './cartSlice';
 
 const Cart = ({ onSidebarHide }) => {
   const [searchParams] = useSearchParams();
   const [addOrder, { isLoading: isAdding, isSuccess: isAdded, error }] =
     useCreateOrderMutation();
+  const [updateOrder, { isLoading: isUpdating, isSuccess: isUpdated }] =
+    useUpdateOrderMutation();
   const cart = useSelector(state => state.cart);
+  const isOrderAlreadyCreated = cart.items.some(itm => itm.lock === true);
+  const isAnyOrderItem = cart.items.some(itm => !itm.lock);
+  const dispatch = useDispatch();
 
   const table = searchParams.get('table');
   const type = searchParams.get('type');
 
-  const createOrder = () => {
+  // Create or update order
+  const handleOrder = () => {
     const products = {};
     cart.items.forEach(itm => (products[itm.productID] = itm.quantity));
     let data = {};
@@ -36,17 +46,28 @@ const Cart = ({ onSidebarHide }) => {
         products,
         customer_name: cart.userInfo.name,
         address: cart.userInfo.address,
-        phone_number: cart.userInfo.phoneNumber,
+        phone_number: cart.userInfo.phone,
       };
     }
-
-    addOrder(data);
+    if (isOrderAlreadyCreated) {
+      updateOrder({ id: cart.orderId, data });
+    } else {
+      addOrder(data);
+    }
   };
 
+  // handle success error state
   useEffect(() => {
-    if (isAdded) toast.success('Order successfully created!');
+    if (isAdded) {
+      toast.success('Order successfully created!');
+      dispatch(lockItems());
+    }
+    if (isUpdated) {
+      toast.success('Order successfully updated!');
+      dispatch(lockItems());
+    }
     if (error) toast.error(error?.data?.error);
-  }, [isAdded, error]);
+  }, [isAdded, error, isUpdated, dispatch]);
 
   return (
     <div className="flex h-full flex-col overflow-x-hidden px-4 py-3">
@@ -55,6 +76,15 @@ const Cart = ({ onSidebarHide }) => {
         <IconButton onClick={onSidebarHide}>
           <PiArrowLineRightBold className="text-primary-500" />
         </IconButton>
+      </div>
+      <div className="flex-end mb-1">
+        <button
+          disabled={!cart.items.length}
+          onClick={() => dispatch(clearCart())}
+          className="rounded-lg bg-red-500 px-3 py-[2px] text-white disabled:opacity-50"
+        >
+          Clear Cart
+        </button>
       </div>
       {/* Cart Items */}
       <section
@@ -81,11 +111,11 @@ const Cart = ({ onSidebarHide }) => {
         </div>
         <div className="flex justify-between">
           <Button
-            disabled={isAdded || !cart?.items.length}
+            disabled={isAdding || !cart?.items.length || !isAnyOrderItem}
             variant="dark"
-            onClick={createOrder}
+            onClick={handleOrder}
           >
-            {isAdding ? 'Loading...' : 'Send to Kitchen'}
+            {isAdding || isUpdating ? 'Loading...' : 'Send to Kitchen'}
           </Button>
 
           <Button disabled={!cart?.items.length} variant="dark">

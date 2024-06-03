@@ -12,9 +12,8 @@ const cartSlice = createSlice({
   reducers: {
     // Add Item to cart
     addCartItem(state, action) {
-      console.log(action.payload);
       const item = state.items.find(item => item.id === action.payload.id);
-      console.log(item);
+
       if (item) {
         cartSlice.caseReducers.increaseItemQuantity(state, action);
       } else {
@@ -26,9 +25,20 @@ const cartSlice = createSlice({
         state.totalPrice += +action.payload.price;
       }
     },
+
+    // Add Cart when order is fetched from db
+    addCartData(state, action) {
+      const items = action.payload.items.map(itm => ({ ...itm, lock: true }));
+      const userInfo = action.payload.userInfo;
+      const totalPrice = +items.reduce((acc, itm) => acc + itm.price, 0);
+
+      return { items, userInfo, totalPrice, orderId: action.payload.orderId };
+    },
+
     // Increase item quantity in cart
     increaseItemQuantity(state, action) {
       const item = state.items.find(itm => itm.id === action.payload.id);
+      if (item.lock) return;
       item.quantity++;
       state.totalPrice += item.price;
     },
@@ -52,8 +62,15 @@ const cartSlice = createSlice({
     addUserInfo(state, action) {
       state.userInfo = action.payload;
     },
+
+    // lock items
+    lockItems(state) {
+      state.items = state.items.map(itm => ({ ...itm, lock: true }));
+    },
     // Clear the cart
-    clearCart(state, action) {},
+    clearCart() {
+      return initialState;
+    },
   },
 });
 
@@ -61,8 +78,10 @@ export const {
   addCartItem,
   increaseItemQuantity,
   decreaseItemQuantity,
+  addCartData,
   deleteItem,
   addUserInfo,
+  lockItems,
   clearCart,
 } = cartSlice.actions;
 export default cartSlice.reducer;

@@ -16,7 +16,7 @@ function Modal({ children }) {
   const [openId, setOpenId] = useState('');
 
   const open = id => setOpenId(id);
-  const close = useCallback(() => setOpenId(''), []);
+  const close = () => setOpenId('');
 
   useEffect(() => {
     if (openId) document.body.style.overflow = 'hidden';

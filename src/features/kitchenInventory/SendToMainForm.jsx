@@ -4,25 +4,48 @@ import Button from '../../Components/UI/Button';
 import { useSendToMainMutation } from '../../services/apiKitchenInventory';
 import { MdOutlineInventory, MdOutlineInventory2 } from 'react-icons/md';
 import Input from '../../Components/UI/Input';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const SendToMainForm = ({ item }) => {
   const {
     register,
     formState: { errors },
     handleSubmit,
+    setValue,
+    getValues,
   } = useForm({
     defaultValues: {
       name: item.ingredient.name,
       unit: item.ingredient.unit,
+      quantity: item.quantity,
     },
   });
   console.log(item);
 
-  const [sendToMain, { isLoading, isSucces, reset }] = useSendToMainMutation();
+  const [sendToMain, { isLoading, isSuccess, reset }] = useSendToMainMutation();
 
   const onSubmit = data => {
     sendToMain({ id: item.ingredient.id, data: { quantity: +data.quantity } });
   };
+
+  // Set default values when changes
+  useEffect(() => {
+    setValue('name', item.ingredient.name);
+    setValue('unit', item.ingredient.unit);
+    setValue('quantity', item.quantity);
+  }, [item, setValue]);
+
+  // handle success or error state
+  useEffect(() => {
+    console.log(isSuccess);
+    if (isSuccess) {
+      toast.success(
+        `${getValues().quantity} ${item.ingredient.unit}, ${item.ingredient.name} is successfully send to Main Inventory!`,
+      );
+      reset();
+    }
+  }, [isSuccess, reset, getValues, item]);
 
   return (
     <div className="mb-8">
