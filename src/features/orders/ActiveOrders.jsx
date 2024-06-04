@@ -92,8 +92,14 @@ const ActiveOrders = ({ onCloseModal }) => {
                   className={`flex-between gap-2 text-[0.9rem] font-[500] text-gray-400 ${ord.cart.option === 'dine_in' ? 'flex-col' : ''}`}
                 >
                   <span>
-                    {ord.cart.products.length}{' '}
-                    {ord.cart.products.length > 1 ? 'Items' : 'Item'}
+                    {ord.cart.products.reduce(
+                      (acc, itm) => +itm.quantity + acc,
+                      0,
+                    )}{' '}
+                    {ord.cart.products.length === 1 &&
+                    ord.cart.products.at(0).quantity === 1
+                      ? 'Item'
+                      : 'Items'}
                   </span>
                   <span>{ord.cart.option}</span>
                 </div>

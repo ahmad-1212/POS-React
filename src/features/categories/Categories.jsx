@@ -1,11 +1,11 @@
 import { useSearchParams } from 'react-router-dom';
 import { useGetCategoriesQuery } from '../../services/apiCategories';
 import Spinner from '../../Components/UI/Spinner';
+import LazyLoad from 'react-lazy-load';
 
 const Categories = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { data, isLoading } = useGetCategoriesQuery();
-  console.log(data);
 
   const handleCategory = cat => {
     searchParams.set('category', cat);
@@ -29,10 +29,12 @@ const Categories = () => {
               className="cursor-pointer border-2 border-gray-100 transition-all hover:scale-105"
             >
               <div>
-                <img
-                  src={cat.image}
-                  className="h-[100px] w-full object-cover"
-                />
+                <LazyLoad>
+                  <img
+                    src={cat.image}
+                    className="h-[100px] w-full object-cover"
+                  />
+                </LazyLoad>
               </div>
               <h2 className="text-center font-[600] uppercase tracking-wider text-primary-500">
                 {cat.name}

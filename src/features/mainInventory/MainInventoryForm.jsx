@@ -22,7 +22,8 @@ const MainInventoryForm = ({ edit, item, onCloseModal }) => {
     formState: { errors },
   } = useForm();
   const { data: ingData, isLoading: isIngLoading } =
-    useGetIngredientsQuery('1');
+    useGetIngredientsQuery('all');
+  console.log(ingData);
   const [addItem, { isLoading, isSuccess, reset: resetAddState }] =
     useAddItemToMainInventoryMutation();
   const [
@@ -30,11 +31,13 @@ const MainInventoryForm = ({ edit, item, onCloseModal }) => {
     { isLoading: isUpdating, isSuccess: isUpdated, reset: resetUpdateState },
   ] = useUpdateItemOfMainInventoryMutation();
 
+  // Watch ingredient field whenever changes change the unit too
   const ingredientWatch = useWatch({
     control,
     name: 'ingredient',
   });
 
+  // Handle submit
   const onSubmit = data => {
     if (edit) {
       updateItem({ id: item.id, data: { quantity: data.quantity } });
@@ -43,6 +46,7 @@ const MainInventoryForm = ({ edit, item, onCloseModal }) => {
     }
   };
 
+  // Handle success or error state
   useEffect(() => {
     if (isUpdated) {
       resetUpdateState();
@@ -63,16 +67,17 @@ const MainInventoryForm = ({ edit, item, onCloseModal }) => {
     item,
   ]);
 
+  // Handle default values when changes
   useEffect(() => {
-    if (!ingData?.results || !edit) return;
+    if (!ingData || !edit) return;
     setValue('ingredient', item.ingredient.id);
     setValue('unit', item.ingredient.unit);
     setValue('quantity', item.quantity);
-  }, [ingData?.results, edit, item, setValue]);
+  }, [ingData, edit, item, setValue]);
 
   useEffect(() => {
     const ingID = getValues().ingredient;
-    const unit = ingData?.results?.find(itm => +itm.id === +ingID)?.unit;
+    const unit = ingData?.find(itm => +itm.id === +ingID)?.unit;
     setValue('unit', unit);
     // console.log(ingredientWatch);
   }, [ingredientWatch]);
@@ -108,12 +113,12 @@ const MainInventoryForm = ({ edit, item, onCloseModal }) => {
             <select
               className="cursor-pointer rounded-md border-2 border-gray-300 bg-transparent  px-4 py-2 text-[1.1rem] outline-none focus:border-primary-400 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:opacity-80"
               id="ingredient"
-              defaultValue={ingData?.results?.at(0)?.ingredientID}
+              defaultValue={ingData?.at(0)?.ingredientID}
               {...register('ingredient', {
                 required: 'Please select an ingredient',
               })}
             >
-              {ingData?.results?.map((ing, i) => (
+              {ingData?.map((ing, i) => (
                 <option key={i} value={ing.id}>
                   {ing.name}
                 </option>
@@ -158,6 +163,7 @@ const MainInventoryForm = ({ edit, item, onCloseModal }) => {
 MainInventoryForm.propTypes = {
   edit: PropTypes.bool,
   item: PropTypes.object,
+  onCloseModal: PropTypes.func,
 };
 
 export default MainInventoryForm;

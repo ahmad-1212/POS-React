@@ -1,4 +1,3 @@
-import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { RxDashboard, RxLayers } from 'react-icons/rx';
@@ -68,7 +67,12 @@ const DashboardNav = ({ collapseSidebar, onClick }) => {
       <nav>
         <ul className="flex flex-col gap-3">
           {LINKS.map((link, i) => (
-            <NavItem key={i} link={link} onClick={onClick} />
+            <NavItem
+              key={i}
+              link={link}
+              onClick={onClick}
+              collapseSidebar={collapseSidebar}
+            />
           ))}
         </ul>
       </nav>

@@ -12,15 +12,39 @@ import { toast } from 'react-toastify';
 import {
   useCreateOrderMutation,
   useUpdateOrderMutation,
+  useUpdateOrderStatusMutation,
 } from '../../services/apiOrders';
 import { clearCart, lockItems } from './cartSlice';
 
 const Cart = ({ onSidebarHide }) => {
   const [searchParams] = useSearchParams();
-  const [addOrder, { isLoading: isAdding, isSuccess: isAdded, error }] =
-    useCreateOrderMutation();
-  const [updateOrder, { isLoading: isUpdating, isSuccess: isUpdated }] =
-    useUpdateOrderMutation();
+  const [
+    addOrder,
+    {
+      isLoading: isAdding,
+      isSuccess: isAdded,
+      error,
+      data: orderData,
+      reset: resetAddOrder,
+    },
+  ] = useCreateOrderMutation();
+  const [
+    updateOrder,
+    {
+      isLoading: isUpdating,
+      isSuccess: isUpdated,
+      data: updatedData,
+      reset: resetUpdateOrder,
+    },
+  ] = useUpdateOrderMutation();
+  const [
+    updateOrderStatus,
+    {
+      isLoading: isStatusUpdating,
+      isSuccess: isStatusSuccess,
+      reset: resetUpdateStatus,
+    },
+  ] = useUpdateOrderStatusMutation();
   const cart = useSelector(state => state.cart);
   const isOrderAlreadyCreated = cart.items.some(itm => itm.lock === true);
   const isAnyOrderItem = cart.items.some(itm => !itm.lock);
@@ -56,18 +80,40 @@ const Cart = ({ onSidebarHide }) => {
     }
   };
 
+  // Update order status
+  const updateStatus = () => {
+    console.log('status upated');
+    updateOrderStatus({ id: cart.orderId, data: { status: 'completed' } });
+  };
+
   // handle success error state
   useEffect(() => {
     if (isAdded) {
       toast.success('Order successfully created!');
-      dispatch(lockItems());
+      resetAddOrder();
+      dispatch(lockItems({ orderId: orderData.id }));
     }
     if (isUpdated) {
       toast.success('Order successfully updated!');
-      dispatch(lockItems());
+      resetUpdateOrder();
+      dispatch(lockItems({ orderId: updatedData.id }));
     }
     if (error) toast.error(error?.data?.error);
-  }, [isAdded, error, isUpdated, dispatch]);
+  }, [
+    isAdded,
+    error,
+    isUpdated,
+    dispatch,
+    resetAddOrder,
+    resetUpdateOrder,
+    updatedData?.id,
+    orderData?.id,
+    toast,
+  ]);
+
+  useEffect(() => {
+    if (isStatusSuccess) window.print();
+  }, [isStatusSuccess]);
 
   return (
     <div className="flex h-full flex-col overflow-x-hidden px-4 py-3">
@@ -111,15 +157,24 @@ const Cart = ({ onSidebarHide }) => {
         </div>
         <div className="flex justify-between">
           <Button
-            disabled={isAdding || !cart?.items.length || !isAnyOrderItem}
+            disabled={
+              isAdding ||
+              !cart?.items.length ||
+              !isAnyOrderItem ||
+              isStatusUpdating
+            }
             variant="dark"
             onClick={handleOrder}
           >
             {isAdding || isUpdating ? 'Loading...' : 'Send to Kitchen'}
           </Button>
 
-          <Button disabled={!cart?.items.length} variant="dark">
-            Print Invoice
+          <Button
+            onClick={updateStatus}
+            disabled={!cart?.items.length || isStatusUpdating}
+            variant="dark"
+          >
+            {isStatusUpdating ? 'Loading...' : ' Print Invoice'}
           </Button>
         </div>
       </section>

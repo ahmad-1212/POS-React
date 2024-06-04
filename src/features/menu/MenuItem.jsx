@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { addCartItem } from '../cart/cartSlice';
 import RippleEffect from '../../Components/UI/RippleEffect';
 import { useGetCategoriesQuery } from '../../services/apiCategories';
+import LazyLoad from 'react-lazy-load';
 
 const MenuItem = ({ item, category }) => {
   const dispatch = useDispatch();
@@ -23,11 +24,12 @@ const MenuItem = ({ item, category }) => {
 
           <h2 className="text-[0.9rem] font-[600]">{item.name}</h2>
           <div className="flex justify-end">
-            <img
-              src={img}
-              loading="lazy"
-              className="h-[4rem] w-[4rem] rounded-full border-[3px] border-primary-500/40 object-cover"
-            />
+            <LazyLoad>
+              <img
+                className="h-[4rem] w-[4rem] rounded-full border-[3px] border-primary-500/40 object-cover"
+                src={img}
+              />
+            </LazyLoad>
           </div>
           <div className="">
             <span className="text-[1rem] font-[700] text-primary-500">

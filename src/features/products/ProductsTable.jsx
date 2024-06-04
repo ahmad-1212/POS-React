@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDeleteProductMutation } from '../../services/apiProducts';
 import DataTable from '../../Components/UI/DataTable';
 
-const ProductsTable = ({ products }) => {
+const ProductsTable = ({ products, isLoading }) => {
   const navigate = useNavigate();
   const [deleteProduct, { isLoading: isDeleting, isSuccess, reset }] =
     useDeleteProductMutation();
@@ -21,6 +21,7 @@ const ProductsTable = ({ products }) => {
       rowColors={true}
       pagination={false}
       data={products}
+      isLoading={isLoading}
       render={(prod, i) => (
         <Modal>
           <td className="px-3 py-2 text-start font-[600] capitalize">
@@ -64,7 +65,8 @@ const ProductsTable = ({ products }) => {
 };
 
 ProductsTable.propTypes = {
-  products: PropTypes.arrayOf(object).isRequired,
+  products: PropTypes.arrayOf(object),
+  isLoading: PropTypes.bool,
 };
 
 export default ProductsTable;

@@ -8,14 +8,7 @@ import IngredientsTable from './IngredientsTable';
 const Ingredients = () => {
   return (
     <section className="flex flex-col gap-8 py-10">
-      <div className="flex items-center">
-        <input
-          type="text"
-          placeholder="Search here..."
-          className="peer w-full rounded-3xl border-2 border-primary-200 bg-transparent px-5 py-2 outline-none placeholder:text-primary-200 focus:border-primary-300 md:w-1/2"
-        />
-        <IoSearchOutline className=" -ml-8 cursor-pointer text-[1.2rem] text-primary-200 peer-focus:text-primary-500" />
-      </div>
+
       <div className="flex-between flex-wrap gap-3 border-b-2 border-primary-200/30 pb-5">
         <h1 className="text-[2rem] font-[600]">Ingredients</h1>
         <Modal>

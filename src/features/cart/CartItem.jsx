@@ -1,18 +1,19 @@
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { decreaseItemQuantity, increaseItemQuantity } from './cartSlice';
+import LazyLoad from 'react-lazy-load';
 const CartItem = ({ itm }) => {
   const dispatch = useDispatch();
   console.log(itm);
   if (itm.lock)
     return (
       <li className="flex items-center gap-3 rounded-md bg-gray-100 px-3 py-2 opacity-50">
-        <div className="h-[60px] w-[60px]">
+        <LazyLoad>
           <img
             src={itm.img}
-            className="h-full w-full rounded-md object-cover"
+            className="h-[60px] w-[60px] rounded-md object-cover"
           />
-        </div>
+        </LazyLoad>
         <div className="flex flex-1 flex-col justify-between">
           <h3 className="text-[0.9rem] font-[600] capitalize">{itm.name}</h3>
           <div className="flex items-center justify-between">
@@ -30,9 +31,12 @@ const CartItem = ({ itm }) => {
 
   return (
     <li className="flex items-center gap-3 rounded-md bg-gray-100 px-3 py-2">
-      <div className="h-[60px] w-[60px]">
-        <img src={itm.img} className="h-full w-full rounded-md object-cover" />
-      </div>
+      <LazyLoad height={60} width={60}>
+        <img src={itm.img}
+        
+        className="h-[60px] w-[60px] rounded-md object-cover"
+        />
+      </LazyLoad>
       <div className="flex flex-1 flex-col justify-between">
         <h3 className="text-[0.9rem] font-[600] capitalize">{itm.name}</h3>
         <div className="flex items-center justify-between">

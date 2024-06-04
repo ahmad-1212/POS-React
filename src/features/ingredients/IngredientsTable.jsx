@@ -46,6 +46,9 @@ const IngredientsTable = () => {
       textCenter
       data={data?.results}
       isLoading={isLoading}
+      totalPages={Math.ceil(data?.count / 10)}
+      next={data?.next && true}
+      previous={data?.previous && true}
       render={(item, i) => (
         <Modal>
           <td className="px-3 py-2 text-start">{item.name}</td>

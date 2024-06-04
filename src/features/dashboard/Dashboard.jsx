@@ -1,5 +1,5 @@
-import { MdAutoGraph } from "react-icons/md";
-import { LiaMoneyBillWaveSolid, LiaClipboardListSolid } from "react-icons/lia";
+import { MdAutoGraph } from 'react-icons/md';
+import { LiaMoneyBillWaveSolid, LiaClipboardListSolid } from 'react-icons/lia';
 
 import {
   AreaChart,
@@ -9,122 +9,91 @@ import {
   Tooltip,
   Area,
   ResponsiveContainer,
-} from "recharts";
-import { useSearchParams } from "react-router-dom";
+} from 'recharts';
+import { useSearchParams } from 'react-router-dom';
+import Tab from '../../Components/UI/Tab';
 const ACTIVE_ORDERS = [
   {
-    name: "Mathew",
+    name: 'Mathew',
     items: 4,
   },
   {
-    name: "Andrew",
+    name: 'Andrew',
     items: 2,
   },
   {
-    name: "Jonas Burg",
+    name: 'Jonas Burg',
     items: 8,
   },
   {
-    name: "Maximillian",
+    name: 'Maximillian',
     items: 5,
   },
   {
-    name: "William Smith",
+    name: 'William Smith',
     items: 6,
   },
 ];
 
 const data = [
   {
-    name: "May 1",
+    name: 'May 1',
     profit: 400,
     sales: 2400,
   },
   {
-    name: "May 2",
+    name: 'May 2',
     profit: 300,
     sales: 1398,
   },
   {
-    name: "May 3",
+    name: 'May 3',
     profit: 2000,
     sales: 9800,
   },
   {
-    name: "May 4",
+    name: 'May 4',
     profit: 500,
     sales: 3908,
   },
   {
-    name: "May 5",
+    name: 'May 5',
     profit: 1500,
     sales: 4800,
   },
   {
-    name: "May 6",
+    name: 'May 6',
     profit: 1100,
     sales: 6800,
   },
   {
-    name: "May 7",
+    name: 'May 7',
     profit: 860,
     sales: 4300,
   },
   {
-    name: "May 8",
+    name: 'May 8',
     profit: 250,
     sales: 1500,
   },
   {
-    name: "May 9",
+    name: 'May 9',
     profit: 1100,
     sales: 6000,
   },
   {
-    name: "May 10",
+    name: 'May 10',
     profit: 200,
     sales: 2000,
   },
 ];
 
 const Dashboard = () => {
-  const [searchParams, setSetSearchparam] = useSearchParams();
-  const last = +searchParams.get("last") || 7;
-  const handleLast = (last) => {
-    searchParams.set("last", last);
-    setSetSearchparam(searchParams);
-  };
-
   return (
     <div className="mt-10 flex flex-col gap-5">
       <div className="flex-between">
         <h1 className="text-[2rem] font-[600]">Dashboard</h1>
-        <div className="flex items-center gap-4 rounded-md border-2 border-gray-100 bg-white px-2 py-[0.4rem] text-[0.9rem]">
-          <button
-            onClick={() => handleLast(7)}
-            className={`rounded-md px-3 py-[0.2rem] hover:bg-primary-500 hover:text-white ${
-              last === 7 ? "bg-primary-500 text-white" : ""
-            }`}
-          >
-            Last 7 days
-          </button>
-          <button
-            onClick={() => handleLast(30)}
-            className={`rounded-md px-3 py-[0.2rem] hover:bg-primary-500 hover:text-white ${
-              last === 30 ? "bg-primary-500 text-white" : ""
-            }`}
-          >
-            Last 30 days
-          </button>
-          <button
-            onClick={() => handleLast(90)}
-            className={`rounded-md px-3 py-[0.2rem] hover:bg-primary-500 hover:text-white ${
-              last === 90 ? "bg-primary-500 text-white" : ""
-            }`}
-          >
-            Last 90 days
-          </button>
-        </div>
+        <Tab />
       </div>
       <section className="flex flex-col gap-4">
         <div className="flex-between gap-4">
@@ -217,7 +186,7 @@ const Dashboard = () => {
               </div>
               <div className="flex-between  py-1 ">
                 <div className="font-[700] text-gray-400">
-                  {" "}
+                  {' '}
                   {order.items} Items
                 </div>
                 <h4 className="font-[700] text-primary-500">In Progress</h4>
@@ -236,7 +205,7 @@ const Dashboard = () => {
             <YAxis unit="$" />
             <XAxis dataKey="name" />
             <CartesianGrid strokeDasharray="6" />
-            <Tooltip contentStyle={{ backgroundColor: "white" }} />
+            <Tooltip contentStyle={{ backgroundColor: 'white' }} />
             <Area
               type="monotone"
               dataKey="sales"

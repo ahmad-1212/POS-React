@@ -3,7 +3,8 @@ import { apiBase } from './apiBase';
 const apiOrders = apiBase.injectEndpoints({
   endpoints: build => ({
     getOrders: build.query({
-      query: () => '/orders/',
+      query: (page = 1) =>
+        `/orders/?include_cart=true&page=${page}&active_only=false`,
       providesTags: ['orders'],
     }),
     getOrderByID: build.mutation({
@@ -27,6 +28,15 @@ const apiOrders = apiBase.injectEndpoints({
         method: 'PUT',
         body: data,
       }),
+      invalidatesTags: ['active-orders'],
+    }),
+    updateOrderStatus: build.mutation({
+      query: ({ id, data }) => ({
+        url: `orders/${id}/?include_cart=false`,
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: ['active-orders', 'orders'],
     }),
   }),
   overrideExisting: false,
@@ -38,4 +48,6 @@ export const {
   useGetActiveOrdersQuery,
   useGetOrderByIDMutation,
   useUpdateOrderMutation,
+  useUpdateOrderStatusMutation,
+  usePrefetch,
 } = apiOrders;

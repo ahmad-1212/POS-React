@@ -3,7 +3,8 @@ import { apiBase } from './apiBase';
 const apiIngredients = apiBase.injectEndpoints({
   endpoints: build => ({
     getIngredients: build.query({
-      query: (page = 1) => `/ingredients/?page=${page}`,
+      query: (page = 1) =>
+        `/ingredients/?${page === 'all' ? 'include_all=true' : `page=${page}`}`,
       providesTags: ['ingredients'],
     }),
     createIngredient: build.mutation({

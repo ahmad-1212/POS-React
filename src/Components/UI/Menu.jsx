@@ -1,7 +1,7 @@
-import { cloneElement, createContext, useContext, useState } from "react";
-import PropTypes from "prop-types";
-import { createPortal } from "react-dom";
-import Overlay from "./Overlay";
+import { cloneElement, createContext, useContext, useState } from 'react';
+import PropTypes from 'prop-types';
+import { createPortal } from 'react-dom';
+import Overlay from './Overlay';
 
 const MenuContext = createContext({});
 
@@ -41,7 +41,7 @@ const List = ({ children }) => {
         transparent
         className="z-30"
       />
-      <div className={`absolute z-30 top-0 right-0 bottom-0 translate-y-full`}>
+      <div className={`absolute bottom-0 right-0 top-0 z-30 translate-y-full`}>
         {children}
       </div>
     </>
