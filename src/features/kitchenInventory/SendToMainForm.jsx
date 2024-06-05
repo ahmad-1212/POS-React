@@ -21,7 +21,6 @@ const SendToMainForm = ({ item }) => {
       quantity: item.quantity,
     },
   });
-  console.log(item);
 
   const [sendToMain, { isLoading, isSuccess, reset }] = useSendToMainMutation();
 
@@ -38,7 +37,6 @@ const SendToMainForm = ({ item }) => {
 
   // handle success or error state
   useEffect(() => {
-    console.log(isSuccess);
     if (isSuccess) {
       toast.success(
         `${getValues().quantity} ${item.ingredient.unit}, ${item.ingredient.name} is successfully send to Main Inventory!`,

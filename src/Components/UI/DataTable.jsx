@@ -18,6 +18,7 @@ const DataTable = ({
   textCenter = false,
   next = false,
   previous = false,
+  errorMessage = 'No results were found!',
 }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = +searchParams.get('page') || 1;
@@ -30,7 +31,6 @@ const DataTable = ({
     }
     setSearchParams(searchParams);
   };
-  console.log(data);
   return (
     <div
       className={`custom-scrollbar relative flex  w-full min-w-[98%] flex-col overflow-x-auto border-2 border-primary-100`}
@@ -57,16 +57,17 @@ const DataTable = ({
           </Table.Row>
         </Table.Head>
         <Table.Body>
-          {Children.toArray(
-            data?.map((item, i) => (
-              <Table.Row
-                key={i}
-                className={`${textCenter ? 'text-center' : ''} ${!rowColors ? 'border-2 border-primary-100' : i % 2 !== 0 ? 'bg-primary-100' : ''} `}
-              >
-                {render(item, i)}
-              </Table.Row>
-            )),
-          )}
+          {!isLoading &&
+            Children.toArray(
+              data?.map((item, i) => (
+                <Table.Row
+                  key={i}
+                  className={`${textCenter ? 'text-center' : ''} ${!rowColors ? 'border-2 border-primary-100' : i % 2 !== 0 ? 'bg-primary-100' : ''} `}
+                >
+                  {render(item, i)}
+                </Table.Row>
+              )),
+            )}
         </Table.Body>
       </Table>
       {isLoading && (
@@ -75,9 +76,7 @@ const DataTable = ({
         </div>
       )}
       {(data?.length === 0 || !data) && !isLoading && (
-        <p className="my-20 text-center text-primary-500">
-          No results were found!
-        </p>
+        <p className="my-20 text-center text-primary-500">{errorMessage}</p>
       )}
       {pagination && (
         <div className="flex-between w-full bg-primary-500 px-3 py-2 text-[1.2rem]">
@@ -125,6 +124,7 @@ DataTable.propTypes = {
   totalPages: PropTypes.number,
   next: PropTypes.bool,
   previous: PropTypes.bool,
+  errorMessage: PropTypes.string,
 };
 
 export default DataTable;

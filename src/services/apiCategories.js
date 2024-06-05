@@ -2,11 +2,11 @@
 import { apiBase } from './apiBase'; // Ensure this is correctly configured and exported
 
 // Inject endpoints into the base API
-export const apiCategories = apiBase.injectEndpoints({
+const apiCategories = apiBase.injectEndpoints({
   endpoints: build => ({
     // Get categories
     getCategories: build.query({
-      query: () => '/categories',
+      query: () => '/categories/?include_all=true',
       providesTags: ['categories'],
     }),
     createCategory: build.mutation({

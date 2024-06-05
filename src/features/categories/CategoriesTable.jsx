@@ -18,17 +18,20 @@ const CategoriesTable = () => {
   const { data, isLoading } = useGetCategoriesQuery();
   const [deleteCategory, { isLoading: isDeleting, isSuccess, reset }] =
     useDeleteCategoryMutation();
-  const [categories, setCategories] = useState(data?.results);
+  const [categories, setCategories] = useState(data);
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get('search') || undefined;
   useEffect(() => {
-    const regExp = new RegExp(searchQuery, 'i');
+    if (data && searchQuery) {
+      const regExp = new RegExp(searchQuery, 'i');
 
-    if (data?.results) {
-      const newCategories = data.results.filter(itm => regExp.test(itm.name));
+      const newCategories = data?.filter(itm => regExp.test(itm.name));
       setCategories(newCategories);
     }
-  }, [searchQuery, data?.results]);
+    if (data && !searchQuery) {
+      setCategories(data);
+    }
+  }, [searchQuery, data]);
 
   useEffect(() => {
     setCategories(data?.results);
@@ -38,7 +41,7 @@ const CategoriesTable = () => {
       edit
       del
       rowColors
-      data={data?.results}
+      data={searchQuery ? categories : data}
       isLoading={isLoading}
       pagination={false}
       head={['Image', 'Category']}

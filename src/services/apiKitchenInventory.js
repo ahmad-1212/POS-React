@@ -3,7 +3,7 @@ import { apiBase } from './apiBase';
 const apiKitchenInventory = apiBase.injectEndpoints({
   endpoints: build => ({
     getKitchenInventory: build.query({
-      query: () => '/inventories/kitchen/',
+      query: () => '/inventories/kitchen/?include_all=true',
       providesTags: ['kitchen-inventory'],
     }),
     sendToMain: build.mutation({

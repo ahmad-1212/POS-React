@@ -3,28 +3,33 @@ import PropTypes from 'prop-types';
 import { useGetTablesQuery } from '../../services/apiTables';
 import Spinner from '../../Components/UI/Spinner';
 const Tables = ({ onCloseModal }) => {
-  const { data: tables, isLoading } = useGetTablesQuery();
+  const { data: tables, isLoading, error } = useGetTablesQuery();
   const [searchParams, setSearchParams] = useSearchParams();
-  console.log(tables);
   const handleClick = tableNum => {
     searchParams.set('table', `${tableNum}`);
     setSearchParams(searchParams);
     onCloseModal();
   };
+
   return (
     <>
       <h1 className="py-5 text-center text-[1.4rem] font-[700]">Tables</h1>
+      {error && !isLoading && (
+        <div className="my-20 text-center text-red-500">
+          Error: {error.message}
+        </div>
+      )}
       {isLoading && (
         <div className="flex-center my-20">
           <Spinner />
         </div>
       )}
-      {tables?.results && !isLoading && (
+      {tables && !isLoading && (
         <ul
           className="flex flex-wrap justify-center gap-4 overflow-y-auto p-2 sm:p-5 md:p-10 
             "
         >
-          {tables?.results?.map((table, i) => (
+          {[...tables].reverse().map((table, i) => (
             <li
               onClick={() => !table.is_reserved && handleClick(table.number)}
               key={i}

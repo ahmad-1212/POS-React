@@ -23,7 +23,6 @@ const MainInventoryForm = ({ edit, item, onCloseModal }) => {
   } = useForm();
   const { data: ingData, isLoading: isIngLoading } =
     useGetIngredientsQuery('all');
-  console.log(ingData);
   const [addItem, { isLoading, isSuccess, reset: resetAddState }] =
     useAddItemToMainInventoryMutation();
   const [

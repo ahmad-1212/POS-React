@@ -3,7 +3,7 @@ import { apiBase } from './apiBase';
 const apiTables = apiBase.injectEndpoints({
   endpoints: build => ({
     getTables: build.query({
-      query: () => '/tables/?reserved_only',
+      query: () => '/tables/?include_all=true',
       providesTags: ['tables'],
     }),
   }),

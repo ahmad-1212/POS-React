@@ -9,7 +9,7 @@ import LazyLoad from 'react-lazy-load';
 const MenuItem = ({ item, category }) => {
   const dispatch = useDispatch();
   const { data: categories } = useGetCategoriesQuery();
-  const img = categories?.results?.find(cat => cat.name === category)?.image;
+  const img = categories?.find(cat => cat.name === category)?.image;
 
   return (
     <li

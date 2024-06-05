@@ -29,7 +29,7 @@ const ActiveOrders = ({ onCloseModal }) => {
     if (isFetchedOrder) {
       onCloseModal();
       const items = order.cart.products.map(prod => {
-        const img = categories?.results?.find(
+        const img = categories?.find(
           cat => cat?.name === prod.product.category.name,
         )?.image;
 
@@ -75,9 +75,9 @@ const ActiveOrders = ({ onCloseModal }) => {
           <Spinner />
         </div>
       )}
-      {data?.results && !isLoading && (
+      {data && !isLoading && (
         <ul className="grid grid-cols-2 flex-wrap justify-center gap-x-4 gap-y-6">
-          {data?.results?.map((ord, i) => (
+          {data?.map((ord, i) => (
             <li
               onClick={() => getOrderByID(ord.id)}
               key={i}

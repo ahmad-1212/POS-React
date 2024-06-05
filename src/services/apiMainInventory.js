@@ -3,12 +3,12 @@ import { apiBase } from './apiBase';
 const apiMainInventory = apiBase.injectEndpoints({
   endpoints: build => ({
     getMainInventory: build.query({
-      query: () => '/inventories/main/',
+      query: () => '/inventories/main/?include_all=true',
       providesTags: ['main-inventory'],
     }),
     addItemToMainInventory: build.mutation({
       query: ({ id, data }) => ({
-        url: `/inventories/main/add/${id}/`,
+        url: `/inventories/main/add/${id}/?include_all=true`,
         method: 'POST',
         body: data,
       }),
@@ -31,8 +31,7 @@ const apiMainInventory = apiBase.injectEndpoints({
       invalidatesTags: ['main-inventory', 'kitchen-inventory'],
     }),
   }),
-  overrideExisting:false,
-
+  overrideExisting: false,
 });
 
 export const {

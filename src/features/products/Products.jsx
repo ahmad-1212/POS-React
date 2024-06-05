@@ -6,7 +6,6 @@ import ProductsTable from './ProductsTable';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useGetProductsQuery } from '../../services/apiProducts';
-import Spinner from '../../Components/UI/Spinner';
 import { useGetCategoriesQuery } from '../../services/apiCategories';
 
 const Products = () => {
@@ -34,7 +33,6 @@ const Products = () => {
         return regExp.test(prod.name);
       }
       if (selectValue === 'all') {
-        console.log('prod');
         return regExp.test(prod.name);
       }
     });
@@ -75,7 +73,7 @@ const Products = () => {
             onChange={handleSearch}
             type="text"
             placeholder="Search here..."
-            className="w-full rounded-3xl border-2 border-primary-200 bg-transparent px-5 py-2 outline-none placeholder:text-primary-200 focus:border-primary-300 md:w-2/3"
+            className="w-full rounded-3xl border-2 border-primary-200 bg-transparent px-5 py-2 outline-none placeholder:text-primary-200 focus:border-primary-300 md:w-2/3 "
           />
           <IoSearchOutline className="-ml-8 cursor-pointer text-[1.2rem] text-primary-200" />
         </div>

@@ -1,15 +1,13 @@
 import DataTable from '../../Components/UI/DataTable';
 import Modal from '../../Components/UI/Modal';
-import Spinner from '../../Components/UI/Spinner';
 import { useGetKitchenInventoryQuery } from '../../services/apiKitchenInventory';
 import SendToMainForm from './SendToMainForm';
 
 const KitchenInventoryTable = () => {
   const { data, isLoading } = useGetKitchenInventoryQuery();
-  console.log(data);
   return (
     <DataTable
-      data={data?.results}
+      data={data}
       rowColors
       isLoading={isLoading}
       head={['Ingredients', 'Quantity', '']}

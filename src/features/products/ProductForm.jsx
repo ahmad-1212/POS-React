@@ -75,7 +75,6 @@ const ProductForm = ({ edit = false, product, productId }) => {
   };
   // REmove an ingredient
   const removeIng = id => {
-    console.log(id);
     setIngredients(ingredients.filter(ing => ing.ingredientID !== id));
   };
 

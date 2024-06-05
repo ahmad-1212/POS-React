@@ -22,7 +22,7 @@ const Categories = () => {
       {/* Categories list */}
       {data && !isLoading && (
         <ul className="grid grid-cols-2 gap-5">
-          {data?.results?.map((cat, i) => (
+          {data?.map((cat, i) => (
             <li
               onClick={() => handleCategory(cat.name)}
               key={i}

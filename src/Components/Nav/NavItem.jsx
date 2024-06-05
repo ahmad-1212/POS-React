@@ -12,7 +12,6 @@ const NavItem = ({ link, onClick, collapseSidebar }) => {
 
   const handleOpenMenu = e => {
     const rect = e.target.getBoundingClientRect();
-    console.log(rect);
     setPositions({ x: rect.left, y: rect.top });
     setShowMenu(true);
   };

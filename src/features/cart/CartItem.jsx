@@ -4,7 +4,6 @@ import { decreaseItemQuantity, increaseItemQuantity } from './cartSlice';
 import LazyLoad from 'react-lazy-load';
 const CartItem = ({ itm }) => {
   const dispatch = useDispatch();
-  console.log(itm);
   if (itm.lock)
     return (
       <li className="flex items-center gap-3 rounded-md bg-gray-100 px-3 py-2 opacity-50">
@@ -32,9 +31,9 @@ const CartItem = ({ itm }) => {
   return (
     <li className="flex items-center gap-3 rounded-md bg-gray-100 px-3 py-2">
       <LazyLoad height={60} width={60}>
-        <img src={itm.img}
-        
-        className="h-[60px] w-[60px] rounded-md object-cover"
+        <img
+          src={itm.img}
+          className="h-[60px] w-[60px] rounded-md object-cover"
         />
       </LazyLoad>
       <div className="flex flex-1 flex-col justify-between">

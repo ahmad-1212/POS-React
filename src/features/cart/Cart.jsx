@@ -1,23 +1,24 @@
-import Button from '../../Components/UI/Button';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import { PiArrowLineRightBold } from 'react-icons/pi';
 
+import Button from '../../Components/UI/Button';
 import IconButton from '../../Components/UI/IconButton';
 import CartItem from './CartItem';
-import { useSearchParams } from 'react-router-dom';
-
-import { useEffect } from 'react';
-import { toast } from 'react-toastify';
 import {
   useCreateOrderMutation,
   useUpdateOrderMutation,
-  useUpdateOrderStatusMutation,
 } from '../../services/apiOrders';
 import { clearCart, lockItems } from './cartSlice';
 
+import PrintButton from './PrintButton';
+
 const Cart = ({ onSidebarHide }) => {
   const [searchParams] = useSearchParams();
+
   const [
     addOrder,
     {
@@ -28,6 +29,7 @@ const Cart = ({ onSidebarHide }) => {
       reset: resetAddOrder,
     },
   ] = useCreateOrderMutation();
+
   const [
     updateOrder,
     {
@@ -37,14 +39,7 @@ const Cart = ({ onSidebarHide }) => {
       reset: resetUpdateOrder,
     },
   ] = useUpdateOrderMutation();
-  const [
-    updateOrderStatus,
-    {
-      isLoading: isStatusUpdating,
-      isSuccess: isStatusSuccess,
-      reset: resetUpdateStatus,
-    },
-  ] = useUpdateOrderStatusMutation();
+
   const cart = useSelector(state => state.cart);
   const isOrderAlreadyCreated = cart.items.some(itm => itm.lock === true);
   const isAnyOrderItem = cart.items.some(itm => !itm.lock);
@@ -80,13 +75,7 @@ const Cart = ({ onSidebarHide }) => {
     }
   };
 
-  // Update order status
-  const updateStatus = () => {
-    console.log('status upated');
-    updateOrderStatus({ id: cart.orderId, data: { status: 'completed' } });
-  };
-
-  // handle success error state
+  // Handle success/error state
   useEffect(() => {
     if (isAdded) {
       toast.success('Order successfully created!');
@@ -110,10 +99,6 @@ const Cart = ({ onSidebarHide }) => {
     orderData?.id,
     toast,
   ]);
-
-  useEffect(() => {
-    if (isStatusSuccess) window.print();
-  }, [isStatusSuccess]);
 
   return (
     <div className="flex h-full flex-col overflow-x-hidden px-4 py-3">
@@ -160,22 +145,15 @@ const Cart = ({ onSidebarHide }) => {
             disabled={
               isAdding ||
               !cart?.items.length ||
-              !isAnyOrderItem ||
-              isStatusUpdating
+              !isAnyOrderItem 
+             
             }
             variant="dark"
             onClick={handleOrder}
           >
             {isAdding || isUpdating ? 'Loading...' : 'Send to Kitchen'}
           </Button>
-
-          <Button
-            onClick={updateStatus}
-            disabled={!cart?.items.length || isStatusUpdating}
-            variant="dark"
-          >
-            {isStatusUpdating ? 'Loading...' : ' Print Invoice'}
-          </Button>
+          <PrintButton />
         </div>
       </section>
     </div>
