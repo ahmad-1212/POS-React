@@ -2,10 +2,13 @@ import { apiBase } from './apiBase';
 
 const apiMainInventory = apiBase.injectEndpoints({
   endpoints: build => ({
+    // Get main inventory products
     getMainInventory: build.query({
       query: () => '/inventories/main/?include_all=true',
       providesTags: ['main-inventory'],
     }),
+
+    // Add stock to main inventory
     addItemToMainInventory: build.mutation({
       query: ({ id, data }) => ({
         url: `/inventories/main/add/${id}/?include_all=true`,
@@ -14,6 +17,8 @@ const apiMainInventory = apiBase.injectEndpoints({
       }),
       invalidatesTags: ['main-inventory'],
     }),
+
+    // Update stock of main inventory
     updateItemOfMainInventory: build.mutation({
       query: ({ id, data }) => ({
         url: `inventories/main/${id}/`,
@@ -22,6 +27,8 @@ const apiMainInventory = apiBase.injectEndpoints({
       }),
       invalidatesTags: ['main-inventory'],
     }),
+
+    // Send to kitchen
     sendToKitchen: build.mutation({
       query: ({ id, data }) => ({
         url: `/inventories/main/transfer/${id}/`,

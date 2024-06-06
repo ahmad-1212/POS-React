@@ -40,7 +40,7 @@ const SalesChart = () => {
 
   const filterData = data?.daily_stats?.map(itm => {
     const date = itm.date.split(',').at(0).split(' ').reverse().join(' ');
-   
+
     return { ...itm, date };
   });
 
@@ -49,7 +49,7 @@ const SalesChart = () => {
   ) : (
     <section className="w-full rounded-md bg-white px-3 py-5 shadow-sm">
       <h2 className="mb-10 text-[1.3rem] font-[600]">
-        Sales from May 1 2024 - May 10 2024
+        Sales from Last {last} Days
       </h2>
       <ResponsiveContainer width="100%" height={250}>
         <AreaChart data={filterData}>
