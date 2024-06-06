@@ -38,6 +38,13 @@ const apiOrders = apiBase.injectEndpoints({
       }),
       invalidatesTags: ['active-orders', 'orders', 'tables'],
     }),
+    getInvoice: build.mutation({
+      query: id => ({
+        url: `orders/${id}/invoice/?include_cart=true`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['active-orders', 'orders', 'tables'],
+    }),
   }),
   overrideExisting: false,
 });
@@ -49,4 +56,5 @@ export const {
   useGetOrderByIDMutation,
   useUpdateOrderMutation,
   useUpdateOrderStatusMutation,
+  useGetInvoiceMutation,
 } = apiOrders;

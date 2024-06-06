@@ -7,6 +7,7 @@ const colors = {
 };
 const ActiveOrders = () => {
   const { data: activeOrders, isLoading } = useGetActiveOrdersQuery();
+
   return (
     <section className="rounded-md bg-white px-3 py-5 shadow-sm">
       <h2 className="text-[1.3rem] font-[600] capitalize">Active Orders</h2>
