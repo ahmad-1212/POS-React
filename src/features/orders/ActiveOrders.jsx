@@ -75,6 +75,13 @@ const ActiveOrders = ({ onCloseModal }) => {
           <Spinner />
         </div>
       )}
+
+      {!isLoading && !data?.length && (
+        <p className="my-20 text-center text-primary-500">
+          No Active orders yet!
+        </p>
+      )}
+
       {data && !isLoading && (
         <ul className="grid grid-cols-2 flex-wrap justify-center gap-x-4 gap-y-6">
           {data?.map((ord, i) => (

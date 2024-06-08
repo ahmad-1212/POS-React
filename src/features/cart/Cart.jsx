@@ -108,6 +108,7 @@ const Cart = ({ onSidebarHide }) => {
           <PiArrowLineRightBold className="text-primary-500" />
         </IconButton>
       </div>
+      {/* Clear cart button */}
       <div className="flex-end mb-1">
         <button
           disabled={!cart.items.length}
@@ -142,12 +143,7 @@ const Cart = ({ onSidebarHide }) => {
         </div>
         <div className="flex justify-between">
           <Button
-            disabled={
-              isAdding ||
-              !cart?.items.length ||
-              !isAnyOrderItem 
-             
-            }
+            disabled={isAdding || !cart?.items.length || !isAnyOrderItem}
             variant="dark"
             onClick={handleOrder}
           >

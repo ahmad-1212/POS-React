@@ -1,27 +1,27 @@
-import { IoSearchOutline } from "react-icons/io5";
-import { MdOutlineAddCircleOutline } from "react-icons/md";
+import { IoSearchOutline } from 'react-icons/io5';
+import { MdOutlineAddCircleOutline } from 'react-icons/md';
 
-import Modal from "../../Components/UI/Modal";
-import Button from "../../Components/UI/Button";
-import CategoryForm from "./CategoryForm";
-import CategoriesTable from "./CategoriesTable";
-import { useSearchParams } from "react-router-dom";
+import Modal from '../../Components/UI/Modal';
+import Button from '../../Components/UI/Button';
+import CategoryForm from './CategoryForm';
+import CategoriesTable from './CategoriesTable';
+import { useSearchParams } from 'react-router-dom';
 
 const CategoriesList = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const handleSearch = (e) => {
+  // Handle search
+  const handleSearch = e => {
     if (!e.target.value) {
-      searchParams.delete("search");
+      searchParams.delete('search');
     } else {
-      searchParams.set("search", e.target.value);
+      searchParams.set('search', e.target.value);
     }
     setSearchParams(searchParams);
   };
 
   return (
     <section className="flex flex-col gap-8 py-10">
-
       <div className="flex-between flex-wrap gap-3 border-b-2 border-primary-200/30 pb-5">
         <h1 className="text-[2rem] font-[600]">Categories</h1>
         <Modal>

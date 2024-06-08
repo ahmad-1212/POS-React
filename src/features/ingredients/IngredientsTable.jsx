@@ -1,7 +1,6 @@
 import { ImPen } from 'react-icons/im';
 import IconButton from '../../Components/UI/IconButton';
 import Modal from '../../Components/UI/Modal';
-import Spinner from '../../Components/UI/Spinner';
 import {
   usePrefetch,
   useDeleteIngredientMutation,
@@ -22,7 +21,8 @@ const IngredientsTable = () => {
     useDeleteIngredientMutation();
   const prefetch = usePrefetch('getIngredients');
 
-  const prefetchNext = useCallback(() => {
+  // Handle prefetching
+  const prefetchData = useCallback(() => {
     if (data?.next) {
       prefetch(page + 1);
     }
@@ -32,8 +32,8 @@ const IngredientsTable = () => {
   }, [prefetch, page, data]);
 
   useEffect(() => {
-    prefetchNext();
-  }, [prefetchNext]);
+    prefetchData();
+  }, [prefetchData]);
 
   return (
     <DataTable

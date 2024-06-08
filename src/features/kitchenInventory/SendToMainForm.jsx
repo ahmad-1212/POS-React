@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
 import Button from '../../Components/UI/Button';
 import { useSendToMainMutation } from '../../services/apiKitchenInventory';
-import { MdOutlineInventory, MdOutlineInventory2 } from 'react-icons/md';
+import { MdOutlineInventory2 } from 'react-icons/md';
 import Input from '../../Components/UI/Input';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
@@ -24,6 +24,7 @@ const SendToMainForm = ({ item }) => {
 
   const [sendToMain, { isLoading, isSuccess, reset }] = useSendToMainMutation();
 
+  // Handle submit
   const onSubmit = data => {
     sendToMain({ id: item.ingredient.id, data: { quantity: +data.quantity } });
   };
@@ -51,6 +52,7 @@ const SendToMainForm = ({ item }) => {
         <MdOutlineInventory2 />
         <span>Send to Main Inventory</span>
       </div>
+      {/* Display availabale data */}
       <div className="mx-10 mt-5 flex items-center gap-2 bg-primary-100 px-3 py-2 text-[1.2rem] text-primary-500">
         <span>Availabale:</span>
         <span>{item.ingredient.name}</span>
@@ -59,6 +61,7 @@ const SendToMainForm = ({ item }) => {
         </span>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="mt-10 px-10">
+        {/* Ing Name */}
         <Input
           register={register}
           type="text"
@@ -70,6 +73,7 @@ const SendToMainForm = ({ item }) => {
           error={errors?.name?.message}
         />
         <div className="grid grid-cols-2 gap-3">
+          {/* Unit */}
           <Input
             register={register}
             type="text"
@@ -80,6 +84,7 @@ const SendToMainForm = ({ item }) => {
             showError
             error={errors?.unit?.message}
           />
+          {/* quantity */}
           <Input
             type="number"
             id="quantity"

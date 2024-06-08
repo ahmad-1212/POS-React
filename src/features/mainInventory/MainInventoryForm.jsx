@@ -110,6 +110,7 @@ const MainInventoryForm = ({ edit, item, onCloseModal }) => {
               Ingredients *
             </label>
             <select
+              disabled={isLoading}
               className="cursor-pointer rounded-md border-2 border-gray-300 bg-transparent  px-4 py-2 text-[1.1rem] outline-none focus:border-primary-400 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:opacity-80"
               id="ingredient"
               defaultValue={ingData?.at(0)?.ingredientID}
@@ -141,6 +142,7 @@ const MainInventoryForm = ({ edit, item, onCloseModal }) => {
               min={0}
               id="quantity"
               label="Quantity"
+              disabled={isLoading}
             />
           </div>
           <div className="mt-5 flex justify-end">

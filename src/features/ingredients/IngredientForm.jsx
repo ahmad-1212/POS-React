@@ -32,6 +32,7 @@ const IngredientForm = ({ edit = false, ingredient, onCloseModal }) => {
     { isLoading: isUpdating, isSuccess: isUpdated, reset: resetUpdateState },
   ] = useUpdateIngredientMutation();
 
+  // Handle submit
   const onSubmit = data => {
     if (edit) {
       updateIngredient({
@@ -48,6 +49,7 @@ const IngredientForm = ({ edit = false, ingredient, onCloseModal }) => {
     }
   };
 
+  // Handle success state
   useEffect(() => {
     if (isSuccess) {
       toast.success('Ingredient successfully added!');
@@ -108,6 +110,7 @@ const IngredientForm = ({ edit = false, ingredient, onCloseModal }) => {
 IngredientForm.propTypes = {
   edit: PropTypes.bool,
   ingredient: PropTypes.object,
+  onCloseModal: PropTypes.func,
 };
 
 export default IngredientForm;

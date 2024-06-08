@@ -9,7 +9,6 @@ import {
   useDeleteCategoryMutation,
   useGetCategoriesQuery,
 } from '../../services/apiCategories';
-import Spinner from '../../Components/UI/Spinner';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import DataTable from '../../Components/UI/DataTable';
@@ -21,6 +20,8 @@ const CategoriesTable = () => {
   const [categories, setCategories] = useState(data);
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get('search') || undefined;
+
+  // Filter data
   useEffect(() => {
     if (data && searchQuery) {
       const regExp = new RegExp(searchQuery, 'i');
@@ -33,6 +34,7 @@ const CategoriesTable = () => {
     }
   }, [searchQuery, data]);
 
+  // Set default data
   useEffect(() => {
     setCategories(data?.results);
   }, [data?.results]);

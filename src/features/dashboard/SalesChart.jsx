@@ -10,21 +10,6 @@ import {
 import { useGetSalesReportQuery } from '../../services/apiReports';
 import { useSearchParams } from 'react-router-dom';
 
-const MONTHS = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-];
-
 const LoadingIndicator = () => (
   <div className="w-full animate-pulse rounded-md bg-gray-100 px-3 py-5 shadow-sm">
     <div className="mb-10 h-5 w-3/4 bg-gray-200"></div>
@@ -36,7 +21,7 @@ const SalesChart = () => {
   const [searchParams] = useSearchParams();
 
   const last = +searchParams.get('last') || 7;
-  const { data, isLoading } = useGetSalesReportQuery(last);
+  const { data, isLoading, isFetching } = useGetSalesReportQuery(last);
 
   const filterData = data?.daily_stats?.map(itm => {
     const date = itm.date.split(',').at(0).split(' ').reverse().join(' ');
@@ -44,7 +29,7 @@ const SalesChart = () => {
     return { ...itm, date };
   });
 
-  return isLoading ? (
+  return isFetching ? (
     <LoadingIndicator />
   ) : (
     <section className="w-full rounded-md bg-white px-3 py-5 shadow-sm">
