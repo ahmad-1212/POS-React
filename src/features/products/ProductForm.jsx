@@ -89,8 +89,7 @@ const ProductForm = ({ edit = false, product, productId }) => {
 
     const preparedData = {
       name: data.productName,
-      categoryID: catData.results.find(cat => cat.name === data.category)
-        .categoryID,
+      categoryID: catData.find(cat => cat.name === data.category).categoryID,
       price: +data.price,
       ingredients: allIng,
     };
@@ -148,13 +147,11 @@ const ProductForm = ({ edit = false, product, productId }) => {
             <select
               className="cursor-pointer rounded-md border-2 border-gray-300 bg-transparent  px-4 py-2 text-[1.1rem] outline-none focus:border-primary-400 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:opacity-80"
               disabled={isCategoryLoading}
-              defaultValue={
-                edit ? product.category.name : catData?.results?.at(0).name
-              }
+              defaultValue={edit ? product.category.name : catData?.at(0).name}
               id="category"
               {...register('category')}
             >
-              {catData?.results?.map((cat, i) => (
+              {catData?.map((cat, i) => (
                 <option key={i} value={cat.name}>
                   {cat.name}
                 </option>
@@ -177,7 +174,7 @@ const ProductForm = ({ edit = false, product, productId }) => {
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-x-3 sm:gap-x-8">
+        <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-2 sm:gap-x-8">
           {/* Ingredients */}
           <div
             className="

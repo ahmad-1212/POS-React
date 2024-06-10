@@ -7,9 +7,11 @@ import SalesChart from './SalesChart';
 const Dashboard = () => {
   return (
     <div className="mt-10 flex flex-col gap-5">
-      <div className="flex-between">
+      <div className="flex flex-wrap items-center gap-3">
         <h1 className="text-[2rem] font-[600]">Dashboard</h1>
-        <Tab />
+        <div className="ml-auto">
+          <Tab />
+        </div>
       </div>
       <Stats />
       <SalesChart />

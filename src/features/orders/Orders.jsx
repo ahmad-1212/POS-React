@@ -53,22 +53,24 @@ const Orders = () => {
 
   return (
     <section className="flex  flex-col gap-3 py-10">
-      <div className="flex-between flex-wrap gap-3">
+      <div className="flex flex-wrap items-center gap-3">
         <h1 className="text-[2rem] font-[600]">Orders</h1>
-        <Tab />
+        <div className="ml-auto">
+          <Tab />
+        </div>
       </div>
-      <div className="flex-between mt-5 gap-3">
+      <div className=" mt-5 flex flex-col flex-wrap gap-3 sm:flex-row">
         <div className="flex flex-1 items-center">
           <input
             onChange={handleSearch}
             type="text"
             placeholder="Search here..."
-            className="peer w-full rounded-3xl border-2 border-primary-200 bg-transparent px-5 py-2 outline-none transition-all placeholder:text-primary-200 focus:w-2/3 focus:border-primary-300 md:w-1/2"
+            className="peer w-full  rounded-3xl border-2 border-primary-200 bg-transparent px-5 py-2 text-[0.9rem] outline-none transition-all placeholder:text-primary-200 focus:border-primary-300  sm:text-[1rem] md:w-1/2 md:focus:w-2/3"
           />
           <IoSearchOutline className=" -ml-8 cursor-pointer text-[1.2rem] text-primary-200 peer-focus:text-primary-500" />
         </div>
         <select
-          className="cursor-pointer rounded-md border-2 border-primary-200 bg-transparent px-5 py-2 font-[600] text-primary-500 outline-none"
+          className="w-[200px] cursor-pointer rounded-md border-2 border-primary-200 bg-transparent px-5 py-2 text-[0.9rem] font-[600] text-primary-500 outline-none  sm:text-[1rem]"
           defaultValue="all"
           onChange={handleType}
         >

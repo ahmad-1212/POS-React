@@ -3,15 +3,7 @@ import React from 'react';
 
 const Invoice = React.forwardRef(({ cart }, ref) => {
   return (
-    <div
-      ref={ref}
-      style={{
-        padding: '20mm',
-        width: '210mm',
-        height: '297mm',
-        fontFamily: 'Arial, sans-serif',
-      }}
-    >
+    <div ref={ref}>
       <div style={{ textAlign: 'center', marginBottom: '20px' }}>
         <h1>Restaurant Name</h1>
         <p>Restaurant Address, City, Country</p>

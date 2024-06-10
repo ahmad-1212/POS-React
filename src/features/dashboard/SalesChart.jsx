@@ -21,7 +21,7 @@ const SalesChart = () => {
   const [searchParams] = useSearchParams();
 
   const last = +searchParams.get('last') || 7;
-  const { data, isLoading, isFetching } = useGetSalesReportQuery(last);
+  const { data, isFetching } = useGetSalesReportQuery(last);
 
   const filterData = data?.daily_stats?.map(itm => {
     const date = itm.date.split(',').at(0).split(' ').reverse().join(' ');

@@ -13,6 +13,7 @@ const PrintButton = () => {
   const isLock = cart.items.some(itm => itm.lock);
   const componentRef = useRef();
   const handlePrint = useReactToPrint({
+    documentTitle: 'Invoice',
     content: () => componentRef.current,
     onBeforeGetContent: () => updateOrderStatus(cart.orderId),
     onAfterPrint: () => dispatch(clearCart()),

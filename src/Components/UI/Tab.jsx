@@ -8,7 +8,7 @@ const Tab = () => {
     setSetSearchparam(searchParams);
   };
   return (
-    <div className="flex items-center gap-4 rounded-md border-2 border-gray-100 bg-white px-2 py-[0.4rem] text-[0.9rem]">
+    <div className="flex items-center gap-2 rounded-md border-2 border-gray-100 bg-white px-2 py-[0.4rem] text-[0.7rem] sm:gap-4 sm:text-[0.9rem]">
       <button
         onClick={() => handleLast(7)}
         className={`rounded-md px-3 py-[0.2rem] hover:bg-primary-500 hover:text-white ${

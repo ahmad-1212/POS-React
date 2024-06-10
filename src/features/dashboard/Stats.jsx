@@ -40,8 +40,8 @@ const Stats = () => {
     <LoadingIndicator />
   ) : (
     <section className="flex flex-col gap-4">
-      <div className="flex-between gap-4">
-        <div className="flex flex-1 items-center gap-3 self-stretch rounded-md bg-white px-3 py-4 shadow-sm">
+      <div className="flex-between flex-wrap gap-4">
+        <div className="flex flex-1 basis-[200px] items-center gap-3 self-stretch rounded-md bg-white px-3 py-4 shadow-sm">
           <div className="flex-center h-[4rem] w-[4rem] rounded-full bg-primary-100 text-[2rem] text-primary-500">
             <LiaMoneyBillWaveSolid />
           </div>
@@ -54,7 +54,7 @@ const Stats = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-1 items-center gap-3 self-stretch rounded-md bg-white px-3 py-4 shadow-sm">
+        <div className="flex flex-1 basis-[200px] items-center gap-3 self-stretch rounded-md bg-white px-3 py-4 shadow-sm">
           <div className="flex-center h-[4rem] w-[4rem] rounded-full bg-red-100 text-[2rem] text-red-500">
             <LiaClipboardListSolid />
           </div>
@@ -67,7 +67,7 @@ const Stats = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-1 items-center gap-3 self-stretch rounded-md bg-white px-3 py-4 shadow-sm">
+        <div className="flex flex-1 basis-[200px] items-center gap-3 self-stretch rounded-md bg-white px-3 py-4 shadow-sm">
           <div className="flex-center h-[4rem] w-[4rem] rounded-full bg-green-100 text-[2rem] text-green-500">
             <MdAutoGraph />
           </div>

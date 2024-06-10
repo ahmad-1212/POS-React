@@ -58,7 +58,7 @@
   position: absolute;
 
   display: block;
-  content: "";
+  content: '';
   border-radius: 9999px;
   opacity: 1;
   animation: 3.5s ease 1 forwards ripple-effect;
@@ -195,5 +195,24 @@ td {
   }
   50% {
     transform: scale(1.5);
+  }
+}
+
+@page {
+  size: 2in auto;
+  margin: 0;
+}
+
+@media print {
+  body {
+    width: 2in;
+    margin: 0 auto;
+    font-size: 10px;
+    margin-top: 20px;
+  }
+
+  .print-content {
+    width: 100%;
+    height: auto;
   }
 }

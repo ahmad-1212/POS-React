@@ -10,10 +10,10 @@ import { FaShoppingCart } from 'react-icons/fa';
 import Button from '../UI/Button';
 import Overlay from '../UI/Overlay';
 import { useScreen } from '../../hooks/useScreen';
-// import { useGetCategoriesQuery } from '../../services/apiCategories';
+import { useGetCategoriesQuery } from '../../services/apiCategories';
 
 const MainLayout = ({ children }) => {
-  // const { data: categories } = useGetCategoriesQuery();
+  const { data: categories } = useGetCategoriesQuery();
   const { screen } = useScreen();
   const [showButton, setShowButton] = useState(screen <= 1024);
   const [showCart, setShowCart] = useState(screen > 1024);
@@ -76,8 +76,8 @@ const MainLayout = ({ children }) => {
             Categories
           </h2>
 
-          {/* <ul className="scrollbar-hidden flex flex-nowrap gap-3 overflow-x-auto">
-            {categories?.results?.map((cat, i) => (
+          <ul className="scrollbar-hidden flex flex-nowrap gap-3 overflow-x-auto">
+            {categories?.map((cat, i) => (
               <li key={i}>
                 <button
                   onClick={() => handleCategories(cat.name)}
@@ -91,7 +91,7 @@ const MainLayout = ({ children }) => {
                 </button>
               </li>
             ))}
-          </ul> */}
+          </ul>
         </section>
         {/* Main  */}
         <main
