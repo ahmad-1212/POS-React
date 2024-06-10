@@ -17,7 +17,7 @@ const Products = () => {
 
   const selectValue = searchParams.get('cat' ?? 'all');
   // Get all categories
-  const options = categories?.results?.map(cat => cat.name);
+  const options = categories?.map(cat => cat.name);
 
   // Handle filter category
   const handleSelect = e => {
