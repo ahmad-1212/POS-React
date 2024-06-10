@@ -82,7 +82,7 @@ const MainLayout = ({ children }) => {
                 <button
                   onClick={() => handleCategories(cat.name)}
                   className={`w-max rounded-md px-7 py-2  font-[600] uppercase tracking-wider ${
-                    cat.name.toLowerCase() === category
+                    cat.name === category
                       ? 'bg-gradient-to-br from-primary-400 to-primary-400 text-white'
                       : 'bg-gray-200 shadow-lg'
                   } from-primary-400 to-primary-400 hover:bg-gradient-to-br hover:text-white`}
