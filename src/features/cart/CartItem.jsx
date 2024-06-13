@@ -15,7 +15,12 @@ const CartItem = ({ itm }) => {
           />
         </LazyLoad>
         <div className="flex flex-1 flex-col justify-between">
-          <h3 className="text-[0.9rem] font-[600] capitalize">{itm.name}</h3>
+          <div className="flex-between">
+            <h3 className="text-[0.9rem] font-[600] capitalize">{itm.name}</h3>
+            {itm.updated && (
+              <span className="text-[0.8rem] font-[600]">Updated</span>
+            )}
+          </div>
           <div className="flex items-center justify-between">
             <h5 className="text-[0.9rem] font-[700] text-primary-500">
               Rs. {Number(itm.price).toFixed(2, 0)}

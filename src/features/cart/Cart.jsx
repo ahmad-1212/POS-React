@@ -39,10 +39,11 @@ const Cart = ({ onSidebarHide }) => {
       reset: resetUpdateOrder,
     },
   ] = useUpdateOrderMutation();
-
+  console.log(isAdding);
   const cart = useSelector(state => state.cart);
   const isOrderAlreadyCreated = cart.items.some(itm => itm.lock === true);
-  const isAnyOrderItem = cart.items.some(itm => !itm.lock);
+  const isAnyOrderItem = cart.items.some(itm => !itm.lock || itm.updated);
+
   const dispatch = useDispatch();
 
   const table = searchParams.get('table');
@@ -139,17 +140,19 @@ const Cart = ({ onSidebarHide }) => {
       <section className="mt-auto flex flex-col gap-3 border-t-2 p-3">
         <div className="flex justify-between px-3 font-[700]">
           <span>Total:</span>
-          <span>Rs. {cart.totalPrice.toFixed(2, 0)}</span>
+          <span>Rs. {Number(cart.totalPrice).toFixed(2, 0)}</span>
         </div>
         <div className="flex justify-between">
           <Button
-            disabled={isAdding || !cart?.items.length || !isAnyOrderItem}
+            disabled={
+              isAdding || isUpdating || !cart?.items.length || !isAnyOrderItem
+            }
             variant="dark"
             onClick={handleOrder}
           >
             {isAdding || isUpdating ? 'Loading...' : 'Send to Kitchen'}
           </Button>
-          <PrintButton />
+          <PrintButton isLoading={isAdding || isUpdating} />
         </div>
       </section>
     </div>

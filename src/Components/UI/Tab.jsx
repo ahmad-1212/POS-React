@@ -1,11 +1,11 @@
 import { useSearchParams } from 'react-router-dom';
 
 const Tab = () => {
-  const [searchParams, setSetSearchparam] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const last = +searchParams.get('last') || 7;
   const handleLast = last => {
     searchParams.set('last', last);
-    setSetSearchparam(searchParams);
+    setSearchParams(searchParams);
   };
   return (
     <div className="flex items-center gap-2 rounded-md border-2 border-gray-100 bg-white px-2 py-[0.4rem] text-[0.7rem] sm:gap-4 sm:text-[0.9rem]">
