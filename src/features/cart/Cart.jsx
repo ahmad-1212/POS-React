@@ -36,6 +36,7 @@ const Cart = ({ onSidebarHide }) => {
       isLoading: isUpdating,
       isSuccess: isUpdated,
       data: updatedData,
+      error: updateError,
       reset: resetUpdateOrder,
     },
   ] = useUpdateOrderMutation();
@@ -89,6 +90,7 @@ const Cart = ({ onSidebarHide }) => {
       dispatch(lockItems({ orderId: updatedData.id }));
     }
     if (error) toast.error(error?.data?.error);
+    if (updateError) toast.error(error?.data?.message);
   }, [
     isAdded,
     error,
@@ -98,7 +100,7 @@ const Cart = ({ onSidebarHide }) => {
     resetUpdateOrder,
     updatedData?.id,
     orderData?.id,
-    toast,
+    updateError,
   ]);
 
   return (

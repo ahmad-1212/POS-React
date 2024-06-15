@@ -15,7 +15,7 @@ const Products = () => {
     useGetCategoriesQuery();
   const [products, setProducts] = useState(data);
 
-  const selectValue = searchParams.get('cat' ?? 'all');
+  const selectValue = searchParams.get('cat') || 'all';
   // Get all categories
   const options = categories?.map(cat => cat.name);
 
@@ -33,6 +33,7 @@ const Products = () => {
         return regExp.test(prod.name);
       }
       if (selectValue === 'all') {
+        console.log('all');
         return regExp.test(prod.name);
       }
     });

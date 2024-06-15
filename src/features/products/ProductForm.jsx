@@ -47,8 +47,9 @@ const ProductForm = ({ edit = false, product, productId }) => {
   );
   const [error, setError] = useState('');
   const { data: catData, isLoading: isCategoryLoading } =
-    useGetCategoriesQuery();
-  const { data: ingData, isLoading: isIngLoading } = useGetIngredientsQuery();
+    useGetCategoriesQuery('all');
+  const { data: ingData, isLoading: isIngLoading } =
+    useGetIngredientsQuery('all');
   const [
     createProduct,
     { isLoading: isCreating, isSuccess, reset: resetCreateProdState },
@@ -61,9 +62,7 @@ const ProductForm = ({ edit = false, product, productId }) => {
     if (errors.quantity) setFormError('quantity', {});
 
     const values = getValues();
-    const ing = ingData.results.find(
-      itm => values.ingredient === itm.ingredientID,
-    );
+    const ing = ingData.find(itm => values.ingredient === itm.ingredientID);
     const isIngExists = ingredients.find(
       itm => itm.ingredientID === ing.ingredientID,
     );
@@ -86,10 +85,11 @@ const ProductForm = ({ edit = false, product, productId }) => {
     // Get All ingredients ID's
     const allIng = {};
     ingredients.forEach(ing => (allIng[ing.ingredientID] = ing.quantity));
-
+    console.log(data.category);
     const preparedData = {
       name: data.productName,
       categoryID: catData.find(cat => cat.name === data.category).categoryID,
+      cost_price: +data.costPrice,
       price: +data.price,
       ingredients: allIng,
     };
@@ -102,7 +102,15 @@ const ProductForm = ({ edit = false, product, productId }) => {
   };
 
   useEffect(() => {
-    const ing = ingData?.results?.find(itm => itm.ingredientID === ingredient);
+    if (edit) {
+      setValue('category', product.category.name);
+    } else {
+      setValue('category', catData?.at(0).name);
+    }
+  }, [product, catData, edit, setValue]);
+
+  useEffect(() => {
+    const ing = ingData?.find(itm => itm.ingredientID === ingredient);
     setValue('unit', ing?.unit);
     setValue('quantity', ing?.quantity);
   }, [ingredient]);
@@ -147,7 +155,7 @@ const ProductForm = ({ edit = false, product, productId }) => {
             <select
               className="cursor-pointer rounded-md border-2 border-gray-300 bg-transparent  px-4 py-2 text-[1.1rem] outline-none focus:border-primary-400 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:opacity-80"
               disabled={isCategoryLoading}
-              defaultValue={edit ? product.category.name : catData?.at(0).name}
+              // defaultValue={edit ? product.category.name : catData?.at(0).name}
               id="category"
               {...register('category')}
             >
@@ -159,19 +167,31 @@ const ProductForm = ({ edit = false, product, productId }) => {
             </select>
             <span></span>
           </div>
-
-          {/* Price */}
-          <Input
-            label="Price"
-            register={register}
-            required="Price is required!"
-            type="number"
-            step="any"
-            min={0}
-            id="price"
-            error={errors?.price?.message}
-            showError
-          />
+          <div className="grid grid-cols-2 gap-3">
+            {/* Price */}
+            <Input
+              label="Cost"
+              register={register}
+              required="Cost Price is required!"
+              type="number"
+              step="any"
+              min={0}
+              id="costPrice"
+              error={errors?.costPrice?.message}
+              showError
+            />
+            <Input
+              label="Price"
+              register={register}
+              required="Price is required!"
+              type="number"
+              step="any"
+              min={0}
+              id="price"
+              error={errors?.price?.message}
+              showError
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-2 sm:gap-x-8">
@@ -193,7 +213,7 @@ const ProductForm = ({ edit = false, product, productId }) => {
               <option value={1} disabled>
                 Select ingredient
               </option>
-              {ingData?.results?.map((ing, i) => (
+              {ingData?.map((ing, i) => (
                 <option key={i} value={ing.ingredientID}>
                   {ing.name}
                 </option>
@@ -249,7 +269,11 @@ const ProductForm = ({ edit = false, product, productId }) => {
 
         {/* Display error or success message */}
         <div className="mt-5 flex justify-end">
-          {error && <p className={`-100 mr-auto px-3 py-2 `}>{error}</p>}
+          {error && (
+            <p className={`-100 mr-auto bg-red-100 px-3 py-2 text-red-500`}>
+              {error}
+            </p>
+          )}
           <Button type="submit" className="px-10" variant="dark">
             {isCreating || isUpdating ? 'Saving...' : 'Save'}
           </Button>
@@ -263,6 +287,7 @@ ProductForm.propTypes = {
   onCloseModal: PropTypes.func,
   edit: PropTypes.bool,
   product: PropTypes.object,
+  productId: PropTypes.string,
 };
 
 export default ProductForm;
