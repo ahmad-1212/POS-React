@@ -7,6 +7,8 @@ import { GoHome } from 'react-icons/go';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { FaRegListAlt } from 'react-icons/fa';
 import { MdOutlineInventory2 } from 'react-icons/md';
+import { MdOutlineDiscount } from 'react-icons/md';
+
 import NavItem from './NavItem';
 
 const LINKS = [
@@ -49,6 +51,11 @@ const LINKS = [
     link: '/ingredients',
     icon: <FaRegListAlt />,
     name: 'ingredients',
+  },
+  {
+    link: '/deals',
+    icon: <MdOutlineDiscount />,
+    name: 'deals',
   },
   {
     link: '/settings',

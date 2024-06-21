@@ -170,7 +170,10 @@ const ProductForm = ({ edit = false, product, productId }) => {
           <div className="grid grid-cols-2 gap-3">
             {/* Price */}
             <Input
-              label="Cost"
+              label="Cost
+              
+              
+              "
               register={register}
               required="Cost Price is required!"
               type="number"

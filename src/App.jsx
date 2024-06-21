@@ -19,6 +19,8 @@ import SettingsPage from './pages/SettingsPage';
 import IngredientsPage from './pages/IngredientsPage';
 import MainInventoryPage from './pages/MainInventoryPage';
 import KitchenInventoryPage from './pages/KitchenInventoryPage';
+import DealsPage from './pages/DealsPage';
+import AddDealPage from './pages/AddDealPage';
 
 const App = () => {
   return (
@@ -47,6 +49,8 @@ const App = () => {
               element={<EditProductPage />}
             />
             <Route path="ingredients" element={<IngredientsPage />} />
+            <Route path="deals" element={<DealsPage />} />
+            <Route path="deals/add" element={<AddDealPage />} />
             <Route path="settings" element={<SettingsPage />} />
           </Route>
 
