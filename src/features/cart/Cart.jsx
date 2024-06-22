@@ -93,7 +93,8 @@ const Cart = ({ onSidebarHide }) => {
       dispatch(lockItems({ orderId: updatedData.id }));
     }
     if (error) toast.error(error?.data?.error);
-    if (updateError) toast.error(error?.data?.message);
+    console.log(updateError);
+    if (updateError) toast.error(updateError?.data?.error);
   }, [
     isAdded,
     error,
