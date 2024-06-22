@@ -1,8 +1,9 @@
 import { MdOutlineAddCircleOutline } from 'react-icons/md';
-import Button from '../../Components/UI/Button';
-import Modal from '../../Components/UI/Modal';
+import Button from '../../../Components/UI/Button';
+import Modal from '../../../Components/UI/Modal';
 import MainInventoryTable from './MainInventoryTable';
 import MainInventoryForm from './MainInventoryForm';
+import InventoryCart from '../InventoryCart';
 
 const MainInventory = () => {
   return (
@@ -22,6 +23,7 @@ const MainInventory = () => {
         </Modal>
       </div>
       <MainInventoryTable />
+      <InventoryCart main={true} />
     </section>
   );
 };

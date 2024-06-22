@@ -28,13 +28,13 @@ const LINKS = [
     name: 'orders',
   },
   {
-    link: '/main-inventory',
+    link: '/inventory/main',
     icon: <MdOutlineInventory2 />,
     name: 'inventories',
     extended: true,
     links: [
-      { link: '/main-inventory', name: 'Main Inventory' },
-      { link: '/kitchen-inventory', name: 'Kitchen Inventory' },
+      { link: '/inventory/main', name: 'Main Inventory' },
+      { link: '/inventory/kitchen', name: 'Kitchen Inventory' },
     ],
   },
   {

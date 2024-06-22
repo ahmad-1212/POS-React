@@ -9,7 +9,6 @@ const Button = ({
   variant = 'primary',
   link = false,
   to,
-  isLoading,
   disabled,
   onClick,
   ...props
@@ -51,7 +50,7 @@ const Button = ({
     <button
       {...props}
       disabled={disabled}
-      className={`relative overflow-hidden disabled:transform-none disabled:cursor-not-allowed  disabled:text-white disabled:shadow-none ${variantType[variant]} ${className} disabled:bg-gray-500`}
+      className={`relative overflow-hidden disabled:transform-none disabled:cursor-not-allowed  disabled:text-white disabled:shadow-none ${variantType[variant]} ${className}`}
       onClick={e => {
         const rect = e.target.getBoundingClientRect();
         setCoords({ x: e.clientX - rect.left, y: e.clientY - rect.top });
@@ -80,46 +79,9 @@ Button.propTypes = {
   variant: PropTypes.oneOf(['primary', 'outlined', 'underline', 'dark']),
   link: PropTypes.bool,
   to: PropTypes.string,
-  isLoading: PropTypes.bool,
+
   disabled: PropTypes.bool,
   onClick: PropTypes.func,
 };
 
 export default Button;
-
-// <button
-//       {...props}
-//       disabled={disabled}
-//       className={`disabled:cursor-not-allowed disabled:bg-gray-400 disabled:border-gray-400 relative overflow-hidden ${variantType[variant]} ${className}`}
-//       onClick={(e) => {
-//         const rect = e.target.getBoundingClientRect();
-//         setCoords({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-//         onClick && onClick(e);
-//       }}
-//     >
-//       {isRippling ? (
-//         <span
-//           className="ripple"
-//           style={{
-//             left: coords.x,
-//             top: coords.y,
-//           }}
-//         />
-//       ) : (
-//         ""
-//       )}
-
-//       {isLoading ? (
-//         <div className="flex items-center gap-2 justify-center">
-//           <LoadingSpinner
-//             width="20px"
-//             height="20px"
-//             border="3px"
-//             color="white"
-//           />
-//           <span>{children}</span>
-//         </div>
-//       ) : (
-//         children
-//       )}
-//     </button>

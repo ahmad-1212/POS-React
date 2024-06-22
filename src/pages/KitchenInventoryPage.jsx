@@ -1,4 +1,4 @@
-import KitchenInventory from '../features/kitchenInventory/KitchenInventory';
+import KitchenInventory from '../features/inventories/kitchenInventory/KitchenInventory';
 
 const KitchenInventoryPage = () => {
   return <KitchenInventory />;

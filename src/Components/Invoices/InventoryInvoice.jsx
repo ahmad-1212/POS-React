@@ -1,7 +1,8 @@
 /* eslint-disable */
 import React from 'react';
 
-const Invoice = React.forwardRef(({ cart }, ref) => {
+const InventoryInvoice = React.forwardRef(({ items, isMain }, ref) => {
+  console.log(items);
   return (
     <div ref={ref}>
       <div style={{ textAlign: 'center', marginBottom: '20px' }}>
@@ -9,13 +10,7 @@ const Invoice = React.forwardRef(({ cart }, ref) => {
         <p>Restaurant Address, City, Country</p>
         <p>Phone: (123) 456-7890 | Email: info@Restaurant.com</p>
       </div>
-      <div style={{ marginBottom: '20px' }}>
-        {cart?.userInfo?.name && <p>Guest Name: {cart?.userInfo?.name}</p>}
-        {cart?.userInfo?.phone && <p>Phone Number: {cart?.userInfo?.phone}</p>}
-        {cart?.userInfo?.address && <p>Address: {cart?.userInfo?.address}</p>}
-        <p>Order ID: #{cart.orderId}</p>
-        <p>Date: {new Date().toLocaleDateString()}</p>
-      </div>
+
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr>
@@ -26,7 +21,7 @@ const Invoice = React.forwardRef(({ cart }, ref) => {
                 textAlign: 'left',
               }}
             >
-              Products
+              Name
             </th>
             <th
               style={{
@@ -44,12 +39,12 @@ const Invoice = React.forwardRef(({ cart }, ref) => {
                 textAlign: 'left',
               }}
             >
-              Amount
+              Unit
             </th>
           </tr>
         </thead>
         <tbody>
-          {cart.items.map((itm, i) => (
+          {items?.map((itm, i) => (
             <tr key={i}>
               <td style={{ border: '1px solid #000', padding: '8px' }}>
                 {itm.name}
@@ -58,20 +53,22 @@ const Invoice = React.forwardRef(({ cart }, ref) => {
                 {itm.quantity}
               </td>
               <td style={{ border: '1px solid #000', padding: '8px' }}>
-                {(+itm.price * itm.quantity).toFixed(2, 0)}
+                {itm.unit}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
       <div style={{ textAlign: 'right', marginTop: '20px' }}>
-        <p>Total: Rs. {cart.totalPrice.toFixed(2, 0)}</p>
+        <p>Total Items: {items.length} </p>
       </div>
       <div style={{ textAlign: 'center', marginTop: '20px' }}>
-        <p>Thank you for eating with us!</p>
+        <p>
+          Invioce of Items sended to {isMain ? 'Kitchen' : 'Main'} Inventory
+        </p>
       </div>
     </div>
   );
 });
 
-export default Invoice;
+export default InventoryInvoice;

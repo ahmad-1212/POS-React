@@ -1,16 +1,17 @@
 import { useForm, useWatch } from 'react-hook-form';
 import PropTypes from 'prop-types';
-import Button from '../../Components/UI/Button';
-import { MdOutlineInventory2 } from 'react-icons/md';
-import { useGetIngredientsQuery } from '../../services/apiIngredients';
-import Spinner from '../../Components/UI/Spinner';
-import Input from '../../Components/UI/Input';
 import { useEffect } from 'react';
+import { toast } from 'react-toastify';
+import { MdOutlineInventory2 } from 'react-icons/md';
+
+import Button from '../../../Components/UI/Button';
+import { useGetIngredientsQuery } from '../../../services/apiIngredients';
+import Spinner from '../../../Components/UI/Spinner';
+import Input from '../../../Components/UI/Input';
 import {
   useAddItemToMainInventoryMutation,
   useUpdateItemOfMainInventoryMutation,
-} from '../../services/apiMainInventory';
-import { toast } from 'react-toastify';
+} from '../../../services/apiMainInventory';
 
 const MainInventoryForm = ({ edit, item, onCloseModal }) => {
   const {

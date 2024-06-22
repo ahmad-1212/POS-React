@@ -1,10 +1,11 @@
-import DataTable from '../../Components/UI/DataTable';
-import Modal from '../../Components/UI/Modal';
-import { useGetKitchenInventoryQuery } from '../../services/apiKitchenInventory';
+import DataTable from '../../../Components/UI/DataTable';
+import Modal from '../../../Components/UI/Modal';
+import { useGetKitchenInventoryQuery } from '../../../services/apiKitchenInventory';
 import SendToMainForm from './SendToMainForm';
 
 const KitchenInventoryTable = () => {
   const { data, isLoading } = useGetKitchenInventoryQuery();
+
   return (
     <DataTable
       data={data}
@@ -23,7 +24,7 @@ const KitchenInventoryTable = () => {
               <Modal>
                 <Modal.Open id="send-main">
                   <button className="w-max rounded-lg bg-primary-200 px-2 py-1 text-[0.9rem] text-primary-500">
-                    Send to Main Inventory
+                    Add to cart
                   </button>
                 </Modal.Open>
                 <Modal.Window id="send-main" zIndex="z-50" closeOnOverlay>

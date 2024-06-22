@@ -15,6 +15,8 @@ import {
 import { clearCart, lockItems } from './cartSlice';
 
 import PrintButton from './PrintButton';
+import Modal from '../../Components/UI/Modal';
+import Checkout from './Checkout';
 
 const Cart = ({ onSidebarHide }) => {
   const [searchParams] = useSearchParams();
@@ -40,8 +42,9 @@ const Cart = ({ onSidebarHide }) => {
       reset: resetUpdateOrder,
     },
   ] = useUpdateOrderMutation();
-  console.log(isAdding);
+
   const cart = useSelector(state => state.cart);
+  const isLock = cart?.items.some(itm => itm.lock);
   const isOrderAlreadyCreated = cart.items.some(itm => itm.lock === true);
   const isAnyOrderItem = cart.items.some(itm => !itm.lock || itm.updated);
 
@@ -154,7 +157,22 @@ const Cart = ({ onSidebarHide }) => {
           >
             {isAdding || isUpdating ? 'Loading...' : 'Send to Kitchen'}
           </Button>
-          <PrintButton isLoading={isAdding || isUpdating} />
+          <Modal>
+            <Modal.Open id="checkout">
+              <Button
+                disabled={
+                  !cart?.items.length || isUpdated || !isLock || isAdding
+                }
+                variant="dark"
+                onClick={handleOrder}
+              >
+                Checkout
+              </Button>
+            </Modal.Open>
+            <Modal.Window id="checkout" closeOnOverlay zIndex="z-50">
+              <Checkout />
+            </Modal.Window>
+          </Modal>
         </div>
       </section>
     </div>

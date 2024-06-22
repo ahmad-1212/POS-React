@@ -1,58 +1,58 @@
-import { useForm } from 'react-hook-form';
-import PropTypes from 'prop-types';
-import Button from '../../Components/UI/Button';
-import { useSendToMainMutation } from '../../services/apiKitchenInventory';
 import { MdOutlineInventory2 } from 'react-icons/md';
-import Input from '../../Components/UI/Input';
+import PropTypes from 'prop-types';
+import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
-import { toast } from 'react-toastify';
 
-const SendToMainForm = ({ item }) => {
+import Input from '../../../Components/UI/Input';
+import Button from '../../../Components/UI/Button';
+
+import { useDispatch } from 'react-redux';
+import { addItem } from '../inventorySlice';
+const SendToKitchenForm = ({ item, onCloseModal }) => {
   const {
     register,
-    formState: { errors },
     handleSubmit,
     setValue,
-    getValues,
+    formState: { errors },
   } = useForm({
     defaultValues: {
       name: item.ingredient.name,
       unit: item.ingredient.unit,
+
       quantity: item.quantity,
     },
   });
 
-  const [sendToMain, { isLoading, isSuccess, reset }] = useSendToMainMutation();
+  const dispatch = useDispatch();
 
-  // Handle submit
+  // Handle submit to send data to kitchen
   const onSubmit = data => {
-    sendToMain({ id: item.ingredient.id, data: { quantity: +data.quantity } });
+    console.log(item);
+    dispatch(
+      addItem({
+        isMain: true,
+        id: item.ingredient.id,
+        name: data.name,
+        unit: data.unit,
+        ingredientID: item.ingredient.ingredientID,
+        quantity: +data.quantity,
+      }),
+    );
+    onCloseModal();
   };
 
-  // Set default values when changes
   useEffect(() => {
     setValue('name', item.ingredient.name);
     setValue('unit', item.ingredient.unit);
     setValue('quantity', item.quantity);
   }, [item, setValue]);
 
-  // handle success or error state
-  useEffect(() => {
-    if (isSuccess) {
-      toast.success(
-        `${getValues().quantity} ${item.ingredient.unit}, ${item.ingredient.name} is successfully send to Main Inventory!`,
-      );
-      reset();
-    }
-  }, [isSuccess, reset, getValues, item]);
-
   return (
     <div className="mb-8">
       <div className="flex items-center justify-center gap-3 bg-primary-500 py-3 text-[1.4rem] font-[600] text-white">
         <MdOutlineInventory2 />
-        <span>Send to Main Inventory</span>
+        <span>Send to Kitchen</span>
       </div>
-      {/* Display availabale data */}
       <div className="mx-10 mt-5 flex items-center gap-2 bg-primary-100 px-3 py-2 text-[1.2rem] text-primary-500">
         <span>Availabale:</span>
         <span>{item.ingredient.name}</span>
@@ -61,7 +61,6 @@ const SendToMainForm = ({ item }) => {
         </span>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="mt-10 px-10">
-        {/* Ing Name */}
         <Input
           register={register}
           type="text"
@@ -73,7 +72,6 @@ const SendToMainForm = ({ item }) => {
           error={errors?.name?.message}
         />
         <div className="grid grid-cols-2 gap-3">
-          {/* Unit */}
           <Input
             register={register}
             type="text"
@@ -84,7 +82,6 @@ const SendToMainForm = ({ item }) => {
             showError
             error={errors?.unit?.message}
           />
-          {/* quantity */}
           <Input
             type="number"
             id="quantity"
@@ -95,12 +92,11 @@ const SendToMainForm = ({ item }) => {
             label="Quantity"
             showError
             error={errors?.quantity?.message}
-            disabled={isLoading}
           />
         </div>
         <div className="flex-end">
-          <Button disabled={isLoading} variant="dark">
-            {isLoading ? 'Sending...' : 'Send'}
+          <Button type="submit" variant="dark">
+            Add
           </Button>
         </div>
       </form>
@@ -108,8 +104,9 @@ const SendToMainForm = ({ item }) => {
   );
 };
 
-SendToMainForm.propTypes = {
+SendToKitchenForm.propTypes = {
   item: PropTypes.object,
+  onCloseModal: PropTypes.func,
 };
 
-export default SendToMainForm;
+export default SendToKitchenForm;

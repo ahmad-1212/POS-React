@@ -1,11 +1,11 @@
 import { ImPen } from 'react-icons/im';
-import IconButton from '../../Components/UI/IconButton';
-import Modal from '../../Components/UI/Modal';
-import { useGetMainInventoryQuery } from '../../services/apiMainInventory';
+import IconButton from '../../../Components/UI/IconButton';
+import Modal from '../../../Components/UI/Modal';
+import { useGetMainInventoryQuery } from '../../../services/apiMainInventory';
 
 import MainInventoryForm from './MainInventoryForm';
 import SendToKitchenForm from './SendToKitchenForm';
-import DataTable from '../../Components/UI/DataTable';
+import DataTable from '../../../Components/UI/DataTable';
 
 const MainInventoryTable = () => {
   const { data, isLoading } = useGetMainInventoryQuery();
@@ -29,7 +29,7 @@ const MainInventoryTable = () => {
           <td className="px-2">
             <Modal.Open id="send-kitchen">
               <button className="w-max rounded-lg bg-primary-200 px-2 py-1 text-[0.9rem] text-primary-500">
-                Send to kitchen
+                Add to cart
               </button>
             </Modal.Open>
             <Modal.Window id="send-kitchen" zIndex="z-50" closeOnOverlay>

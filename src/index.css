@@ -198,10 +198,10 @@ td {
   }
 }
 
-@page {
+/* @page {
   size: 2in auto;
   margin: 0;
-}
+} */
 
 @media print {
   body {
@@ -210,6 +210,4 @@ td {
     font-size: 10px;
     margin-top: 20px;
   }
-
-
 }

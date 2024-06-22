@@ -10,8 +10,8 @@ const apiKitchenInventory = apiBase.injectEndpoints({
 
     // Send stock to main inventory
     sendToMain: build.mutation({
-      query: ({ id, data }) => ({
-        url: `/inventories/kitchen/transfer/${id}/`,
+      query: data => ({
+        url: `/inventories/kitchen/transfer/`,
         method: 'POST',
         body: data,
       }),

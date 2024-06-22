@@ -1,4 +1,4 @@
-import MainInventory from '../features/mainInventory/MainInventory';
+import MainInventory from '../features/inventories/mainInventory/MainInventory';
 
 const MainInventoryPage = () => {
   return <MainInventory />;

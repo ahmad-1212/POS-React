@@ -1,3 +1,4 @@
+import InventoryCart from '../InventoryCart';
 import KitchenInventoryTable from './KitchenInventoryTable';
 
 const KitchenInventory = () => {
@@ -7,6 +8,7 @@ const KitchenInventory = () => {
         <h1 className="text-[2rem] font-[600]">Kitchen Inventory</h1>
       </div>
       <KitchenInventoryTable />
+      <InventoryCart main={false} />
     </section>
   );
 };
