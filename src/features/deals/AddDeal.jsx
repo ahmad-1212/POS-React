@@ -1,16 +1,23 @@
-import { MdOutlineAddCircleOutline } from 'react-icons/md';
-import ProductsTable from '../products/ProductsTable';
 import Products from '../products/Products';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useGetProductsQuery } from '../../services/apiProducts';
 import { HiX } from 'react-icons/hi';
 import Button from '../../Components/UI/Button';
 import Modal from '../../Components/UI/Modal';
+import Spinner from '../../Components/UI/Spinner';
 import DealForm from './DealForm';
+import { useSearchParams } from 'react-router-dom';
+import { useGetDealWithIdQuery } from '../../services/apiDeals';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { BsTicketDetailed } from 'react-icons/bs';
 
 const AddDeal = () => {
   const [selectProducts, setSelectProducts] = useState([]);
   const { data } = useGetProductsQuery();
+  const [searchParams] = useSearchParams();
+  const edit = searchParams.get('edit') || false;
+  const dealId = searchParams.get('deal') || null;
+  const { data: deal, isLoading } = useGetDealWithIdQuery(dealId || skipToken);
 
   const addProduct = id => {
     if (!data) return;
@@ -40,11 +47,28 @@ const AddDeal = () => {
     setSelectProducts(newProd);
   };
 
-  return (
+  useEffect(() => {
+    if ((!edit && !dealId) || !deal) return;
+    console.log(deal);
+    const products = deal.products.map(prod => ({
+      ...prod.product,
+      quantity: prod.quantity,
+    }));
+
+    setSelectProducts(products);
+  }, [edit, dealId, deal]);
+
+  return edit && dealId && isLoading ? (
+    <div className="mx-auto my-20">
+      <Spinner />
+    </div>
+  ) : (
     <>
       <section className="flex flex-col gap-8 py-10">
         <div className="flex-between flex-wrap gap-3 border-b-2 border-primary-200/30 pb-5">
-          <h1 className="text-[2rem] font-[600]">Add new Deal</h1>
+          <h1 className="text-[2rem] font-[600]">
+            {edit && dealId ? 'Edit Deal' : 'Add new Deal'}
+          </h1>
         </div>
       </section>
       {selectProducts.length > 0 && (
@@ -68,11 +92,16 @@ const AddDeal = () => {
           <Modal>
             <Modal.Open id="addDeal">
               <Button className="flex justify-end" variant="dark">
-                Create Deal
+                {edit && dealId && deal ? 'Update Deal' : 'Create Deal'}
               </Button>
             </Modal.Open>
             <Modal.Window id="addDeal" closeOnOverlay zIndex="z-50">
-              <DealForm selectProducts={selectProducts} />
+              <DealForm
+                selectProducts={selectProducts}
+                setSelectProducts={setSelectProducts}
+                deal={deal}
+                edit={edit && BsTicketDetailed}
+              />
             </Modal.Window>
           </Modal>
         </section>

@@ -10,6 +10,7 @@ import { clearInventoryCart } from './inventorySlice';
 import PrintInvoiceBtn from './PrintInvoiceBtn';
 import { useSendToKitchenMutation } from '../../services/apiMainInventory';
 import { useSendToMainMutation } from '../../services/apiKitchenInventory';
+import { toast } from 'react-toastify';
 
 const InventoryCart = ({ main }) => {
   const [showCart, setShowCart] = useState(false);
@@ -17,11 +18,15 @@ const InventoryCart = ({ main }) => {
   const cart = useSelector(state => state.inventory);
   const [
     sendToKitchen,
-    { isLoading: isSendingToKitchen, isSuccess: isSendedToKitchen },
+    {
+      isLoading: isSendingToKitchen,
+      reset: resetKitchen,
+      isSuccess: isSendedToKitchen,
+    },
   ] = useSendToKitchenMutation();
   const [
     sendToMain,
-    { isLoading: isSendingToMain, isSuccess: isSendedToMain },
+    { isLoading: isSendingToMain, reset: resetMain, isSuccess: isSendedToMain },
   ] = useSendToMainMutation();
 
   let items;
@@ -35,8 +40,6 @@ const InventoryCart = ({ main }) => {
     setShowCart(show);
   };
 
-  console.log(items);
-
   const handleSendItems = () => {
     const ingredients_data = {};
     items.forEach(itm => (ingredients_data[itm.ingredientID] = +itm.quantity));
@@ -46,6 +49,19 @@ const InventoryCart = ({ main }) => {
       sendToMain({ ingredients_data });
     }
   };
+
+  useEffect(() => {
+    if (isSendedToKitchen) {
+      toast.success('Items successfully sended to Kitchen Inventory!');
+      resetKitchen();
+      dispatch(clearInventoryCart());
+    }
+    if (isSendedToMain) {
+      toast.success('Items successfully sended to Main Inventory!');
+      resetMain();
+      dispatch(clearInventoryCart());
+    }
+  }, [isSendedToKitchen, isSendedToMain, resetKitchen, resetMain, dispatch]);
 
   useEffect(() => {
     if (showCart) {
@@ -101,6 +117,11 @@ const InventoryCart = ({ main }) => {
               Clear Cart
             </button>
           </div>
+          {!items.length && (
+            <p className="flex-center h-full w-full text-primary-500">
+              No Items added to cart yet!
+            </p>
+          )}
           {/* Cart Items */}
           <section className={`h-full overflow-y-auto`}>
             <ul className="flex flex-col gap-3 pb-16 ">

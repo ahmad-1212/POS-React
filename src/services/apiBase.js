@@ -16,6 +16,7 @@ const baseQueryWithErrorHandling = async (args, api, extraOptions) => {
           },
         };
       }
+
       default: {
         const firstValue = Object.keys(result?.error?.data)[0];
         console.log(firstValue);
