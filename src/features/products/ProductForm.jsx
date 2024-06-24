@@ -28,9 +28,11 @@ const ProductForm = ({ edit = false, product, productId }) => {
           productName: product.name,
           category: product.category.name,
           price: product.price,
+          costPrice: product.cost_price,
         }
       : {},
   });
+
   const ingredient = useWatch({
     name: 'ingredient',
     control,
@@ -50,6 +52,7 @@ const ProductForm = ({ edit = false, product, productId }) => {
     useGetCategoriesQuery('all');
   const { data: ingData, isLoading: isIngLoading } =
     useGetIngredientsQuery('all');
+
   const [
     createProduct,
     { isLoading: isCreating, isSuccess, reset: resetCreateProdState },
@@ -170,10 +173,7 @@ const ProductForm = ({ edit = false, product, productId }) => {
           <div className="grid grid-cols-2 gap-3">
             {/* Price */}
             <Input
-              label="Cost
-              
-              
-              "
+              label="Cost"
               register={register}
               required="Cost Price is required!"
               type="number"

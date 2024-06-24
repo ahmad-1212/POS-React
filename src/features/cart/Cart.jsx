@@ -14,7 +14,6 @@ import {
 } from '../../services/apiOrders';
 import { clearCart, lockItems } from './cartSlice';
 
-import PrintButton from './PrintButton';
 import Modal from '../../Components/UI/Modal';
 import Checkout from './Checkout';
 
@@ -56,23 +55,34 @@ const Cart = ({ onSidebarHide }) => {
   // Create or update order
   const handleOrder = () => {
     const products = {};
-    cart.items.forEach(itm => (products[itm.productID] = itm.quantity));
+    const deals = {};
+
+    cart.items.forEach(itm => {
+      if (itm.deal) {
+        deals[itm.dealID] = itm.quantity;
+      } else {
+        products[itm.productID] = itm.quantity;
+      }
+    });
     let data = {};
     if (type === 'dine in') {
       data = {
         option: type.toLowerCase().replace(' ', '_'),
         table,
         products,
+        deals,
       };
     } else {
       data = {
         option: type.toLowerCase().replace(' ', '_'),
         products,
+        deals,
         customer_name: cart.userInfo.name,
         address: cart.userInfo.address,
         phone_number: cart.userInfo.phone,
       };
     }
+
     if (isOrderAlreadyCreated) {
       updateOrder({ id: cart.orderId, data });
     } else {
@@ -84,17 +94,23 @@ const Cart = ({ onSidebarHide }) => {
   useEffect(() => {
     if (isAdded) {
       toast.success('Order successfully created!');
-      resetAddOrder();
       dispatch(lockItems({ orderId: orderData.id }));
+      resetAddOrder();
     }
     if (isUpdated) {
       toast.success('Order successfully updated!');
-      resetUpdateOrder();
       dispatch(lockItems({ orderId: updatedData.id }));
+      resetUpdateOrder();
     }
-    if (error) toast.error(error?.data?.error);
-    console.log(updateError);
-    if (updateError) toast.error(updateError?.data?.error);
+    if (error) {
+      toast.error(error?.data?.error);
+      resetAddOrder();
+    }
+
+    if (updateError) {
+      toast.error(updateError?.data?.error);
+      resetUpdateOrder();
+    }
   }, [
     isAdded,
     error,

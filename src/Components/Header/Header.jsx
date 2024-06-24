@@ -16,6 +16,7 @@ const Header = () => {
   const [selectValue, setSelectValue] = useState(
     searchParams.get('type') || '',
   );
+
   const items = useSelector(state => state.cart.items);
   const isOrderPlaced = items.some(itm => itm.lock);
   const dispatch = useDispatch();
@@ -41,6 +42,11 @@ const Header = () => {
   const handleSelectChange = e => {
     setType(e.target.value);
     setSelectValue(e.target.value);
+  };
+
+  const handleDeals = () => {
+    searchParams.set('category', 'deals');
+    setSearchParams(searchParams);
   };
 
   useEffect(() => {
@@ -114,7 +120,10 @@ const Header = () => {
         </div>
       )}
 
-      <div className="ml-auto">
+      <div className="ml-auto flex items-center gap-2">
+        <Button variant="dark" onClick={handleDeals}>
+          Deals
+        </Button>
         <Modal>
           <Modal.Open id="activeOrders">
             <Button variant="dark">

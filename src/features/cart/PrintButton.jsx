@@ -45,7 +45,11 @@ const PrintButton = ({ isLoading, printBill, onCloseModal }) => {
         disabled={!cart?.items.length || isGetting || !isLock || isLoading}
         variant="dark"
       >
-        {isGetting ? 'Loading...' : printBill ? 'Print Bill' : 'Print Invoice'}
+        {isGetting
+          ? 'Loading...'
+          : printBill
+            ? 'Print Invoice'
+            : 'Duplicate Invoice'}
       </Button>
       <div className="hidden">
         <Invoice

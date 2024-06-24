@@ -8,19 +8,26 @@ import Button from '../../Components/UI/Button';
 import Modal from '../../Components/UI/Modal';
 import UserInfoForm from './UserInfoForm';
 import Spinner from '../../Components/UI/Spinner';
+import { useGetDealsQuery } from '../../services/apiDeals';
 
 const Menu = () => {
   const [searchParams] = useSearchParams();
   const category = searchParams.get('category');
   const { data, isLoading } = useGetProductsQuery();
+  const { data: deals } = useGetDealsQuery();
   const [products, setProducts] = useState(null);
   const userInfo = useSelector(state => state.cart.userInfo);
   const type = searchParams.get('type');
   const table = searchParams.get('table');
+
   useEffect(() => {
     if (!category || !data) return;
-    setProducts(data?.filter(prod => prod.category.name === category));
-  }, [category, data]);
+    if (category === 'deals') {
+      setProducts(deals);
+    } else {
+      setProducts(data?.filter(prod => prod.category.name === category));
+    }
+  }, [category, data, deals]);
 
   return (
     <section className="mb-10 flex flex-col gap-4 px-4 py-5 sm:px-10">

@@ -7,6 +7,7 @@ import { useGetCategoriesQuery } from '../../services/apiCategories';
 import LazyLoad from 'react-lazy-load';
 
 const MenuItem = ({ item, category }) => {
+  const isDeal = category === 'deals';
   const dispatch = useDispatch();
   const { data: categories } = useGetCategoriesQuery();
   const img = categories?.find(cat => cat.name === category)?.image;
@@ -14,7 +15,9 @@ const MenuItem = ({ item, category }) => {
   return (
     <li
       className="w-full cursor-pointer overflow-hidden rounded-lg bg-white  shadow-sm hover:scale-105 hover:shadow-lg"
-      onClick={() => dispatch(addCartItem({ ...item, img }))}
+      onClick={() =>
+        dispatch(addCartItem({ ...item, img, deal: category === 'deals' }))
+      }
     >
       <RippleEffect>
         <div className=" border-1 flex h-full flex-col justify-between bg-white p-3 shadow-sm">
@@ -26,7 +29,7 @@ const MenuItem = ({ item, category }) => {
           <div className="flex justify-end">
             <LazyLoad>
               <img
-                className="h-[4rem] w-[4rem] rounded-full border-[3px] border-primary-500/40 object-cover"
+                className={`${isDeal ? 'opacity-0' : 'opacity-100'} h-[4rem] w-[4rem] rounded-full border-[3px] border-primary-500/40 object-cover`}
                 src={img}
               />
             </LazyLoad>

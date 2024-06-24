@@ -3,6 +3,23 @@ import Button from '../../Components/UI/Button';
 
 const OrderDetail = ({ order, onCloseModal }) => {
   console.log(order);
+  const products = order.cart.products.map(prod => {
+    const price = +prod.product.price * +prod.quantity;
+    return {
+      name: prod.product.name,
+      price,
+      quantity: prod.quantity,
+    };
+  });
+  const deals = order.cart.deals.map(deal => {
+    return {
+      name: deal.deal.name,
+      price: +deal.deal.price * +deal.quantity,
+      quantity: deal.quantity,
+      deal: true,
+    };
+  });
+  const items = [...deals, ...products];
   return (
     <div>
       <h1 className="bg-primary-500 py-3 text-center text-[1.3rem] font-[600] text-white">
@@ -57,16 +74,18 @@ const OrderDetail = ({ order, onCloseModal }) => {
               </tr>
             </thead>
             <tbody>
-              {order.cart.products.map((itm, i) => (
+              {items.map((itm, i) => (
                 <tr key={i}>
                   <td style={{ border: '1px solid #000', padding: '8px' }}>
-                    {itm.product.name}
+                    <span>{itm.name}</span>
+                    {'  '}
+                    {itm.deal && <span className="font-[600]"> (Deal)</span>}
                   </td>
                   <td style={{ border: '1px solid #000', padding: '8px' }}>
                     {itm.quantity}
                   </td>
                   <td style={{ border: '1px solid #000', padding: '8px' }}>
-                    {(+itm.product.price * itm.quantity).toFixed(2, 0)}
+                    {itm.price.toFixed(2, 0)}
                   </td>
                 </tr>
               ))}
@@ -76,7 +95,7 @@ const OrderDetail = ({ order, onCloseModal }) => {
         <div className="flex-between mb-4 mt-3">
           <p>
             <strong>Total Items:</strong>{' '}
-            {order.cart.products.reduce((acc, itm) => acc + itm.quantity, 0)}
+            {items.reduce((acc, itm) => acc + itm.quantity, 0)}
           </p>
           <p>
             <strong>Total Price:</strong> Rs.{' '}

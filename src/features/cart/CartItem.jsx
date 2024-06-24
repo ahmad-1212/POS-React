@@ -8,12 +8,18 @@ const CartItem = ({ itm }) => {
   if (itm.lock)
     return (
       <li className="flex items-center gap-3 rounded-md bg-gray-100 px-3 py-2 opacity-50">
-        <LazyLoad>
-          <img
-            src={itm.img}
-            className="h-[60px] w-[60px] rounded-md object-cover"
-          />
-        </LazyLoad>
+        {itm.deal ? (
+          <div className="flex-center h-[60px] w-[60px] rounded-md bg-primary-400 text-center text-white">
+            Deal
+          </div>
+        ) : (
+          <LazyLoad>
+            <img
+              src={itm.img}
+              className="h-[60px] w-[60px] rounded-md object-cover"
+            />
+          </LazyLoad>
+        )}
         <div className="flex flex-1 flex-col justify-between">
           <div className="flex-between">
             <h3 className="text-[0.9rem] font-[600] capitalize">{itm.name}</h3>
@@ -37,12 +43,18 @@ const CartItem = ({ itm }) => {
   // if itm is not lock
   return (
     <li className="flex items-center gap-3 rounded-md bg-gray-100 px-3 py-2">
-      <LazyLoad height={60} width={60}>
-        <img
-          src={itm.img}
-          className="h-[60px] w-[60px] rounded-md object-cover"
-        />
-      </LazyLoad>
+      {itm.deal ? (
+        <div className="flex-center h-[60px] w-[60px] rounded-md bg-primary-500 text-white">
+          Deal
+        </div>
+      ) : (
+        <LazyLoad>
+          <img
+            src={itm.img}
+            className="h-[60px] w-[60px] rounded-md object-cover"
+          />
+        </LazyLoad>
+      )}
       <div className="flex flex-1 flex-col justify-between">
         <h3 className="text-[0.9rem] font-[600] capitalize">{itm.name}</h3>
         <div className="flex items-center justify-between">

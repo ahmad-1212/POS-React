@@ -18,12 +18,7 @@ const ActiveOrders = ({ onCloseModal }) => {
   const { data: categories } = useGetCategoriesQuery();
   const [
     getOrderByID,
-    {
-      isLoading: isFetchingById,
-      isSuccess: isFetchedOrder,
-      error,
-      data: order,
-    },
+    { isLoading: isFetchingById, isSuccess: isFetchedOrder, data: order },
   ] = useGetOrderByIDMutation();
   const dispatch = useDispatch();
   const filter = searchParams.get('filter') || 'dine_in';
@@ -36,7 +31,8 @@ const ActiveOrders = ({ onCloseModal }) => {
   useEffect(() => {
     if (isFetchedOrder) {
       onCloseModal();
-      const items = order.cart.products.map(prod => {
+      console.log(order);
+      const products = order.cart.products.map(prod => {
         const img = categories?.find(
           cat => cat?.name === prod.product.category.name,
         )?.image;
@@ -48,13 +44,27 @@ const ActiveOrders = ({ onCloseModal }) => {
         };
       });
 
+      const deals = order.cart.deals.map(deal => {
+        return {
+          ...deal.deal,
+          quantity: deal.quantity,
+          deal: true,
+        };
+      });
+
       const userInfo = {
         name: order.customer_name,
         phone: order.phone_number,
         address: order.address,
       };
 
-      dispatch(addCartData({ items, userInfo, orderId: order.id }));
+      dispatch(
+        addCartData({
+          items: [...deals, ...products],
+          userInfo,
+          orderId: order.id,
+        }),
+      );
     }
   }, [isFetchedOrder]);
 
@@ -73,7 +83,7 @@ const ActiveOrders = ({ onCloseModal }) => {
     const filterOrders = data?.filter(ord => ord?.cart?.option === filter);
     setOrders(filterOrders);
   }, [data, filter]);
-  console.log(orders);
+
   return (
     <div className="relative px-5 py-10">
       {isFetchingById && (
