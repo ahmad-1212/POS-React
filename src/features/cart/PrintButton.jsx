@@ -17,10 +17,12 @@ const PrintButton = ({ isLoading, printBill, onCloseModal }) => {
   const handlePrint = useReactToPrint({
     documentTitle: 'Invoice',
     content: () => componentRef.current,
-    onBeforeGetContent: () => getInvoice(cart.orderId),
+    onBeforeGetContent: () => printBill && getInvoice(cart.orderId),
     onAfterPrint: () => {
-      dispatch(clearCart());
-      onCloseModal();
+      if (printBill) {
+        dispatch(clearCart());
+        onCloseModal();
+      }
     },
   });
 

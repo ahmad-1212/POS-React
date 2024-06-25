@@ -13,8 +13,8 @@ const Checkout = ({ onCloseModal }) => {
         Print Bill <br /> OR <br /> Print Invoice
       </p>
       <div className="flex-center gap-3 py-5">
-        <PrintButton printBill={true} onCloseModal={onCloseModal} />
         <PrintButton onCloseModal={onCloseModal} />
+        <PrintButton printBill={true} onCloseModal={onCloseModal} />
       </div>
     </div>
   );
