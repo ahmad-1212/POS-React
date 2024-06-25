@@ -4,6 +4,7 @@ import { decreaseItemQuantity, increaseItemQuantity } from './cartSlice';
 import LazyLoad from 'react-lazy-load';
 const CartItem = ({ itm }) => {
   const dispatch = useDispatch();
+
   // If itm is lock
   if (itm.lock)
     return (
@@ -31,10 +32,28 @@ const CartItem = ({ itm }) => {
             <h5 className="text-[0.9rem] font-[700] text-primary-500">
               Rs. {Number(itm.price).toFixed(2, 0)}
             </h5>
-            <div className="flex items-center gap-2 font-[700]">
-              <span>Quantity: </span>
-              <span className="font-[700]">{itm.quantity}</span>
-            </div>
+            {itm.updated && itm.orgQuantity < itm.quantity ? (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => dispatch(decreaseItemQuantity(itm))}
+                  className="rounded-md border-2 border-primary-500 px-2 hover:bg-primary-500 hover:text-primary-100"
+                >
+                  &minus;
+                </button>
+                <span className="font-[700]">{itm.quantity}</span>
+                <button
+                  onClick={() => dispatch(increaseItemQuantity(itm))}
+                  className="rounded-md border-2 border-primary-500 px-2 hover:bg-primary-500 hover:text-primary-100"
+                >
+                  +
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 font-[700]">
+                <span>Quantity: </span>
+                <span className="font-[700]">{itm.quantity}</span>
+              </div>
+            )}
           </div>
         </div>
       </li>

@@ -28,14 +28,16 @@ const cartSlice = createSlice({
 
     // Add Cart when order is fetched from db
     addCartData(state, action) {
-      const items = action.payload.items.map(itm => ({ ...itm, lock: true }));
+      const items = action.payload.items.map(itm => ({
+        ...itm,
+        lock: true,
+        orgQuantity: itm.quantity,
+      }));
       const userInfo = action.payload.userInfo;
       const totalPrice = +items.reduce(
         (acc, itm) => acc + +itm.price * +itm.quantity,
         0,
       );
-
-      console.log(totalPrice);
 
       return { items, userInfo, totalPrice, orderId: action.payload.orderId };
     },
@@ -50,6 +52,13 @@ const cartSlice = createSlice({
     // Decrease item quantity in cart
     decreaseItemQuantity(state, action) {
       const item = state.items.find(itm => itm.id === action.payload.id);
+
+      if (item.lock && item.updated) {
+        if (item.orgQuantity === item.quantity - 1) {
+          item.updated = false;
+        }
+      }
+
       if (item.quantity === 1) {
         state.totalPrice -= item.price;
         return cartSlice.caseReducers.deleteItem(state, action);
@@ -70,7 +79,12 @@ const cartSlice = createSlice({
 
     // lock items
     lockItems(state, action) {
-      state.items = state.items.map(itm => ({ ...itm, lock: true,updated:false }));
+      state.items = state.items.map(itm => ({
+        ...itm,
+        lock: true,
+        updated: false,
+        orgQuantity: itm.quantity,
+      }));
       state.orderId = action.payload.orderId;
     },
     // Clear the cart

@@ -41,14 +41,14 @@ const Cart = ({ onSidebarHide }) => {
       reset: resetUpdateOrder,
     },
   ] = useUpdateOrderMutation();
+  const dispatch = useDispatch();
 
   const cart = useSelector(state => state.cart);
   const isLock = cart?.items.some(itm => itm.lock);
   const isOrderAlreadyCreated = cart.items.some(itm => itm.lock === true);
   const isAnyOrderItem = cart.items.some(itm => !itm.lock || itm.updated);
 
-  const dispatch = useDispatch();
-
+  // Get table and type
   const table = searchParams.get('table');
   const type = searchParams.get('type');
 
@@ -57,6 +57,7 @@ const Cart = ({ onSidebarHide }) => {
     const products = {};
     const deals = {};
 
+    // If deals add in deals and if product add in products
     cart.items.forEach(itm => {
       if (itm.deal) {
         deals[itm.dealID] = itm.quantity;
@@ -64,6 +65,8 @@ const Cart = ({ onSidebarHide }) => {
         products[itm.productID] = itm.quantity;
       }
     });
+
+    // Prepare data
     let data = {};
     if (type === 'dine in') {
       data = {
@@ -83,6 +86,7 @@ const Cart = ({ onSidebarHide }) => {
       };
     }
 
+    // If order already created update the order otherwise create new order
     if (isOrderAlreadyCreated) {
       updateOrder({ id: cart.orderId, data });
     } else {

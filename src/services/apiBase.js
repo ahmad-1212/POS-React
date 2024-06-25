@@ -2,14 +2,24 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import config from '../config';
 import { toast } from 'react-toastify';
 
+let fetchError = false;
+
 // Custom error handling function
 const baseQueryWithErrorHandling = async (args, api, extraOptions) => {
   const baseQuery = fetchBaseQuery({ baseUrl: config.get('API_URL') });
 
   const result = await baseQuery(args, api, extraOptions);
   if (result.error) {
+    console.log(result.error);
     switch (result.error.status) {
       case 'FETCH_ERROR': {
+        if (fetchError) return;
+        toast.error(
+          'Either Network Error or Something went wrong. Failed to Fetch the data!',
+          { autoClose: 8000 },
+        );
+        fetchError = true;
+        setTimeout(() => (fetchError = false), 6000);
         return {
           error: {
             message: 'Failed to fetch',
