@@ -162,7 +162,11 @@ const ActiveOrders = ({ onCloseModal }) => {
                     {ord.cart.products.reduce(
                       (acc, itm) => +itm.quantity + acc,
                       0,
-                    )}{' '}
+                    ) +
+                      ord.cart.deals.reduce(
+                        (acc, itm) => +itm.quantity + acc,
+                        0,
+                      )}{' '}
                     {ord.cart.products.length === 1 &&
                     ord.cart.products.at(0).quantity === 1
                       ? 'Item'

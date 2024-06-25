@@ -12,7 +12,6 @@ const inventorySlice = createSlice({
     addItem(state, action) {
       const { isMain } = action.payload;
       if (isMain) {
-        console.log(action.payload);
         const isExists = state.main.find(itm => itm.id === action.payload.id);
         if (isExists) {
           isExists.quantity = action.payload.quantity;
@@ -32,11 +31,25 @@ const inventorySlice = createSlice({
       }
     },
 
+    removeItem(state, action) {
+      const { isMain } = action.payload;
+      if (isMain) {
+        state.main = state.main.filter(itm => itm.id !== action.payload.id);
+      }
+      if (!isMain) {
+        console.log(action.payload.id);
+        state.kitchen = state.kitchen.filter(
+          itm => itm.id !== action.payload.id,
+        );
+      }
+    },
+
     clearInventoryCart() {
       return initialState;
     },
   },
 });
 
-export const { addItem, clearInventoryCart } = inventorySlice.actions;
+export const { addItem, removeItem, clearInventoryCart } =
+  inventorySlice.actions;
 export default inventorySlice.reducer;

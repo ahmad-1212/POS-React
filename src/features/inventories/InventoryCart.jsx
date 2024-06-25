@@ -6,11 +6,12 @@ import Button from '../../Components/UI/Button';
 import { FaShoppingCart } from 'react-icons/fa';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearInventoryCart } from './inventorySlice';
+import { clearInventoryCart, removeItem } from './inventorySlice';
 import PrintInvoiceBtn from './PrintInvoiceBtn';
 import { useSendToKitchenMutation } from '../../services/apiMainInventory';
 import { useSendToMainMutation } from '../../services/apiKitchenInventory';
 import { toast } from 'react-toastify';
+import { HiX } from 'react-icons/hi';
 
 const InventoryCart = ({ main }) => {
   const [showCart, setShowCart] = useState(false);
@@ -128,11 +129,22 @@ const InventoryCart = ({ main }) => {
               {items?.map(itm => (
                 <li
                   key={itm.id}
-                  className="flex-between rounded-md bg-primary-200 px-5 py-3"
+                  className="rounded-md bg-primary-200 px-5 py-3"
                 >
-                  <h3 className="text-[1.1rem] font-[500]">{itm.name}</h3>
-                  <div>
-                    {itm.quantity} {itm.unit}
+                  <div className="flex justify-end py-1">
+                    <HiX
+                      className="flex cursor-pointer justify-end"
+                      onClick={() =>
+                        dispatch(removeItem({ isMain: main, id: itm.id }))
+                      }
+                    />
+                  </div>
+
+                  <div className="flex-between ">
+                    <h3 className="text-[1.1rem] font-[500]">{itm.name}</h3>
+                    <div>
+                      {itm.quantity} {itm.unit}
+                    </div>
                   </div>
                 </li>
               ))}
