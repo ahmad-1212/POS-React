@@ -1,7 +1,10 @@
-import { useForm } from "react-hook-form";
-import Input from "../../Components/UI/Input";
-import Button from "../../Components/UI/Button";
-import { useNavigate } from "react-router-dom";
+import { useForm } from 'react-hook-form';
+import Input from '../../Components/UI/Input';
+import Button from '../../Components/UI/Button';
+import { useNavigate } from 'react-router-dom';
+import { useLoginMutation } from '../../services/apiAuth';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const {
@@ -10,22 +13,35 @@ const Login = () => {
     handleSubmit,
   } = useForm();
   const navigate = useNavigate();
-
-  const onSubmit = (data) => {
-    navigate("/home");
+  const [login, { isLoading, isSuccess, reset, error }] = useLoginMutation();
+  const onSubmit = data => {
+    login({ email: data.email, password: data.password });
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success('Login successfully!', { autoClose: 3000 });
+      navigate('/home');
+      reset();
+    }
+    if (error) {
+      toast.error(error?.data?.error);
+      reset();
+    }
+  }, [isSuccess, reset, error, navigate]);
 
   return (
     <form
-      className="w-[90%] sm:w-[500px] bg-gray-50 px-8 sm:px-12 py-8 sm:py-16 rounded-md shadow-md flex flex-col gap-6"
+      className="flex w-[90%] flex-col gap-6 rounded-md bg-gray-50 px-8 py-8 shadow-md sm:w-[500px] sm:px-12 sm:py-16"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <h1 className="text-center font-[500] text-[2rem] ">Login</h1>
+      <h1 className="text-center text-[2rem] font-[500] ">Login</h1>
       {/* Email Input */}
       <Input
         label="Email"
         type="email"
         required="Please enter you Email!"
+        placeholder="name@example.com"
         register={register}
         id="email"
         error={errors?.email?.message}
@@ -38,15 +54,17 @@ const Login = () => {
         type="password"
         id="password"
         error={errors?.password?.message}
+        placeholder="••••••••"
       />
 
       {/* Login Button */}
       <Button
         type="submit"
         variant="dark"
-        className="text-[1.4rem] mt-6 sm:mt-8"
+        className="mt-6 text-[1.4rem] sm:mt-8"
+        disabled={isLoading}
       >
-        Login
+        {isLoading ? 'Loading...' : 'Login'}
       </Button>
       <div className="text-center text-[0.9rem] ">
         Don't have an account? Signup

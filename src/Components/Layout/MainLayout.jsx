@@ -105,7 +105,7 @@ const MainLayout = ({ children }) => {
         <aside
           className={`fixed bottom-0 right-0 top-0 w-[90%] bg-white sm:w-[22rem] lg:top-[80px]  ${
             showCart ? 'right-0' : 'right-[-100dvw] opacity-0'
-          } hight-screen z-20 overflow-y-auto overflow-x-hidden transition-all duration-[1s] lg:border-l-2`}
+          } hight-screen z-0 overflow-y-auto overflow-x-hidden transition-all duration-[1s] lg:border-l-2`}
         >
           <Cart onSidebarHide={handleShowCart} />
         </aside>

@@ -3,6 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { apiBase } from '../services/apiBase'; // Import your base API
 import cartReducer from '../features/cart/cartSlice';
 import inventoryReducer from '../features/inventories/inventorySlice';
+import authReducer from '../features/authentication/authSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
 
     cart: cartReducer,
     inventory: inventoryReducer,
+    auth: authReducer,
   },
 
   middleware: getDefaultMiddleware =>

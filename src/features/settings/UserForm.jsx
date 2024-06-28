@@ -1,11 +1,17 @@
-import { FaRegUser } from "react-icons/fa";
-import PropTypes from "prop-types";
+import { FaRegUser } from 'react-icons/fa';
+import PropTypes from 'prop-types';
 
-import Button from "../../Components/UI/Button";
-import Input from "../../Components/UI/Input";
-import { useForm } from "react-hook-form";
+import Button from '../../Components/UI/Button';
+import Input from '../../Components/UI/Input';
+import { useForm } from 'react-hook-form';
+import {
+  useCreateUserMutation,
+  useUpdateUserMutation,
+} from '../../services/apiUsers';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
-const UserForm = ({ edit, user }) => {
+const UserForm = ({ edit, user, onCloseModal }) => {
   const {
     register,
     handleSubmit,
@@ -13,33 +19,61 @@ const UserForm = ({ edit, user }) => {
   } = useForm({
     defaultValues: edit
       ? {
-          userName: user.name,
+          name: user.name,
           email: user.email,
           role: user.role,
         }
       : {},
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const [
+    createUser,
+    { isLoading: isCreating, isSuccess: isCreated, reset: resetCreate },
+  ] = useCreateUserMutation();
+
+  const [
+    updateUser,
+    { isLoading: isUpdating, isSuccess: isUpdated, reset: updateReset },
+  ] = useUpdateUserMutation();
+
+  const onSubmit = data => {
+    if (edit) {
+      updateUser({ id: user.id, data });
+    } else {
+      createUser(data);
+    }
   };
+
+  useEffect(() => {
+    if (isCreated) {
+      toast.success('User successfully created!', { autoClose: 5000 });
+      resetCreate();
+      onCloseModal();
+    }
+
+    if (isUpdated) {
+      toast.success('User updated successfully!', { autoClose: 5000 });
+      updateReset();
+    }
+  }, [isCreated, isUpdated, resetCreate, updateReset, onCloseModal]);
+
   return (
     <div>
-      <div className="py-3 flex justify-center items-center gap-3 bg-primary-500 text-white text-[1.4rem] font-[600]">
+      <div className="flex items-center justify-center gap-3 bg-primary-500 py-3 text-[1.4rem] font-[600] text-white">
         <FaRegUser />
-        <span>{edit ? "Edit" : "Add new"} User</span>
+        <span>{edit ? 'Edit' : 'Add new'} User</span>
       </div>
       <form
-        className="p-5 flex flex-col gap-3 mt-4"
+        className="mt-4 flex flex-col gap-3 p-5"
         onSubmit={handleSubmit(onSubmit)}
       >
         <Input
           label="User Name"
           register={register}
           required="User Name is required!"
-          id="userName"
+          id="name"
           type="text"
-          error={errors?.userName?.message}
+          error={errors?.name?.message}
           showError
         />
         <Input
@@ -51,25 +85,42 @@ const UserForm = ({ edit, user }) => {
           error={errors?.email?.message}
           showError
         />
+        {!edit && (
+          <Input
+            label="Password"
+            register={register}
+            required="Password is required!"
+            id="password"
+            type="password"
+            error={errors?.password?.message}
+            minLength={6}
+            showError
+          />
+        )}
 
         <div className="flex flex-col gap-2 ">
-          <label htmlFor="role" className="font-[500] text-[1.2rem]">
+          <label htmlFor="role" className="text-[1.2rem] font-[500]">
             Role
           </label>
           <select
-            {...register("role", { required: "Role is required!" })}
+            {...register('role', { required: 'Role is required!' })}
             id="role"
-            className="outline-none border-2 px-4 py-2 rounded-md  bg-transparent disabled:opacity-80 disabled:bg-gray-300 disabled:cursor-not-allowed focus:border-gray-600"
+            className="rounded-md border-2 bg-transparent px-4 py-2  outline-none focus:border-gray-600 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:opacity-80"
           >
             <option value="cashier">Cashier</option>
             <option value="manager">Manager</option>
-            <option value="kitchen staff">Kitchen Staff</option>
+            <option value="staff">Kitchen Staff</option>
           </select>
         </div>
 
-        <div className="flex justify-end mt-5">
-          <Button type="submit" className="px-10" variant="dark">
-            Save
+        <div className="mt-5 flex justify-end">
+          <Button
+            disabled={isCreating || isUpdating}
+            type="submit"
+            className="px-10"
+            variant="dark"
+          >
+            {isCreating || isUpdating ? 'Saving...' : 'Save'}
           </Button>
         </div>
       </form>
@@ -80,6 +131,7 @@ const UserForm = ({ edit, user }) => {
 UserForm.propTypes = {
   edit: PropTypes.bool,
   user: PropTypes.object,
+  onCloseModal: PropTypes.func,
 };
 
 export default UserForm;

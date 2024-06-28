@@ -1,36 +1,39 @@
-import { useEffect } from "react";
-import { Outlet } from "react-router-dom";
-import PropTypes from "prop-types";
+import { useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import {
   MdKeyboardDoubleArrowLeft,
   MdKeyboardDoubleArrowRight,
-} from "react-icons/md";
+} from 'react-icons/md';
 
-import DashboardNav from "../Nav/DashboardNav";
-import { useState } from "react";
-import { IoMenu } from "react-icons/io5";
+import DashboardNav from '../Nav/DashboardNav';
+import { useState } from 'react';
+import { IoMenu } from 'react-icons/io5';
 
-import Menu from "../UI/Menu";
-import { useScreen } from "../../hooks/useScreen";
-import Overlay from "../UI/Overlay";
-import { HiX } from "react-icons/hi";
-import IconButton from "../UI/IconButton";
+import Menu from '../UI/Menu';
+import { useScreen } from '../../hooks/useScreen';
+import Overlay from '../UI/Overlay';
+import { HiX } from 'react-icons/hi';
+import IconButton from '../UI/IconButton';
+import { useSelector } from 'react-redux';
+import { removeItem } from '../../utils/localStorage';
 
 const DashboardLayout = ({ children }) => {
   const { screen } = useScreen();
   const [collapseSidebar, setCollapseSidebar] = useState(screen < 768);
   const [showSidebar, setShowSidebar] = useState(false);
+  const user = useSelector(state => state.auth.user);
   useEffect(() => {
-    document.title = "POS | Dashboard";
+    document.title = 'POS | Dashboard';
   }, []);
   return (
     <>
       {screen >= 768 && (
         <div
-          onClick={() => setCollapseSidebar((prev) => !prev)}
-          className={`fixed  -translate-x-1/2 z-20 text-[2rem] ${
-            collapseSidebar ? " -translate-x-1/2 left-[4.7rem]" : "left-[18rem]"
-          } transition-all duration-500 bg-transparent w-[2.8rem] h-[2.8rem] flex-center border-2 border-primary-200 cursor-pointer rounded-full text-primary-500`}
+          onClick={() => setCollapseSidebar(prev => !prev)}
+          className={`fixed  z-20 -translate-x-1/2 text-[2rem] ${
+            collapseSidebar ? ' left-[4.7rem] -translate-x-1/2' : 'left-[18rem]'
+          } flex-center h-[2.8rem] w-[2.8rem] cursor-pointer rounded-full border-2 border-primary-200 bg-transparent text-primary-500 transition-all duration-500`}
         >
           {collapseSidebar ? (
             <MdKeyboardDoubleArrowRight />
@@ -42,8 +45,8 @@ const DashboardLayout = ({ children }) => {
       {screen >= 640 && (
         <aside
           className={`${
-            collapseSidebar ? "w-[4.7rem]" : "sm:w-[18rem]"
-          } h-[100dvh] fixed top-0 left-0 bg-white border-r-2 transition-all duration-500 overflow-x-hidden`}
+            collapseSidebar ? 'w-[4.7rem]' : 'sm:w-[18rem]'
+          } fixed left-0 top-0 h-[100dvh] overflow-x-hidden border-r-2 bg-white transition-all duration-500`}
         >
           <DashboardNav collapseSidebar={collapseSidebar} />
         </aside>
@@ -56,12 +59,12 @@ const DashboardLayout = ({ children }) => {
             className="z-40"
           />
           <aside
-            className={`w-[80dvw] flex justify-center fixed top-0 bg-gray-100 h-[100dvh] z-50 ${
-              showSidebar ? "left-0" : "left-[-100dvw]"
+            className={`fixed top-0 z-50 flex h-[100dvh] w-[80dvw] justify-center bg-gray-100 ${
+              showSidebar ? 'left-0' : 'left-[-100dvw]'
             } transition-all`}
           >
             <IconButton
-              className="absolute top-[1rem] left-[1rem] text-primary-500 text-[1.5rem]"
+              className="absolute left-[1rem] top-[1rem] text-[1.5rem] text-primary-500"
               onClick={() => setShowSidebar(false)}
             >
               <HiX />
@@ -72,40 +75,43 @@ const DashboardLayout = ({ children }) => {
       )}
       <main
         className={`${
-          collapseSidebar ? "pl-0 sm:pl-[4.7rem]" : "pl-[18rem]"
+          collapseSidebar ? 'pl-0 sm:pl-[4.7rem]' : 'pl-[18rem]'
         } h-screen w-full transition-all duration-500`}
       >
-        <header className=" bg-white px-10 flex-end h-[70px] border-b-2">
+        <header className=" flex-end h-[70px] border-b-2 bg-white px-10">
           {screen < 640 && (
             <div>
               <IoMenu
-                className="text-[1.5rem] cursor-pointer"
-                onClick={() => setShowSidebar((prev) => !prev)}
+                className="cursor-pointer text-[1.5rem]"
+                onClick={() => setShowSidebar(prev => !prev)}
               />
             </div>
           )}
           <div className="relative ml-auto">
             <Menu>
               <Menu.Open>
-                <div className="relative w-[3rem] h-[3rem] rounded-full overflow-hidden cursor-pointer">
+                <div className="relative h-[3rem] w-[3rem] cursor-pointer overflow-hidden rounded-full">
                   <img
                     src="/demo-img.jpg"
-                    className="w-full h-full object-cover"
+                    className="h-full w-full object-cover"
                   />
                 </div>
               </Menu.Open>
               <Menu.List>
-                <ul className="bg-white px-3 py-4 shadow-lg rounded-lg flex flex-col gap-4 w-max">
-                  <li className="flex items-center gap-3 text-[0.8rem] break-words">
+                <ul className="flex w-max flex-col gap-4 rounded-lg bg-white px-3 py-4 shadow-lg">
+                  <li className="flex items-center gap-3 break-words text-[0.8rem]">
                     <img
-                      className="w-[2rem] h-[2rem] rounded-full object-cover"
+                      className="h-[2rem] w-[2rem] rounded-full object-cover"
                       src="/demo-img.jpg"
                     />
-                    <span>demo@example.com</span>
+                    <span>{user.email}</span>
                   </li>
                   <li
                     className="cursor-pointer"
-                    onClick={() => location.assign("/")}
+                    onClick={() => {
+                      removeItem('token');
+                      location.assign('/');
+                    }}
                   >
                     Logout
                   </li>
@@ -114,7 +120,7 @@ const DashboardLayout = ({ children }) => {
             </Menu>
           </div>
         </header>
-        <div className="flex flex-col px-5 md:px-10 max-w-[1200px] mx-auto  overflow-hidden pb-20">
+        <div className="mx-auto flex max-w-[1200px] flex-col overflow-hidden px-5  pb-20 md:px-10">
           {children || <Outlet />}
         </div>
       </main>

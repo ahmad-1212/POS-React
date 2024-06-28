@@ -62,7 +62,7 @@ const Products = ({ isDeal, onAddProduct }) => {
           <Button
             variant="dark"
             link
-            to="add-product"
+            to="add"
             className="flex items-center gap-3"
           >
             <MdOutlineAddCircleOutline className="text-[1.3rem]" />
