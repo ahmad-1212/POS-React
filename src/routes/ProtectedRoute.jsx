@@ -3,10 +3,14 @@ import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import FullPageLoading from '../Components/UI/FullPageLoading';
 import { useGetUserQuery } from '../services/apiAuth';
+import { getItem } from '../utils/localStorage';
 
 const ProtectedRoute = ({ children, authPage }) => {
-  const { data, isLoading } = useGetUserQuery();
   const navigate = useNavigate();
+
+  const { data, isLoading } = useGetUserQuery(null, {
+    skip: !getItem('token'),
+  });
   const isAuth = data;
 
   useEffect(() => {
@@ -19,12 +23,10 @@ const ProtectedRoute = ({ children, authPage }) => {
       navigate('/login');
     }
   }, [isAuth, authPage, navigate, isLoading]);
-
   if (isLoading) return <FullPageLoading />;
 
   if (!isLoading && authPage && isAuth) return null;
   if (!isLoading && !authPage && !isAuth) return null;
-
   return children;
 };
 

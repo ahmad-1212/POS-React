@@ -12,7 +12,7 @@ const cartSlice = createSlice({
   reducers: {
     // Add Item to cart
     addCartItem(state, action) {
-      const item = state.items.find(item => item.id === action.payload.id);
+      const item = state.items.find(item => item._id === action.payload._id);
 
       if (item) {
         cartSlice.caseReducers.increaseItemQuantity(state, action);
@@ -44,14 +44,14 @@ const cartSlice = createSlice({
 
     // Increase item quantity in cart
     increaseItemQuantity(state, action) {
-      const item = state.items.find(itm => itm.id === action.payload.id);
+      const item = state.items.find(itm => itm._id === action.payload._id);
       if (item.lock) item.updated = true;
       item.quantity++;
       state.totalPrice += +item.price;
     },
     // Decrease item quantity in cart
     decreaseItemQuantity(state, action) {
-      const item = state.items.find(itm => itm.id === action.payload.id);
+      const item = state.items.find(itm => itm._id === action.payload._id);
 
       if (item.lock && item.updated) {
         if (item.orgQuantity === item.quantity - 1) {
@@ -69,7 +69,7 @@ const cartSlice = createSlice({
     },
     // Delete Item from the cart
     deleteItem(state, action) {
-      state.items = state.items.filter(item => item.id !== action.payload.id);
+      state.items = state.items.filter(item => item._id !== action.payload._id);
     },
 
     // Add User Info,

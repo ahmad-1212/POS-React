@@ -25,15 +25,32 @@ const DealForm = ({
   } = useForm({
     defaultValues: edit ? { dealname: deal.name, price: +deal.price } : {},
   });
-  const [createDeal, { isLoading, isSuccess, reset }] = useCreateDealMutation();
+  const [createDeal, { isLoading, isSuccess, reset, error }] =
+    useCreateDealMutation();
   const [
     updateDeal,
-    { isLoading: isUpdating, reset: resetUpdate, isSuccess: isUpdated },
+    {
+      isLoading: isUpdating,
+      reset: resetUpdate,
+      isSuccess: isUpdated,
+      error: updateError,
+    },
   ] = useUpdateDealMutation();
-  const totalProducts = selectProducts?.reduce(
-    (acc, prod) => acc + prod.quantity,
-    0,
-  );
+
+  const total = {
+    totalCost: 0,
+    totalProfit: 0,
+    totalProducts: 0,
+    totalPrice: 0,
+  };
+  selectProducts?.forEach(prod => {
+    const cost = prod.cost * prod.quantity;
+    const profit = prod.price * prod.quantity - prod.cost * prod.quantity;
+    total.totalProducts += +prod.quantity;
+    total.totalCost += cost;
+    total.totalProfit += profit;
+    total.totalPrice += cost + profit;
+  });
 
   const onSubmit = _data => {
     const data = {
@@ -41,14 +58,13 @@ const DealForm = ({
       price: +_data.price,
       products: {},
     };
-
-    selectProducts.forEach(prd => {
-      data.products[prd.productID] = prd.quantity;
-    });
+    data.products = selectProducts.map(prd => ({
+      product: prd._id,
+      quantity: prd.quantity,
+    }));
 
     if (edit) {
-      console.log(data);
-      updateDeal({ id: deal.id, data });
+      updateDeal({ id: deal._id, data });
     } else {
       createDeal(data);
     }
@@ -73,16 +89,41 @@ const DealForm = ({
     }
   }, [isUpdated, resetUpdate, onCloseModal]);
 
+  useEffect(() => {
+    if (error) {
+      toast.error(error?.message, { autoClose: 5000 });
+      reset();
+    }
+    if (updateError) {
+      toast.error(updateError?.message, { autoClose: 5000 });
+      resetUpdate();
+    }
+  }, [error, updateError, reset, resetUpdate]);
+
   return (
     <div>
       <h1 className="flex items-center justify-center gap-3 bg-primary-500 py-3 text-[1.4rem] font-[600] text-white">
         <MdOutlineDiscount />
         <span>Add new Deal</span>
       </h1>
-      <h3 className="px-3 py-4 text-[1rem] ">
-        <span className="font-[600]">Total Products: </span>
-        <span>{totalProducts}</span>
-      </h3>
+      <div className="grid grid-cols-2 gap-2 py-2">
+        <h3 className="px-3  text-[1rem] ">
+          <span className="font-[600]">Total Products: </span>
+          <span>{total.totalProducts}</span>
+        </h3>
+        <h3 className="px-3  text-[1rem] ">
+          <span className="font-[600]">Total Cost: </span>
+          <span>{total.totalCost}</span>
+        </h3>
+        <h3 className="px-3  text-[1rem] ">
+          <span className="font-[600]">Total Profit: </span>
+          <span>{total.totalProfit}</span>
+        </h3>
+        <h3 className="px-3  text-[1rem] ">
+          <span className="font-[600]">Total Price: </span>
+          <span>{total.totalPrice}</span>
+        </h3>
+      </div>
       <form className="my-3 px-5" onSubmit={handleSubmit(onSubmit)}>
         <Input
           register={register}
@@ -92,6 +133,7 @@ const DealForm = ({
           error={errors?.dealname?.message}
           showError
           type="text"
+          disabled={isLoading || isUpdating}
         />
         <Input
           register={register}
@@ -103,15 +145,17 @@ const DealForm = ({
           type="number"
           min="0"
           step="any"
+          disabled={isLoading || isUpdating}
         />
 
         <div className="flex-end mt-5">
           <Button
             disabled={isLoading || isUpdating}
+            isLoading={isLoading || isUpdating}
             variant="dark"
             type="submit"
           >
-            {isLoading || isUpdating ? 'Saving...' : ' Save'}
+            Save
           </Button>
         </div>
       </form>

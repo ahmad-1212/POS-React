@@ -33,7 +33,7 @@ const UserInfoForm = ({ onCloseModal }) => {
       <h1 className="mt-3 p-6 pb-0 text-[1.4rem] font-[600] capitalize text-primary-500 sm:p-10 sm:pb-0">
         Please fill out all the fields!
       </h1>
-      <form className="flex flex-col gap-2 p-6 sm:gap-4 sm:p-10">
+      <form className="flex flex-col  p-6 sm:gap-1 sm:p-10">
         <Input
           register={register}
           required="Name is required!"

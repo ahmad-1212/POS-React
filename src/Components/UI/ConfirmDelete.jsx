@@ -10,6 +10,7 @@ const ConfirmDelete = ({
   isSuccess,
   reset,
   successMessage,
+  className,
 }) => {
   useEffect(() => {
     if (isSuccess) {
@@ -23,19 +24,21 @@ const ConfirmDelete = ({
       <div className="w-full bg-primary-500 text-white">
         <h1 className="px-10 py-3 text-[1.5rem] font-[600]">Please Confirm</h1>
       </div>
-      <p className="px-5 text-center text-[1rem] sm:text-[1.2rem]">{message}</p>
+      <p className={`px-5 text-center text-[1rem] ${className}`}>{message}</p>
       <div className="flex-end mb-5 px-5">
         <button
           onClick={onCloseModal}
           type="button"
-          className="rounded-md px-5 py-2 text-[0.9rem] uppercase tracking-wide hover:bg-primary-100 hover:text-primary-500 sm:text-[1rem]"
+          disabled={isLoading}
+          className="rounded-md px-5 py-2 text-[0.9rem] uppercase tracking-wide hover:bg-primary-100 hover:text-primary-500 disabled:cursor-not-allowed sm:text-[1rem]"
         >
           Cancel
         </button>
         <button
           onClick={onConfirm}
+          disabled={isLoading}
           type="button"
-          className="rounded-md px-5 py-2 text-[0.9rem] font-[600] uppercase tracking-wide text-red-500 hover:bg-red-400 hover:text-white sm:text-[1rem]"
+          className="rounded-md px-5 py-2 text-[0.9rem] font-[600] uppercase tracking-wide text-red-500 hover:bg-red-400 hover:text-white disabled:bg-red-400 disabled:text-white disabled:opacity-90 sm:text-[1rem]"
         >
           {isLoading ? 'Deleting...' : 'Confirm'}
         </button>
@@ -52,6 +55,7 @@ ConfirmDelete.propTypes = {
   isSuccess: PropTypes.bool,
   reset: PropTypes.func,
   successMessage: PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default ConfirmDelete;

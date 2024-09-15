@@ -17,7 +17,7 @@ const MainInventory = () => {
               <span>Add New</span>
             </Button>
           </Modal.Open>
-          <Modal.Window id="add-stock" closeOnOverlay>
+          <Modal.Window id="add-stock" zIndex="z-30" closeOnOverlay>
             <MainInventoryForm />
           </Modal.Window>
         </Modal>

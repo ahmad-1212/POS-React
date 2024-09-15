@@ -4,14 +4,14 @@ const apiIngredients = apiBase.injectEndpoints({
   endpoints: build => ({
     // Get Ingredients
     getIngredients: build.query({
-      query: (page = 1) =>
-        `/ingredients/?${page === 'all' ? 'include_all=true' : `page=${page}`}`,
+      query: () => `/ingredients`,
+      transformResponse: data => data.ingredients,
       providesTags: ['ingredients'],
     }),
 
     // Create ingredient
     createIngredient: build.mutation({
-      query: data => ({ url: '/ingredients/', method: 'POST', body: data }),
+      query: data => ({ url: '/ingredients', method: 'POST', body: data }),
       invalidatesTags: ['ingredients'],
     }),
 
@@ -19,8 +19,8 @@ const apiIngredients = apiBase.injectEndpoints({
     updateIngredient: build.mutation({
       query({ id, ...data }) {
         return {
-          url: `/ingredients/${id}/`,
-          method: 'PUT',
+          url: `/ingredients/${id}`,
+          method: 'PATCH',
           body: data,
         };
       },
@@ -29,8 +29,13 @@ const apiIngredients = apiBase.injectEndpoints({
 
     // Delete ingredient
     deleteIngredient: build.mutation({
-      query: id => ({ url: `/ingredients/${id}/`, method: 'DELETE' }),
-      invalidatesTags: ['ingredients'],
+      query: id => ({ url: `/ingredients/${id}`, method: 'DELETE' }),
+      invalidatesTags: [
+        'ingredients',
+        'products',
+        'main-inventory',
+        'kitchen-inventory',
+      ],
     }),
   }),
   overrideExisting: false,

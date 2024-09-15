@@ -10,6 +10,7 @@ import {
 } from '../../services/apiUsers';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 
 const UserForm = ({ edit, user, onCloseModal }) => {
   const {
@@ -19,7 +20,7 @@ const UserForm = ({ edit, user, onCloseModal }) => {
   } = useForm({
     defaultValues: edit
       ? {
-          name: user.name,
+          username: user.username,
           email: user.email,
           role: user.role,
         }
@@ -28,19 +29,26 @@ const UserForm = ({ edit, user, onCloseModal }) => {
 
   const [
     createUser,
-    { isLoading: isCreating, isSuccess: isCreated, reset: resetCreate },
+    { isLoading: isCreating, isSuccess: isCreated, reset: resetCreate, error },
   ] = useCreateUserMutation();
+
+  const me = useSelector(state => state.auth.user);
 
   const [
     updateUser,
-    { isLoading: isUpdating, isSuccess: isUpdated, reset: updateReset },
+    {
+      isLoading: isUpdating,
+      isSuccess: isUpdated,
+      reset: updateReset,
+      error: updateError,
+    },
   ] = useUpdateUserMutation();
 
   const onSubmit = data => {
     if (edit) {
       updateUser({ id: user.id, data });
     } else {
-      createUser(data);
+      createUser({ ...data, confirmPassword: data.password });
     }
   };
 
@@ -57,6 +65,15 @@ const UserForm = ({ edit, user, onCloseModal }) => {
     }
   }, [isCreated, isUpdated, resetCreate, updateReset, onCloseModal]);
 
+  useEffect(() => {
+    if (error) {
+      toast.error(error?.message, { autoClose: 5000 });
+    }
+    if (updateError) {
+      toast.error(updateError?.message, { autoClose: 5000 });
+    }
+  }, [error, updateError]);
+
   return (
     <div>
       <div className="flex items-center justify-center gap-3 bg-primary-500 py-3 text-[1.4rem] font-[600] text-white">
@@ -71,9 +88,9 @@ const UserForm = ({ edit, user, onCloseModal }) => {
           label="User Name"
           register={register}
           required="User Name is required!"
-          id="name"
+          id="username"
           type="text"
-          error={errors?.name?.message}
+          error={errors?.username?.message}
           showError
         />
         <Input
@@ -98,20 +115,22 @@ const UserForm = ({ edit, user, onCloseModal }) => {
           />
         )}
 
-        <div className="flex flex-col gap-2 ">
-          <label htmlFor="role" className="text-[1.2rem] font-[500]">
-            Role
-          </label>
-          <select
-            {...register('role', { required: 'Role is required!' })}
-            id="role"
-            className="rounded-md border-2 bg-transparent px-4 py-2  outline-none focus:border-gray-600 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:opacity-80"
-          >
-            <option value="cashier">Cashier</option>
-            <option value="manager">Manager</option>
-            <option value="staff">Kitchen Staff</option>
-          </select>
-        </div>
+        {(me.role === 'admin' || me.role === 'manager') && (
+          <div className="flex flex-col gap-2 ">
+            <label htmlFor="role" className="text-[1.2rem] font-[500]">
+              Role
+            </label>
+            <select
+              {...register('role', { required: 'Role is required!' })}
+              id="role"
+              className="rounded-md border-2 bg-transparent px-4 py-2  outline-none focus:border-gray-600 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:opacity-80"
+            >
+              <option value="cashier">Cashier</option>
+              <option value="manager">Manager</option>
+              <option value="staff">Kitchen Staff</option>
+            </select>
+          </div>
+        )}
 
         <div className="mt-5 flex justify-end">
           <Button

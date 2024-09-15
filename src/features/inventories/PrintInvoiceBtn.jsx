@@ -5,7 +5,7 @@ import InventoryInvoice from '../../Components/Invoices/InventoryInvoice';
 import { useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 
-const PrintInvoiceBtn = ({ isMain }) => {
+const PrintInvoiceBtn = ({ isMain, disabled }) => {
   const inventory = useSelector(state => state.inventory);
 
   const componentRef = useRef();
@@ -23,7 +23,11 @@ const PrintInvoiceBtn = ({ isMain }) => {
 
   return (
     <>
-      <Button disabled={!items.length} variant="dark" onClick={handlePrint}>
+      <Button
+        disabled={!items.length || disabled}
+        variant="dark"
+        onClick={handlePrint}
+      >
         Print Invoice
       </Button>
       <div className="hidden">

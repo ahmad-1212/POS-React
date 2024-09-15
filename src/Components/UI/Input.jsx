@@ -72,9 +72,7 @@ const Input = ({
       {label && (
         <label
           htmlFor={id}
-          className={`text-[1rem] font-[500] sm:text-[1rem] md:text-[1.2rem] ${
-            error ? 'text-red-500' : ''
-          }`}
+          className={`text-[1.1rem] font-[500]   ${error ? 'text-red-500' : ''}`}
         >
           {label} {required && '*'}
         </label>
@@ -85,7 +83,7 @@ const Input = ({
         type={type}
         id={id}
         disabled={disabled}
-        className={`rounded-md border-2 bg-transparent px-4 py-2 text-[0.9rem] outline-none  disabled:cursor-not-allowed disabled:bg-gray-300 disabled:opacity-80 sm:text-[1.1rem] ${
+        className={`rounded-md border-2 bg-transparent px-4 py-2 text-[0.9rem] outline-none  disabled:cursor-not-allowed disabled:bg-gray-300 disabled:opacity-80  ${
           error && 'border-red-500'
         } ${
           !error && ' border-gray-300 focus:border-primary-400'
@@ -93,7 +91,7 @@ const Input = ({
         {...register(id, validate)}
       />
       {showError && (
-        <span className="-mt-2 text-[0.8rem] text-red-500 sm:text-[0.8rem]">
+        <span className="-mt-2 text-[0.8rem] text-red-500 sm:text-[0.7rem]">
           {error && error} &nbsp;
         </span>
       )}

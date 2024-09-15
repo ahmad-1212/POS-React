@@ -6,11 +6,12 @@ import { useGetOrdersQuery } from '../../services/apiOrders';
 import Tab from '../../Components/UI/Tab';
 import { IoSearchOutline } from 'react-icons/io5';
 import { useEffect, useState } from 'react';
+import { isToday } from '../../utils/isToday';
 
 const colors = {
-  processing: 'text-primary-500',
-  completed: 'text-green-500',
-  cancelled: 'text-red-500',
+  processing: 'primary-500',
+  completed: 'green-500',
+  cancelled: 'red-500',
 };
 
 const Orders = () => {
@@ -19,7 +20,6 @@ const Orders = () => {
   const type = searchParams.get('type') || 'all';
   const { data, isLoading, isFetching } = useGetOrdersQuery(last);
   const [orders, setOrders] = useState(data);
-
   // Handle type
   const handleType = e => {
     searchParams.set('type', e.target.value);
@@ -32,9 +32,9 @@ const Orders = () => {
     const regExp = new RegExp(query, 'i');
     const filterData = data?.filter(itm => {
       if (type === 'all') {
-        return regExp.test(itm.id) || regExp.test(itm.customer_name);
-      } else if (type === itm.cart.option) {
-        return regExp.test(itm.id) || regExp.test(itm.customer_name);
+        return regExp.test(itm.orderId) || regExp.test(itm.customerName);
+      } else if (type === itm.type) {
+        return regExp.test(itm.orderId) || regExp.test(itm.customerName);
       }
     });
     setOrders(filterData);
@@ -46,7 +46,7 @@ const Orders = () => {
     if (type === 'all') {
       setOrders(data);
     } else {
-      const newOrders = data?.filter(itm => itm.cart.option === type);
+      const newOrders = data?.filter(itm => itm.type === type);
       setOrders(newOrders);
     }
   }, [data, type]);
@@ -87,24 +87,26 @@ const Orders = () => {
         isLoading={isFetching || isLoading}
         render={item => (
           <>
-            <td className="px-3 py-2 text-start">#{item.id}</td>
+            <td className="px-3 py-2 text-start">#{item.orderId}</td>
             <td className="px-3 py-2 capitalize">
-              {item.cart.option.replace('_', ' ')}
+              {item.type.replace('_', ' ')}
             </td>
-            <td className="px-3 py-2 capitalize">
-              {item.customer_name ?? '-'}
-            </td>
+            <td className="px-3 py-2 capitalize">{item.customerName ?? '-'}</td>
             <td className="px-3 py-2">
-              <div>{new Date(item.created_at).toLocaleDateString()} </div>
-              <div>{new Date(item.created_at).toLocaleTimeString()}</div>
+              <div>
+                {isToday(item.createdAt)
+                  ? 'Today at '
+                  : new Date(item.createdAt).toLocaleDateString()}{' '}
+              </div>
+              <div>{new Date(item.createdAt).toLocaleTimeString()}</div>
             </td>
-            <td
-              className={`font-[700] capitalize ${colors[item.order_status.toLowerCase()]}
+            <td>
+              <div
+                className={`py-2 font-[700] capitalize text-${colors[item.status.toLowerCase()]}  
         `}
-            >
-              {item.order_status === 'processing'
-                ? 'in progress'
-                : item.order_status}
+              >
+                {item.status === 'processing' ? 'in progress' : item.status}
+              </div>
             </td>
           </>
         )}

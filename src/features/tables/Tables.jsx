@@ -10,7 +10,6 @@ const Tables = ({ onCloseModal }) => {
     setSearchParams(searchParams);
     onCloseModal();
   };
-
   return (
     <>
       <h1 className="py-5 text-center text-[1.4rem] font-[700]">Tables</h1>
@@ -24,16 +23,21 @@ const Tables = ({ onCloseModal }) => {
           <Spinner />
         </div>
       )}
-      {tables && !isLoading && (
+      {tables && tables.length === 0 && !isLoading && (
+        <p className="my-20 text-center text-primary-500">
+          No tables added yet!
+        </p>
+      )}
+      {tables && tables.length > 0 && !isLoading && (
         <ul
           className="flex flex-wrap justify-center gap-4 overflow-y-auto p-2 sm:p-5 md:p-10 
             "
         >
           {[...tables].reverse().map((table, i) => (
             <li
-              onClick={() => !table.is_reserved && handleClick(table.number)}
+              onClick={() => !table.isReserved && handleClick(table.number)}
               key={i}
-              className={`flex-center w-[80px] cursor-pointer rounded-lg ${table.is_reserved ? 'cursor-not-allowed bg-red-400' : 'bg-green-400 hover:scale-105'} p-5 text-[1.3rem] font-[600] text-white `}
+              className={`flex-center w-[80px] cursor-pointer rounded-lg ${table.isReserved ? 'cursor-not-allowed bg-red-400' : 'bg-green-400 hover:scale-105'} p-5 text-[1.3rem] font-[600] text-white `}
             >
               <div>H{table.number}</div>
             </li>

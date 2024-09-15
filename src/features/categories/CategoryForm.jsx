@@ -16,15 +16,24 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
     formState: { errors },
     handleSubmit,
   } = useForm({ defaultValues: edit ? { categoryName: category.name } : {} });
-  const [imgUrl, setImgUrl] = useState(edit && category?.image);
+  const [imgUrl, setImgUrl] = useState(
+    edit &&
+      category.image &&
+      `http://127.0.0.1:3000/public/images/${category?.image}`,
+  );
   const [image, setImage] = useState(null);
   const [
     createCategory,
-    { isLoading, isSuccess: isCreated, error: createError },
+    { isLoading, isSuccess: isCreated, error: createError, reset: resetCreate },
   ] = useCreateCategoryMutation();
   const [
     update,
-    { isLoading: isUpdating, isSuccess: isUpdated, error: updateError },
+    {
+      isLoading: isUpdating,
+      isSuccess: isUpdated,
+      error: updateError,
+      reset: resetUpdateErr,
+    },
   ] = useUpdateCategoryMutation();
 
   // Handle form submission
@@ -33,7 +42,7 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
       const formData = new FormData();
       formData.append('name', data.categoryName);
       if (image) formData.append('image', image);
-      update({ id: category.id, formData });
+      update({ id: category._id, formData });
     } else {
       if (!image) return toast.error('Please provide an Image!');
       const formData = new FormData();
@@ -64,8 +73,14 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
       toast.success('Category successfully updated!');
       onCloseModal();
     }
-    if (createError) console.log(createError);
-    if (updateError) console.log(updateError);
+    if (createError) {
+      toast.error(createError?.message, { autoClose: 3000 });
+      resetCreate();
+    }
+    if (updateError) {
+      toast.error(updateError?.message, { autoClose: 3000 });
+      resetUpdateErr();
+    }
   }, [isCreated, isUpdated, onCloseModal, createError, updateError]);
 
   return (
@@ -130,8 +145,9 @@ const CategoryForm = ({ onCloseModal, edit = false, category }) => {
             type="submit"
             className="px-10"
             variant="dark"
+            isLoading={isLoading || isUpdating}
           >
-            {isLoading || isUpdating ? 'Loading...' : 'Save'}
+            Save
           </Button>
         </div>
       </form>

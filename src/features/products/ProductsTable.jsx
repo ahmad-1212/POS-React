@@ -42,7 +42,7 @@ const ProductsTable = ({
               {/* Edit Button */}
               <td className="w-[10%] px-3 py-2">
                 <IconButton
-                  onClick={() => navigate(`edit/${prod.id}`)}
+                  onClick={() => navigate(`edit/${prod._id}`)}
                   className={`text-[1.3rem] text-primary-500 ${
                     i % 2 !== 0 ? 'hover:bg-primary-200' : ''
                   }`}
@@ -59,8 +59,9 @@ const ProductsTable = ({
                 </Modal.Open>
                 <Modal.Window id="delete" center closeOnOverlay zIndex="z-50">
                   <ConfirmDelete
-                    onConfirm={() => deleteProduct(prod.id)}
-                    message="Are you sure you want to delete this Product?"
+                    onConfirm={() => deleteProduct(prod._id)}
+                    className="text-start text-[0.8rem]"
+                    message={`Remember product ${prod.name} added to any deal will be removed from that deal. Are you still sure you want to delete this product?`}
                     successMessage={`Product "${prod.name}" successfully Deleted!`}
                     isLoading={isDeleting}
                     isSuccess={isSuccess}
@@ -71,10 +72,7 @@ const ProductsTable = ({
             </>
           ) : (
             <td className="py-2">
-              <Button
-                variant="dark"
-                onClick={() => onAddProduct(prod.productID)}
-              >
+              <Button variant="dark" onClick={() => onAddProduct(prod._id)}>
                 Add
               </Button>
             </td>

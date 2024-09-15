@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLoginMutation } from '../../services/apiAuth';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
+import Spinner from '../../Components/UI/Spinner';
 
 const Login = () => {
   const {
@@ -20,12 +21,15 @@ const Login = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      toast.success('Login successfully!', { autoClose: 3000 });
+      toast.success('Login successfully!', {
+        autoClose: 3000,
+        position: 'top-center',
+      });
       navigate('/home');
       reset();
     }
     if (error) {
-      toast.error(error?.data?.error);
+      toast.error(error?.message, { autoClose: 4000, position: 'top-center' });
       reset();
     }
   }, [isSuccess, reset, error, navigate]);
@@ -63,12 +67,10 @@ const Login = () => {
         variant="dark"
         className="mt-6 text-[1.4rem] sm:mt-8"
         disabled={isLoading}
+        isLoading={isLoading}
       >
-        {isLoading ? 'Loading...' : 'Login'}
+        Login
       </Button>
-      <div className="text-center text-[0.9rem] ">
-        Don't have an account? Signup
-      </div>
     </form>
   );
 };

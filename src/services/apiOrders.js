@@ -4,14 +4,15 @@ const apiOrders = apiBase.injectEndpoints({
   endpoints: build => ({
     // Get orders
     getOrders: build.query({
-      query: (last = 7) =>
-        `/orders/?include_cart=true&days_range=${last}&active_only=false`,
+      query: (last = 7) => `/orders?days_range=${last}`,
+      transformResponse: data => data.orders,
       providesTags: ['orders'],
     }),
 
     // Get order by id
     getOrderByID: build.mutation({
-      query: id => `orders/${id}/?include_cart=true`,
+      query: id => `/orders/${id}`,
+      transformResponse: data => data.order,
     }),
 
     // Create order
@@ -21,44 +22,47 @@ const apiOrders = apiBase.injectEndpoints({
         method: 'POST',
         body: data,
       }),
+      transformErrorResponse: data => data.order,
       invalidatesTags: ['active-orders', 'tables'],
     }),
 
     // Get active orders
     getActiveOrders: build.query({
-      query: () => '/orders/?include_cart=true&active_only=true',
+      query: () => '/orders?active_only=true',
+      transformResponse: data => data.orders,
       providesTags: ['active-orders'],
     }),
 
     // Update order
     updateOrder: build.mutation({
       query: ({ id, data }) => ({
-        url: `/orders/${id}/`,
-        method: 'PUT',
-        body: data,
-      }),
-      invalidatesTags: ['active-orders'],
-    }),
-
-    // Update order status
-    updateOrderStatus: build.mutation({
-      query: ({ id, data }) => ({
-        url: `orders/${id}/?include_cart=false`,
+        url: `/orders/${id}`,
         method: 'PATCH',
         body: data,
       }),
-      invalidatesTags: ['active-orders', 'orders', 'tables'],
+      transformResponse: data => data.order,
+      invalidatesTags: ['active-orders'],
     }),
 
     // Get invoice
     getInvoice: build.mutation({
       query: id => ({
-        url: `orders/${id}/invoice/?include_cart=true`,
+        url: `orders/${id}/invoice`,
         method: 'POST',
       }),
+      transformResponse: data => data.order,
       invalidatesTags: ['active-orders', 'orders', 'tables'],
     }),
+
+    // Get reports
+    getReports: build.query({
+      query: days => ({
+        url: `orders/report?days_range=${days}`,
+      }),
+      transformResponse: data => data.report,
+    }),
   }),
+
   overrideExisting: false,
 });
 
@@ -68,6 +72,6 @@ export const {
   useGetActiveOrdersQuery,
   useGetOrderByIDMutation,
   useUpdateOrderMutation,
-  useUpdateOrderStatusMutation,
   useGetInvoiceMutation,
+  useGetReportsQuery,
 } = apiOrders;

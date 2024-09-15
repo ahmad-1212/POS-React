@@ -4,7 +4,8 @@ const apiTables = apiBase.injectEndpoints({
   endpoints: build => ({
     // Get Tables
     getTables: build.query({
-      query: () => '/tables/?include_all=true',
+      query: () => '/tables',
+      transformResponse: data => data.tables,
       providesTags: ['tables'],
     }),
   }),

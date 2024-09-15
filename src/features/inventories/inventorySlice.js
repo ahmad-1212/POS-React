@@ -37,7 +37,6 @@ const inventorySlice = createSlice({
         state.main = state.main.filter(itm => itm.id !== action.payload.id);
       }
       if (!isMain) {
-        console.log(action.payload.id);
         state.kitchen = state.kitchen.filter(
           itm => itm.id !== action.payload.id,
         );

@@ -12,10 +12,12 @@ import {
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import DataTable from '../../Components/UI/DataTable';
+import { toast } from 'react-toastify';
 
 const CategoriesTable = () => {
   const { data, isLoading } = useGetCategoriesQuery();
-  const [deleteCategory, { isLoading: isDeleting, isSuccess, reset }] =
+
+  const [deleteCategory, { isLoading: isDeleting, isSuccess, reset, error }] =
     useDeleteCategoryMutation();
   const [categories, setCategories] = useState(data);
   const [searchParams] = useSearchParams();
@@ -36,8 +38,16 @@ const CategoriesTable = () => {
 
   // Set default data
   useEffect(() => {
-    setCategories(data?.results);
-  }, [data?.results]);
+    setCategories(data);
+  }, [data]);
+
+  // Handle error
+  useEffect(() => {
+    if (error) {
+      toast.error(error.message, { autoClose: 5000 });
+      reset();
+    }
+  }, [error]);
   return (
     <DataTable
       edit
@@ -53,7 +63,7 @@ const CategoriesTable = () => {
           <Modal>
             <td className="w-[20%] px-3 py-2">
               <img
-                src={cat.image}
+                src={`http://127.0.0.1:3000/public/images/${cat.image}`}
                 className="h-[50px] w-[50px] object-cover"
                 loading="lazy"
               />
@@ -83,7 +93,7 @@ const CategoriesTable = () => {
               </Modal.Open>
               <Modal.Window id="delete" center closeOnOverlay zIndex="z-50">
                 <ConfirmDelete
-                  onConfirm={() => deleteCategory(cat.id)}
+                  onConfirm={() => deleteCategory(cat._id)}
                   message="Are you sure you want to delete this category?"
                   successMessage={`Category "${cat.name}" successfully deleted!`}
                   isLoading={isDeleting}

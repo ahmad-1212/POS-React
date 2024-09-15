@@ -3,12 +3,13 @@ import { apiBase } from './apiBase';
 const apiUsers = apiBase.injectEndpoints({
   endpoints: build => ({
     getAllUsers: build.query({
-      query: () => '/users/?include_all=true',
+      query: () => '/users',
+      transformResponse: data => data.users,
       providesTags: ['all-users'],
     }),
     createUser: build.mutation({
       query: data => ({
-        url: '/users/register/',
+        url: '/users/register',
         method: 'POST',
         body: data,
       }),
@@ -24,7 +25,7 @@ const apiUsers = apiBase.injectEndpoints({
     }),
     deleteUser: build.mutation({
       query: id => ({
-        url: `/users/${id}/`,
+        url: `/users/${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['all-users'],

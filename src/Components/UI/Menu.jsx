@@ -35,13 +35,8 @@ const List = ({ children }) => {
 
   return (
     <>
-      <Overlay
-        onClick={() => setShowMenu(false)}
-        show={showMenu}
-        transparent
-        className="z-30"
-      />
-      <div className={`absolute bottom-0 right-0 top-0 z-30 translate-y-full`}>
+      <Overlay onClick={() => setShowMenu(false)} show={showMenu} transparent />
+      <div className={`absolute bottom-0 right-0 top-0 z-50 translate-y-full`}>
         {children}
       </div>
     </>

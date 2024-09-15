@@ -4,14 +4,15 @@ const apiKitchenInventory = apiBase.injectEndpoints({
   endpoints: build => ({
     // Get kitchen inventory stock
     getKitchenInventory: build.query({
-      query: () => '/inventories/kitchen/?include_all=true',
+      query: () => '/inventories/kitchen',
+      transformResponse: data => data.items,
       providesTags: ['kitchen-inventory'],
     }),
 
     // Send stock to main inventory
     sendToMain: build.mutation({
       query: data => ({
-        url: `/inventories/kitchen/transfer/`,
+        url: `/inventories/kitchen/transfer`,
         method: 'POST',
         body: data,
       }),

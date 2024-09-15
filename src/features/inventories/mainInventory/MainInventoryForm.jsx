@@ -38,11 +38,12 @@ const MainInventoryForm = ({ edit, item, onCloseModal }) => {
   });
 
   // Handle submit
-  const onSubmit = data => {
+  const onSubmit = _data => {
+    const data = { ingredient: _data.ingredient, quantity: _data.quantity };
     if (edit) {
-      updateItem({ id: item.id, data: { quantity: data.quantity } });
+      updateItem(data);
     } else {
-      addItem({ id: data.ingredient, data: { quantity: +data.quantity } });
+      addItem(data);
     }
   };
 
@@ -70,17 +71,17 @@ const MainInventoryForm = ({ edit, item, onCloseModal }) => {
   // Handle default values when changes
   useEffect(() => {
     if (!ingData || !edit) return;
-    setValue('ingredient', item.ingredient.id);
+    setValue('ingredient', item.ingredient._id);
+    console.log(item.ingredient.unit);
     setValue('unit', item.ingredient.unit);
     setValue('quantity', item.quantity);
   }, [ingData, edit, item, setValue]);
 
   useEffect(() => {
     const ingID = getValues().ingredient;
-    const unit = ingData?.find(itm => +itm.id === +ingID)?.unit;
+    const unit = ingData?.find(itm => itm._id === ingID)?.unit;
     setValue('unit', unit);
-    // console.log(ingredientWatch);
-  }, [ingredientWatch]);
+  }, [ingredientWatch, ingData]);
 
   return (
     <div>
@@ -114,13 +115,13 @@ const MainInventoryForm = ({ edit, item, onCloseModal }) => {
               disabled={isLoading}
               className="cursor-pointer rounded-md border-2 border-gray-300 bg-transparent  px-4 py-2 text-[1.1rem] outline-none focus:border-primary-400 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:opacity-80"
               id="ingredient"
-              defaultValue={ingData?.at(0)?.ingredientID}
+              defaultValue={ingData?.at(0)?.name}
               {...register('ingredient', {
                 required: 'Please select an ingredient',
               })}
             >
               {ingData?.map((ing, i) => (
-                <option key={i} value={ing.id}>
+                <option key={i} value={ing._id}>
                   {ing.name}
                 </option>
               ))}
@@ -148,12 +149,13 @@ const MainInventoryForm = ({ edit, item, onCloseModal }) => {
           </div>
           <div className="mt-5 flex justify-end">
             <Button
-              // disabled={isLoading}
+              disabled={isLoading || isUpdating}
+              isLoading={isLoading || isUpdating}
               type="submit"
               className="px-10"
               variant="dark"
             >
-              {isLoading || isUpdating ? 'Loading...' : 'Save'}
+              Save
             </Button>
           </div>
         </form>

@@ -4,24 +4,27 @@ const apiMainInventory = apiBase.injectEndpoints({
   endpoints: build => ({
     // Get main inventory products
     getMainInventory: build.query({
-      query: () => '/inventories/main/?include_all=true',
+      query: () => '/inventories/main',
+      transformResponse: data => data.items,
       providesTags: ['main-inventory'],
     }),
 
     // Add stock to main inventory
     addItemToMainInventory: build.mutation({
-      query: ({ id, data }) => ({
-        url: `/inventories/main/add/${id}/?include_all=true`,
-        method: 'POST',
-        body: data,
-      }),
+      query: data => {
+        return {
+          url: `/inventories/main/add`,
+          method: 'POST',
+          body: data,
+        };
+      },
       invalidatesTags: ['main-inventory'],
     }),
 
     // Update stock of main inventory
     updateItemOfMainInventory: build.mutation({
-      query: ({ id, data }) => ({
-        url: `inventories/main/${id}/`,
+      query: data => ({
+        url: `inventories/main/update`,
         method: 'PATCH',
         body: data,
       }),

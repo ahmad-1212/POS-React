@@ -4,13 +4,14 @@ const apiProducts = apiBase.injectEndpoints({
   endpoints: build => ({
     // Get products
     getProducts: build.query({
-      query: () => '/products/',
+      query: () => '/products',
+      transformResponse: data => data?.products,
       providesTags: ['products'],
     }),
 
     // get product with id
     getProductWithId: build.query({
-      query: id => `/products/${id}/`,
+      query: id => `/products/${id}`,
       providesTags: (_, __, id) => [{ type: 'product', id }],
     }),
 
@@ -31,7 +32,7 @@ const apiProducts = apiBase.injectEndpoints({
       query({ id, data }) {
         return {
           url: `/products/${id}/`,
-          method: 'PUT',
+          method: 'PATCH',
           body: data,
         };
       },
@@ -43,10 +44,10 @@ const apiProducts = apiBase.injectEndpoints({
     // Delete Product
     deleteProduct: build.mutation({
       query: id => ({
-        url: `/products/${id}/`,
+        url: `/products/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['products'],
+      invalidatesTags: ['products', 'deals'],
     }),
   }),
   overrideExisting: false,

@@ -18,22 +18,21 @@ const SendToMainForm = ({ item, onCloseModal }) => {
     defaultValues: {
       name: item.ingredient.name,
       unit: item.ingredient.unit,
-
       quantity: item.quantity,
     },
   });
 
   const dispatch = useDispatch();
 
-  // Handle submit
+  // Handle submit to add data to cart
   const onSubmit = data => {
     dispatch(
       addItem({
         isMain: false,
-        id: item.ingredient.id,
+        id: item.ingredient._id,
         name: data.name,
         unit: data.unit,
-        ingredientID: item.ingredient.ingredientID,
+        ingredientID: item.ingredient._id,
         quantity: +data.quantity,
       }),
     );

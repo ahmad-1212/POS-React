@@ -12,11 +12,15 @@ const MenuItem = ({ item, category }) => {
   const { data: categories } = useGetCategoriesQuery();
   const img = categories?.find(cat => cat.name === category)?.image;
 
+  const { name, price, _id } = item;
+
   return (
     <li
       className="w-full cursor-pointer overflow-hidden rounded-lg bg-white  shadow-sm hover:scale-105 hover:shadow-lg"
       onClick={() =>
-        dispatch(addCartItem({ ...item, img, deal: category === 'deals' }))
+        dispatch(
+          addCartItem({ name, price, _id, img, deal: category === 'deals' }),
+        )
       }
     >
       <RippleEffect>
@@ -30,7 +34,7 @@ const MenuItem = ({ item, category }) => {
             <LazyLoad>
               <img
                 className={`${isDeal ? 'opacity-0' : 'opacity-100'} h-[4rem] w-[4rem] rounded-full border-[3px] border-primary-500/40 object-cover`}
-                src={img}
+                src={`http://127.0.0.1:3000/public/images/${img}`}
               />
             </LazyLoad>
           </div>

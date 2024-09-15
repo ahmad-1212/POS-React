@@ -42,12 +42,19 @@ const InventoryCart = ({ main }) => {
   };
 
   const handleSendItems = () => {
-    const ingredients_data = {};
-    items.forEach(itm => (ingredients_data[itm.ingredientID] = +itm.quantity));
+    const ingredient_items = [];
+    items.forEach(itm => {
+      const ing_obj = {
+        ingredient: itm.ingredientID,
+        quantity: itm.quantity,
+      };
+      ingredient_items.push(ing_obj);
+    });
+
     if (main) {
-      sendToKitchen({ ingredients_data });
+      sendToKitchen({ items: ingredient_items });
     } else {
-      sendToMain({ ingredients_data });
+      sendToMain({ items: ingredient_items });
     }
   };
 
@@ -152,14 +159,18 @@ const InventoryCart = ({ main }) => {
           </section>
           {/* Total bill and print or send to kitchen Buttons */}
           <section className="mt-auto grid grid-cols-2  gap-3 border-t-2 p-3">
-            <PrintInvoiceBtn isMain={main} />
+            <PrintInvoiceBtn
+              isMain={main}
+              disabled={isSendingToKitchen || isSendingToMain}
+            />
             <Button
               disabled={isSendingToKitchen || isSendingToMain || !items.length}
+              isLoading={isSendingToKitchen || isSendingToMain}
               onClick={handleSendItems}
               variant="dark"
               className="w-full"
             >
-              {isSendingToKitchen || isSendingToMain ? 'Sending...' : 'Send'}
+              Send
             </Button>
           </section>
         </div>

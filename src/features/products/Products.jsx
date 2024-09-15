@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 const Products = ({ isDeal, onAddProduct }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { data, isLoading } = useGetProductsQuery();
+
   const { data: categories, isLoading: isCateogryLoading } =
     useGetCategoriesQuery();
   const [products, setProducts] = useState(data);
@@ -39,7 +40,6 @@ const Products = ({ isDeal, onAddProduct }) => {
     });
     setProducts(filterProducts);
   };
-
   // Filter products on the basis of category
   useEffect(() => {
     if (!data) return;
@@ -96,12 +96,17 @@ const Products = ({ isDeal, onAddProduct }) => {
           ))}
         </select>
       </div>
-      <ProductsTable
-        products={products}
-        isLoading={isLoading}
-        isDeal={isDeal}
-        onAddProduct={onAddProduct}
-      />
+      <div className="flex flex-col gap-2">
+        {isDeal && (
+          <h1 className="text-[1.3rem] font-[500]">Select products</h1>
+        )}
+        <ProductsTable
+          products={products}
+          isLoading={isLoading}
+          isDeal={isDeal}
+          onAddProduct={onAddProduct}
+        />
+      </div>
     </section>
   );
 };

@@ -6,10 +6,10 @@ import Button from '../../Components/UI/Button';
 import Modal from '../../Components/UI/Modal';
 import Spinner from '../../Components/UI/Spinner';
 import DealForm from './DealForm';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useGetDealWithIdQuery } from '../../services/apiDeals';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { BsTicketDetailed } from 'react-icons/bs';
+import { toast } from 'react-toastify';
 
 const AddDeal = () => {
   const [selectProducts, setSelectProducts] = useState([]);
@@ -17,16 +17,21 @@ const AddDeal = () => {
   const [searchParams] = useSearchParams();
   const edit = searchParams.get('edit') || false;
   const dealId = searchParams.get('deal') || null;
-  const { data: deal, isLoading } = useGetDealWithIdQuery(dealId || skipToken);
-
+  const {
+    data: deal,
+    error: dealError,
+    isLoading,
+  } = useGetDealWithIdQuery(dealId || skipToken);
+  const navigate = useNavigate();
+  console.log(dealError);
   const addProduct = id => {
     if (!data) return;
 
-    const product = data.find(prod => prod.productID === id);
+    const product = data.find(prod => prod._id === id);
     if (!product) return; // if the product is not found, exit
 
     setSelectProducts(prevState => {
-      const productIndex = prevState.findIndex(item => item.productID === id);
+      const productIndex = prevState.findIndex(item => item._id === id);
       if (productIndex !== -1) {
         // If the product is already selected, increase the quantity
         const updatedProducts = [...prevState];
@@ -43,20 +48,26 @@ const AddDeal = () => {
   };
 
   const removeProduct = id => {
-    const newProd = selectProducts.filter(prod => prod.productID !== id);
+    const newProd = selectProducts.filter(prod => prod._id !== id);
     setSelectProducts(newProd);
   };
 
   useEffect(() => {
-    if ((!edit && !dealId) || !deal) return;
-    console.log(deal);
+    if (!deal) return;
     const products = deal.products.map(prod => ({
       ...prod.product,
       quantity: prod.quantity,
     }));
 
     setSelectProducts(products);
-  }, [edit, dealId, deal]);
+  }, [dealId, deal]);
+
+  useEffect(() => {
+    if (dealError) {
+      toast.error(dealError?.message);
+      navigate('/deals');
+    }
+  }, [dealError]);
 
   return edit && dealId && isLoading ? (
     <div className="mx-auto my-20">
@@ -71,20 +82,21 @@ const AddDeal = () => {
           </h1>
         </div>
       </section>
+
       {selectProducts.length > 0 && (
         <section className="my-5">
           <ul className="mb-10 flex flex-wrap items-center gap-2 ">
             {selectProducts?.map(prod => (
               <li
                 className="flex items-center gap-5 rounded-md bg-primary-400 px-3 py-1 text-white"
-                key={prod.productID}
+                key={prod._id}
               >
                 <span>
                   {prod.name}: {prod.quantity}
                 </span>
                 <HiX
                   className="cursor-pointer"
-                  onClick={() => removeProduct(prod.productID)}
+                  onClick={() => removeProduct(prod._id)}
                 />
               </li>
             ))}
@@ -100,12 +112,13 @@ const AddDeal = () => {
                 selectProducts={selectProducts}
                 setSelectProducts={setSelectProducts}
                 deal={deal}
-                edit={edit && BsTicketDetailed}
+                edit={Boolean(edit)}
               />
             </Modal.Window>
           </Modal>
         </section>
       )}
+
       <Products isDeal={true} onAddProduct={addProduct} />
     </>
   );

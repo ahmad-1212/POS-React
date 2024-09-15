@@ -15,7 +15,7 @@ const EditProduct = () => {
         <h1>Edit Product</h1>
       </div>
       {data && !isLoading && (
-        <ProductForm edit product={data} productId={productId} />
+        <ProductForm edit product={data?.product} productId={productId} />
       )}
       {isLoading && (
         <div className="mx-auto mt-20">

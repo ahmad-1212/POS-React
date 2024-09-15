@@ -31,8 +31,7 @@ const ActiveOrders = ({ onCloseModal }) => {
   useEffect(() => {
     if (isFetchedOrder) {
       onCloseModal();
-      console.log(order);
-      const products = order.cart.products.map(prod => {
+      const products = order.products.map(prod => {
         const img = categories?.find(
           cat => cat?.name === prod.product.category.name,
         )?.image;
@@ -44,7 +43,7 @@ const ActiveOrders = ({ onCloseModal }) => {
         };
       });
 
-      const deals = order.cart.deals.map(deal => {
+      const deals = order.deals.map(deal => {
         return {
           ...deal.deal,
           quantity: deal.quantity,
@@ -53,8 +52,8 @@ const ActiveOrders = ({ onCloseModal }) => {
       });
 
       const userInfo = {
-        name: order.customer_name,
-        phone: order.phone_number,
+        name: order.customerName,
+        phone: order.phoneNumber,
         address: order.address,
       };
 
@@ -62,7 +61,7 @@ const ActiveOrders = ({ onCloseModal }) => {
         addCartData({
           items: [...deals, ...products],
           userInfo,
-          orderId: order.id,
+          orderId: order.orderId,
         }),
       );
     }
@@ -70,22 +69,22 @@ const ActiveOrders = ({ onCloseModal }) => {
 
   useEffect(() => {
     if (isFetchedOrder) {
-      if (order.cart.option === 'dine_in') {
-        searchParams.set('table', order.cart.table);
+      if (order.type === 'dine_in') {
+        searchParams.set('table', order.table);
       }
-      searchParams.set('type', order.cart.option.replace('_', ' '));
+      searchParams.set('type', order.type.replace('_', ' '));
       setSearchParams(searchParams);
     }
   }, [isFetchedOrder]);
 
   useEffect(() => {
     if (!data) return;
-    const filterOrders = data?.filter(ord => ord?.cart?.option === filter);
+    const filterOrders = data?.filter(ord => ord?.type === filter);
     setOrders(filterOrders);
   }, [data, filter]);
 
   return (
-    <div className="relative px-5 py-10">
+    <div className=" relative px-5 py-10">
       {isFetchingById && (
         <div className="flex-center absolute inset-0 z-50 h-full w-full bg-white/80">
           <Spinner />
@@ -140,39 +139,36 @@ const ActiveOrders = ({ onCloseModal }) => {
         <ul className="grid grid-cols-2 flex-wrap justify-center gap-x-4 gap-y-6">
           {orders?.map((ord, i) => (
             <li
-              onClick={() => getOrderByID(ord.id)}
+              onClick={() => getOrderByID(ord.orderId)}
               key={i}
               className="flex cursor-pointer gap-3 rounded-lg border-2 px-3 py-1"
             >
-              {ord.cart.option === 'dine_in' ? (
+              {ord.type === 'dine_in' ? (
                 <div className="flex-center h-[50px] w-[50px] rounded-lg bg-red-400 text-[1.2rem] text-white">
-                  H{ord.cart.table}
+                  H{ord.table}
                 </div>
               ) : (
                 <div className="flex-center h-[50px] w-[50px] rounded-full bg-red-400 text-[1.2rem] uppercase text-white">
-                  {ord.cart.option.slice(0, 2)}
+                  {ord.type.slice(0, 2)}
                 </div>
               )}
               <div>
-                <h3 className="font-[600] capitalize">{ord?.customer_name}</h3>
+                <h3 className="font-[600] capitalize">{ord?.customerName}</h3>
                 <div
-                  className={`flex-between gap-2 text-[0.9rem] font-[500] text-gray-400 ${ord.cart.option === 'dine_in' ? 'flex-col' : ''}`}
+                  className={`flex-between gap-2 text-[0.9rem] font-[500] text-gray-400 ${ord.type === 'dine_in' ? 'flex-col' : ''}`}
                 >
                   <span>
-                    {ord.cart.products.reduce(
-                      (acc, itm) => +itm.quantity + acc,
-                      0,
-                    ) +
-                      ord.cart.deals.reduce(
+                    {ord.products.reduce((acc, itm) => +itm.quantity + acc, 0) +
+                      ord.deals.reduce(
                         (acc, itm) => +itm.quantity + acc,
                         0,
                       )}{' '}
-                    {ord.cart.products.length === 1 &&
-                    ord.cart.products.at(0).quantity === 1
+                    {ord.products.length === 1 &&
+                    ord.products.at(0).quantity === 1
                       ? 'Item'
                       : 'Items'}
                   </span>
-                  <span>{ord.cart.option}</span>
+                  <span>{ord.type}</span>
                 </div>
               </div>
             </li>

@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
+  MdHome,
   MdKeyboardDoubleArrowLeft,
   MdKeyboardDoubleArrowRight,
 } from 'react-icons/md';
 
 import DashboardNav from '../Nav/DashboardNav';
 import { useState } from 'react';
-import { IoMenu } from 'react-icons/io5';
+import { IoLogOut, IoMenu } from 'react-icons/io5';
 
 import Menu from '../UI/Menu';
 import { useScreen } from '../../hooks/useScreen';
@@ -16,13 +17,20 @@ import Overlay from '../UI/Overlay';
 import { HiX } from 'react-icons/hi';
 import IconButton from '../UI/IconButton';
 import { useSelector } from 'react-redux';
-import { removeItem } from '../../utils/localStorage';
+import Spinner from '../UI/Spinner';
+import { useLogoutMutation } from '../../services/apiAuth';
 
 const DashboardLayout = ({ children }) => {
   const { screen } = useScreen();
   const [collapseSidebar, setCollapseSidebar] = useState(screen < 768);
   const [showSidebar, setShowSidebar] = useState(false);
+  const [logout, { isLoading }] = useLogoutMutation();
   const user = useSelector(state => state.auth.user);
+
+  const logoutUser = () => {
+    logout().unwrap();
+  };
+
   useEffect(() => {
     document.title = 'POS | Dashboard';
   }, []);
@@ -98,22 +106,35 @@ const DashboardLayout = ({ children }) => {
                 </div>
               </Menu.Open>
               <Menu.List>
-                <ul className="flex w-max flex-col gap-4 rounded-lg bg-white px-3 py-4 shadow-lg">
-                  <li className="flex items-center gap-3 break-words text-[0.8rem]">
+                <ul className="flex w-max flex-col rounded-lg bg-white px-3 py-4 shadow-lg">
+                  <li className="mb-3 flex items-center gap-3 break-words text-[0.8rem]">
                     <img
                       className="h-[2rem] w-[2rem] rounded-full object-cover"
                       src="/demo-img.jpg"
                     />
                     <span>{user.email}</span>
                   </li>
-                  <li
-                    className="cursor-pointer"
-                    onClick={() => {
-                      removeItem('token');
-                      location.assign('/');
-                    }}
-                  >
-                    Logout
+                  <li>
+                    <NavLink
+                      to="/home"
+                      className=" flex items-center gap-3 px-3 py-2 text-primary-500 hover:bg-primary-500/20"
+                    >
+                      <MdHome className="text-[1.2rem] text-primary-500" />
+                      <span>Home</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <button
+                      className="flex w-full items-center gap-3 px-3 py-2 text-primary-500 hover:bg-primary-500/20"
+                      onClick={logoutUser}
+                    >
+                      {isLoading ? (
+                        <Spinner small={true} color={'orange'} />
+                      ) : (
+                        <IoLogOut className="text-[1.2rem] text-primary-500" />
+                      )}
+                      <span>Logout</span>
+                    </button>
                   </li>
                 </ul>
               </Menu.List>

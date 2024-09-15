@@ -7,6 +7,7 @@ import { useReactToPrint } from 'react-to-print';
 import { clearCart } from './cartSlice';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
+
 const PrintButton = ({ isLoading, printBill, onCloseModal }) => {
   const [getInvoice, { isLoading: isGetting, error }] = useGetInvoiceMutation();
   const [amount, setAmount] = useState(null);

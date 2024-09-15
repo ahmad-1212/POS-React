@@ -1,7 +1,7 @@
 import { LiaClipboardListSolid, LiaMoneyBillWaveSolid } from 'react-icons/lia';
 import { MdAutoGraph } from 'react-icons/md';
 import { useSearchParams } from 'react-router-dom';
-import { useGetSalesReportQuery } from '../../services/apiReports';
+import { useGetReportsQuery } from '../../services/apiOrders';
 
 const LoadingIndicator = () => (
   <section className="flex animate-pulse flex-col gap-4">
@@ -34,7 +34,7 @@ const LoadingIndicator = () => (
 const Stats = () => {
   const [searchParams] = useSearchParams();
   const last = +searchParams.get('last') || 7;
-  const { data: report, isLoading, isFetching } = useGetSalesReportQuery(last);
+  const { data: report, isLoading, isFetching } = useGetReportsQuery(last);
 
   return isLoading || isFetching ? (
     <LoadingIndicator />
@@ -50,7 +50,7 @@ const Stats = () => {
               Sales
             </h4>
             <div className="text-[1.5rem] font-[600] text-gray-700">
-              Rs. {report?.total_sales}
+              Rs. {report?.totalSale || 0}
             </div>
           </div>
         </div>
@@ -63,7 +63,7 @@ const Stats = () => {
               Orders
             </h4>
             <div className="text-[1.5rem] font-[600] text-gray-700">
-              {report?.total_count}
+              {report?.totalOrders || 0}
             </div>
           </div>
         </div>
@@ -76,7 +76,7 @@ const Stats = () => {
               Profit
             </h4>
             <div className="text-[1.5rem] font-[600] text-gray-700">
-              Rs. {report?.total_profit}
+              Rs. {report?.totalProfit || 0}
             </div>
           </div>
         </div>

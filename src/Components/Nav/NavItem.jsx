@@ -92,7 +92,7 @@ const NavItem = ({ link, onClick, collapseSidebar }) => {
         </li>
         {isLinkExtended &&
           link.links.map((itm, i) => (
-            <li key={i} className="animate-dropdown ml-10">
+            <li key={i} className="ml-10 animate-dropdown">
               <NavLink
                 onClick={() => onClick?.()}
                 to={itm.link}

@@ -9,66 +9,71 @@ const DealDetails = ({ deal, onCloseModal }) => {
       </h1>
       <div className="p-4 ">
         <div className="mt-8">
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr>
-                <th
-                  style={{
-                    border: '1px solid #000',
-                    padding: '8px',
-                    textAlign: 'left',
-                  }}
-                >
-                  Name
-                </th>
-                <th
-                  style={{
-                    border: '1px solid #000',
-                    padding: '8px',
-                    textAlign: 'left',
-                  }}
-                >
-                  Qty
-                </th>
-                <th
-                  style={{
-                    border: '1px solid #000',
-                    padding: '8px',
-                    textAlign: 'left',
-                  }}
-                >
-                  Price
-                </th>
-                <th
-                  style={{
-                    border: '1px solid #000',
-                    padding: '8px',
-                    textAlign: 'left',
-                  }}
-                >
-                  Total
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {deal.products.map((itm, i) => (
-                <tr key={i}>
-                  <td style={{ border: '1px solid #000', padding: '8px' }}>
-                    {itm.product.name}
-                  </td>
-                  <td style={{ border: '1px solid #000', padding: '8px' }}>
-                    {itm.quantity}
-                  </td>
-                  <td style={{ border: '1px solid #000', padding: '8px' }}>
-                    {itm.product.price}
-                  </td>
-                  <td style={{ border: '1px solid #000', padding: '8px' }}>
-                    {(+itm.product.price * itm.quantity).toFixed(2, 0)}
-                  </td>
+          {deal.products.length > 0 ? (
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr>
+                  <th
+                    style={{
+                      border: '1px solid #000',
+                      padding: '8px',
+                      textAlign: 'left',
+                    }}
+                  >
+                    Name
+                  </th>
+                  <th
+                    style={{
+                      border: '1px solid #000',
+                      padding: '8px',
+                      textAlign: 'left',
+                    }}
+                  >
+                    Qty
+                  </th>
+                  <th
+                    style={{
+                      border: '1px solid #000',
+                      padding: '8px',
+                      textAlign: 'left',
+                    }}
+                  >
+                    Price
+                  </th>
+                  <th
+                    style={{
+                      border: '1px solid #000',
+                      padding: '8px',
+                      textAlign: 'left',
+                    }}
+                  >
+                    Total
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+
+              <tbody>
+                {deal.products.map((itm, i) => (
+                  <tr key={i}>
+                    <td style={{ border: '1px solid #000', padding: '8px' }}>
+                      {itm.product.name}
+                    </td>
+                    <td style={{ border: '1px solid #000', padding: '8px' }}>
+                      {itm.quantity}
+                    </td>
+                    <td style={{ border: '1px solid #000', padding: '8px' }}>
+                      {itm.product.price}
+                    </td>
+                    <td style={{ border: '1px solid #000', padding: '8px' }}>
+                      {(+itm.product.price * itm.quantity).toFixed(2, 0)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p className="py-3 text-center">No products added to deal yet!</p>
+          )}
         </div>
         <div className="flex-between mb-4 mt-3">
           <p>

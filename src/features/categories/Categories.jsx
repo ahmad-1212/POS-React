@@ -5,12 +5,13 @@ import LazyLoad from 'react-lazy-load';
 
 const Categories = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { data, isLoading } = useGetCategoriesQuery();
+  const { isLoading, data: categories } = useGetCategoriesQuery();
 
   const handleCategory = cat => {
     searchParams.set('category', cat);
     setSearchParams(searchParams);
   };
+
   return (
     <div className="p-5">
       <h2 className="mb-3 text-[1.4rem] font-[700]">Categories</h2>
@@ -19,10 +20,15 @@ const Categories = () => {
           <Spinner />
         </div>
       )}
+      {categories && categories.length === 0 && (
+        <p className="my-20 text-center text-[0.9rem] font-[500] text-primary-500">
+          No categories were found!
+        </p>
+      )}
       {/* Categories list */}
-      {data && !isLoading && (
+      {categories && categories.length > 0 && !isLoading && (
         <ul className="grid grid-cols-2 gap-5">
-          {data?.map((cat, i) => (
+          {categories?.map((cat, i) => (
             <li
               onClick={() => handleCategory(cat.name)}
               key={i}
@@ -31,7 +37,7 @@ const Categories = () => {
               <div>
                 <LazyLoad>
                   <img
-                    src={cat.image}
+                    src={`http://127.0.0.1:3000/public/images/${cat?.image}`}
                     className="h-[100px] w-full object-cover"
                   />
                 </LazyLoad>

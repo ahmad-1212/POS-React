@@ -22,19 +22,17 @@ const SendToKitchenForm = ({ item, onCloseModal }) => {
       quantity: item.quantity,
     },
   });
-
   const dispatch = useDispatch();
 
-  // Handle submit to send data to kitchen
+  // Handle submit to add data to cart
   const onSubmit = data => {
-    console.log(item);
     dispatch(
       addItem({
         isMain: true,
-        id: item.ingredient.id,
+        id: item.ingredient._id,
         name: data.name,
         unit: data.unit,
-        ingredientID: item.ingredient.ingredientID,
+        ingredientID: item.ingredient._id,
         quantity: +data.quantity,
       }),
     );

@@ -2,7 +2,6 @@
 import React from 'react';
 
 const InventoryInvoice = React.forwardRef(({ items, isMain }, ref) => {
-  console.log(items);
   return (
     <div ref={ref}>
       <div style={{ textAlign: 'center', marginBottom: '20px' }}>

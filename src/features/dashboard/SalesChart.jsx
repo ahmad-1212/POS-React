@@ -7,8 +7,8 @@ import {
   Area,
   ResponsiveContainer,
 } from 'recharts';
-import { useGetSalesReportQuery } from '../../services/apiReports';
 import { useSearchParams } from 'react-router-dom';
+import { useGetReportsQuery } from '../../services/apiOrders';
 
 const LoadingIndicator = () => (
   <div className="w-full animate-pulse rounded-md bg-gray-100 px-3 py-5 shadow-sm">
@@ -21,12 +21,17 @@ const SalesChart = () => {
   const [searchParams] = useSearchParams();
 
   const last = +searchParams.get('last') || 7;
-  const { data, isFetching } = useGetSalesReportQuery(last);
+  const { data, isFetching, error } = useGetReportsQuery(last);
 
-  const filterData = data?.daily_stats?.map(itm => {
-    const date = itm.date.split(',').at(0).split(' ').reverse().join(' ');
-
-    return { ...itm, date };
+  const filterData = data?.dailyReport?.map(itm => {
+    const date = new Date(itm._id);
+    const sales = itm?.totalDailyPrice;
+    const profit = itm?.totalDailyProfit;
+    return {
+      sales,
+      profit,
+      date: date.getDate() + date.toLocaleString('en-US', { weekday: 'short' }),
+    };
   });
 
   return isFetching ? (
@@ -36,6 +41,7 @@ const SalesChart = () => {
       <h2 className="mb-10 text-[1.3rem] font-[600]">
         Sales from Last {last} Days
       </h2>
+
       <ResponsiveContainer width="100%" height={250}>
         <AreaChart data={filterData}>
           <YAxis unit="Rs" />

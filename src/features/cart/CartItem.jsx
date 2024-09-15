@@ -16,7 +16,7 @@ const CartItem = ({ itm }) => {
         ) : (
           <LazyLoad>
             <img
-              src={itm.img}
+              src={`http://127.0.0.1:3000/public/images/${itm.img}`}
               className="h-[60px] w-[60px] rounded-md object-cover"
             />
           </LazyLoad>
@@ -69,7 +69,7 @@ const CartItem = ({ itm }) => {
       ) : (
         <LazyLoad>
           <img
-            src={itm.img}
+            src={`http://127.0.0.1:3000/public/images/${itm.img}`}
             className="h-[60px] w-[60px] rounded-md object-cover"
           />
         </LazyLoad>

@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 // import LoadingSpinner from "./LoadingSpinner";
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
+import Spinner from './Spinner';
 
 const Button = ({
   children,
@@ -11,6 +12,7 @@ const Button = ({
   to,
   disabled,
   onClick,
+  isLoading,
   ...props
 }) => {
   const [coords, setCoords] = useState({ x: -1, y: -1 });
@@ -50,7 +52,7 @@ const Button = ({
     <button
       {...props}
       disabled={disabled}
-      className={`relative overflow-hidden disabled:transform-none disabled:cursor-not-allowed  disabled:text-white disabled:shadow-none ${variantType[variant]} ${className}`}
+      className={`relative flex items-center justify-center  gap-2 overflow-hidden disabled:transform-none disabled:cursor-not-allowed  disabled:text-white disabled:shadow-none ${variantType[variant]} ${className} disabled:bg-gray-500`}
       onClick={e => {
         const rect = e.target.getBoundingClientRect();
         setCoords({ x: e.clientX - rect.left, y: e.clientY - rect.top });
@@ -68,7 +70,12 @@ const Button = ({
       ) : (
         ''
       )}
-      {children}
+      {isLoading && (
+        <span>
+          <Spinner small={true} />
+        </span>
+      )}
+      <span className="flex items-center gap-2">{children}</span>
     </button>
   );
 };
@@ -79,9 +86,9 @@ Button.propTypes = {
   variant: PropTypes.oneOf(['primary', 'outlined', 'underline', 'dark']),
   link: PropTypes.bool,
   to: PropTypes.string,
-
   disabled: PropTypes.bool,
   onClick: PropTypes.func,
+  isLoading: PropTypes.bool,
 };
 
 export default Button;

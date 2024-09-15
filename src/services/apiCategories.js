@@ -6,7 +6,8 @@ const apiCategories = apiBase.injectEndpoints({
   endpoints: build => ({
     // Get categories
     getCategories: build.query({
-      query: () => '/categories/?include_all=true',
+      query: () => '/categories',
+      transformResponse: data => data?.categories,
       providesTags: ['categories'],
     }),
     createCategory: build.mutation({
@@ -39,7 +40,7 @@ const apiCategories = apiBase.injectEndpoints({
     deleteCategory: build.mutation({
       query(id) {
         return {
-          url: `/categories/${id}/`,
+          url: `/categories/${id}`,
           method: 'DELETE',
         };
       },

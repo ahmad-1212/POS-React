@@ -25,7 +25,8 @@ const Cart = ({ onSidebarHide }) => {
     {
       isLoading: isAdding,
       isSuccess: isAdded,
-      error,
+      error: addError,
+
       data: orderData,
       reset: resetAddOrder,
     },
@@ -42,7 +43,7 @@ const Cart = ({ onSidebarHide }) => {
     },
   ] = useUpdateOrderMutation();
   const dispatch = useDispatch();
-
+  console.log(updateError);
   const cart = useSelector(state => state.cart);
   const isLock = cart?.items.some(itm => itm.lock);
   const isOrderAlreadyCreated = cart.items.some(itm => itm.lock === true);
@@ -54,15 +55,15 @@ const Cart = ({ onSidebarHide }) => {
 
   // Create or update order
   const handleOrder = () => {
-    const products = {};
-    const deals = {};
+    const products = [];
+    const deals = [];
 
     // If deals add in deals and if product add in products
     cart.items.forEach(itm => {
       if (itm.deal) {
-        deals[itm.dealID] = itm.quantity;
+        deals.push({ deal: itm._id, quantity: +itm.quantity });
       } else {
-        products[itm.productID] = itm.quantity;
+        products.push({ product: itm._id, quantity: +itm.quantity });
       }
     });
 
@@ -70,19 +71,19 @@ const Cart = ({ onSidebarHide }) => {
     let data = {};
     if (type === 'dine in') {
       data = {
-        option: type.toLowerCase().replace(' ', '_'),
+        type: type.toLowerCase().replace(' ', '_'),
         table,
         products,
         deals,
       };
     } else {
       data = {
-        option: type.toLowerCase().replace(' ', '_'),
+        type: type.toLowerCase().replace(' ', '_'),
         products,
         deals,
-        customer_name: cart.userInfo.name,
+        customerName: cart.userInfo.name,
         address: cart.userInfo.address,
-        phone_number: cart.userInfo.phone,
+        phoneNumber: cart.userInfo.phone,
       };
     }
 
@@ -98,26 +99,27 @@ const Cart = ({ onSidebarHide }) => {
   useEffect(() => {
     if (isAdded) {
       toast.success('Order successfully created!');
-      dispatch(lockItems({ orderId: orderData.id }));
+      dispatch(lockItems({ orderId: orderData.order.orderId }));
       resetAddOrder();
     }
     if (isUpdated) {
       toast.success('Order successfully updated!');
-      dispatch(lockItems({ orderId: updatedData.id }));
+      dispatch(lockItems({ orderId: updatedData.orderId }));
       resetUpdateOrder();
     }
-    if (error) {
-      toast.error(error?.data?.error);
+    if (addError) {
+      console.log(addError);
+      toast.error(addError?.message);
       resetAddOrder();
     }
 
     if (updateError) {
-      toast.error(updateError?.data?.error);
+      toast.error(updateError?.message);
       resetUpdateOrder();
     }
   }, [
     isAdded,
-    error,
+    addError,
     isUpdated,
     dispatch,
     resetAddOrder,
@@ -152,7 +154,7 @@ const Cart = ({ onSidebarHide }) => {
         }`}
       >
         {!cart.items.length && (
-          <p className="flex-center h-full text-primary-500">
+          <p className="flex-center h-full text-[0.9rem] font-[500] text-primary-500">
             No Items added yet!
           </p>
         )}

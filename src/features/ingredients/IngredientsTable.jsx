@@ -19,21 +19,6 @@ const IngredientsTable = () => {
   const { data, isLoading } = useGetIngredientsQuery(page);
   const [deleteIngredient, { isLoading: isDeleting, isSuccess, reset }] =
     useDeleteIngredientMutation();
-  const prefetch = usePrefetch('getIngredients');
-
-  // Handle prefetching
-  const prefetchData = useCallback(() => {
-    if (data?.next) {
-      prefetch(page + 1);
-    }
-    if (data?.previous) {
-      prefetch(page - 1);
-    }
-  }, [prefetch, page, data]);
-
-  useEffect(() => {
-    prefetchData();
-  }, [prefetchData]);
 
   return (
     <DataTable
@@ -42,13 +27,9 @@ const IngredientsTable = () => {
       edit
       del
       rowColors
-      pagination
       textCenter
-      data={data?.results}
+      data={data}
       isLoading={isLoading}
-      totalPages={Math.ceil(data?.count / 10)}
-      next={data?.next && true}
-      previous={data?.previous && true}
       render={(item, i) => (
         <Modal>
           <td className="px-3 py-2 text-start">{item.name}</td>
@@ -78,8 +59,8 @@ const IngredientsTable = () => {
             </Modal.Open>
             <Modal.Window id="delete" center closeOnOverlay zIndex="z-50">
               <ConfirmDelete
-                onConfirm={() => deleteIngredient(item.id)}
-                message="Are you sure you want to delete this Ingredient?"
+                onConfirm={() => deleteIngredient(item._id)}
+                message={`Remember deleting ${item.name} ingredient, it will also be removed from inventories and products if added to any of them, Are you still sure you want to delete this Ingredient?`}
                 successMessage={`Ingredient "${item.name}" successfully Deleted!`}
                 isLoading={isDeleting}
                 isSuccess={isSuccess}

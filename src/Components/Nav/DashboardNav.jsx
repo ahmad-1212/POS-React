@@ -69,7 +69,7 @@ const DashboardNav = ({ collapseSidebar, onClick }) => {
     <div
       className={`flex flex-col p-10 pt-14 ${
         collapseSidebar ? 'pl-5' : ''
-      } w-[18rem] transition-all`}
+      } w-[18rem]  transition-all`}
     >
       <nav>
         <ul className="flex flex-col gap-3">

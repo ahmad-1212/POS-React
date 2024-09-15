@@ -28,7 +28,7 @@ const ProductForm = ({ edit = false, product, productId }) => {
           productName: product.name,
           category: product.category.name,
           price: product.price,
-          costPrice: product.cost_price,
+          costPrice: product.cost,
         }
       : {},
   });
@@ -40,7 +40,7 @@ const ProductForm = ({ edit = false, product, productId }) => {
   const [ingredients, setIngredients] = useState(
     (edit &&
       product.ingredients.map(itm => ({
-        ingredientID: itm.ingredient.ingredientID,
+        _id: itm.ingredient._id,
         quantity: itm.quantity,
         unit: itm.ingredient.unit,
         name: itm.ingredient.name,
@@ -65,19 +65,18 @@ const ProductForm = ({ edit = false, product, productId }) => {
     if (errors.quantity) setFormError('quantity', {});
 
     const values = getValues();
-    const ing = ingData.find(itm => values.ingredient === itm.ingredientID);
-    const isIngExists = ingredients.find(
-      itm => itm.ingredientID === ing.ingredientID,
-    );
+
+    const ing = ingData.find(itm => values.ingredient === itm.name);
+    const isIngExists = ingredients.find(itm => itm.name === ing.name);
 
     if (isIngExists) return;
     if (!values.quantity)
       return setFormError('quantity', { message: 'Please add quantity here!' });
     setIngredients(prev => [...prev, { ...ing, quantity: values.quantity }]);
   };
-  // REmove an ingredient
+  // Remove an ingredient
   const removeIng = id => {
-    setIngredients(ingredients.filter(ing => ing.ingredientID !== id));
+    setIngredients(ingredients.filter(ing => ing._id !== id));
   };
 
   const onSubmit = data => {
@@ -86,13 +85,16 @@ const ProductForm = ({ edit = false, product, productId }) => {
       return setError('Please add at least one Ingredient!');
 
     // Get All ingredients ID's
-    const allIng = {};
-    ingredients.forEach(ing => (allIng[ing.ingredientID] = ing.quantity));
-    console.log(data.category);
+
+    const allIng = ingredients.map(ing => ({
+      ingredient: ing._id,
+      quantity: ing.quantity,
+    }));
+
     const preparedData = {
       name: data.productName,
-      categoryID: catData.find(cat => cat.name === data.category).categoryID,
-      cost_price: +data.costPrice,
+      category: catData.find(cat => cat.name === data.category)._id,
+      cost: +data.costPrice,
       price: +data.price,
       ingredients: allIng,
     };
@@ -108,12 +110,12 @@ const ProductForm = ({ edit = false, product, productId }) => {
     if (edit) {
       setValue('category', product.category.name);
     } else {
-      setValue('category', catData?.at(0).name);
+      setValue('category', catData?.at(0)?.name);
     }
   }, [product, catData, edit, setValue]);
 
   useEffect(() => {
-    const ing = ingData?.find(itm => itm.ingredientID === ingredient);
+    const ing = ingData?.find(itm => itm.name === ingredient);
     setValue('unit', ing?.unit);
     setValue('quantity', ing?.quantity);
   }, [ingredient]);
@@ -129,6 +131,7 @@ const ProductForm = ({ edit = false, product, productId }) => {
       toast.success('Your product is updated successfully!');
     }
   }, [isSuccess, reset, resetCreateProdState, isUpdated]);
+
   return (
     <div>
       <form
@@ -145,6 +148,7 @@ const ProductForm = ({ edit = false, product, productId }) => {
           error={errors?.productName?.message}
           showError
           autoFocus
+          disabled={isCreating || isUpdating}
         />
         <div className="grid grid-cols-1 gap-x-8 sm:grid-cols-2">
           {/* Category */}
@@ -157,7 +161,7 @@ const ProductForm = ({ edit = false, product, productId }) => {
             </label>
             <select
               className="cursor-pointer rounded-md border-2 border-gray-300 bg-transparent  px-4 py-2 text-[1.1rem] outline-none focus:border-primary-400 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:opacity-80"
-              disabled={isCategoryLoading}
+              disabled={isCategoryLoading || isCreating || isUpdating}
               // defaultValue={edit ? product.category.name : catData?.at(0).name}
               id="category"
               {...register('category')}
@@ -181,6 +185,7 @@ const ProductForm = ({ edit = false, product, productId }) => {
               min={0}
               id="costPrice"
               error={errors?.costPrice?.message}
+              disabled={isCreating || isUpdating}
               showError
             />
             <Input
@@ -192,6 +197,7 @@ const ProductForm = ({ edit = false, product, productId }) => {
               min={0}
               id="price"
               error={errors?.price?.message}
+              disabled={isCreating || isUpdating}
               showError
             />
           </div>
@@ -208,7 +214,7 @@ const ProductForm = ({ edit = false, product, productId }) => {
             </label>
             <select
               className="cursor-pointer rounded-md border-2 border-gray-300 bg-transparent  px-4 py-2 text-[1.1rem] outline-none focus:border-primary-400 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:opacity-80"
-              disabled={isIngLoading}
+              disabled={isIngLoading || isCreating || isUpdating}
               defaultValue={1}
               id="ingredient"
               {...register('ingredient')}
@@ -243,12 +249,18 @@ const ProductForm = ({ edit = false, product, productId }) => {
               type="number"
               className="w-full"
               error={errors?.quantity?.message}
+              disabled={isCreating || isUpdating}
               showError
             />
           </div>
         </div>
         <div>
-          <Button variant="dark" type="button" onClick={handleAddIngredient}>
+          <Button
+            variant="dark"
+            type="button"
+            onClick={handleAddIngredient}
+            disabled={isCreating || isUpdating}
+          >
             Add Ingredient
           </Button>
           {/* Display ingredients */}
@@ -263,7 +275,7 @@ const ProductForm = ({ edit = false, product, productId }) => {
                 </span>
                 <HiX
                   className="cursor-pointer transition-all hover:scale-110"
-                  onClick={() => removeIng(ing.ingredientID)}
+                  onClick={() => removeIng(ing._id)}
                 />
               </li>
             ))}
@@ -277,8 +289,14 @@ const ProductForm = ({ edit = false, product, productId }) => {
               {error}
             </p>
           )}
-          <Button type="submit" className="px-10" variant="dark">
-            {isCreating || isUpdating ? 'Saving...' : 'Save'}
+          <Button
+            type="submit"
+            className="px-10"
+            variant="dark"
+            isLoading={isCreating || isUpdating}
+            disabled={isCreating || isUpdating}
+          >
+            Save
           </Button>
         </div>
       </form>

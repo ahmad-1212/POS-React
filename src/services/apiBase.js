@@ -1,9 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import config from '../config';
 import { toast } from 'react-toastify';
-import { getItem } from '../utils/localStorage';
-
-let fetchError = false;
+import { getItem, removeItem } from '../utils/localStorage';
 
 // Custom error handling function
 const baseQueryWithErrorHandling = async (args, api, extraOptions) => {
@@ -20,42 +18,66 @@ const baseQueryWithErrorHandling = async (args, api, extraOptions) => {
   });
 
   const result = await baseQuery(args, api, extraOptions);
-  if (result.error) {
+  console.log(result);
+  if (result && result.error) {
     switch (result.error.status) {
       case 'FETCH_ERROR': {
-        if (fetchError) return;
-        toast.error(
-          'Either Network Error or Something went wrong. Failed to Fetch the data!',
-          { autoClose: 8000 },
-        );
-        fetchError = true;
-        setTimeout(() => (fetchError = false), 6000);
         return {
           error: {
-            message: 'Failed to fetch',
+            message:
+              'Either Network Error or Something went wrong. Failed to Fetch the data!',
           },
         };
       }
 
-      default: {
-        const firstValue = Object.keys(result?.error?.data)[0];
-        // Show error
-        if (Array.isArray(result.error.data[firstValue])) {
-          let message = '';
-          console.log(message);
-          Object.keys(result.error.data).forEach(key => {
-            message = message + `${key}: ` + result.error.data[key][0];
-          });
-          toast.error(message, { autoClose: 6000 });
+      case 403: {
+        toast.error('You are not authorized to perform this action!', {
+          autoClose: 5000,
+        });
+
+        return {
+          error: {
+            message: 'You are not authorized to perform this action!',
+          },
+        };
+      }
+      case 401: {
+        if (location.pathname !== '/login' && location.pathname !== '/') {
+          toast.error(
+            'You token has expired, you will be redirected to login page. Please login again to get access!',
+            { autoClose: 3000 },
+          );
+          setTimeout(() => {
+            location.assign('/');
+            localStorage.clear();
+          }, 4000);
+          return;
         }
+
+        return {
+          error: {
+            message: result.error.data.message,
+          },
+        };
+      }
+      default: {
+        const message = result.error.data.message;
+
+        return {
+          error: {
+            message,
+          },
+        };
       }
     }
   }
-  return result;
+  console.log(result);
+  return result.data.token ? result : result.data;
 };
 
 // Base API slice
 export const apiBase = createApi({
   baseQuery: baseQueryWithErrorHandling,
+  refetchOnMountOrArgChange: true,
   endpoints: () => ({}), // Initial empty endpoints; will be injected later
 });

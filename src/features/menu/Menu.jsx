@@ -25,7 +25,12 @@ const Menu = () => {
     if (category === 'deals') {
       setProducts(deals);
     } else {
-      setProducts(data?.filter(prod => prod.category.name === category));
+      setProducts(
+        data?.filter(
+          prod =>
+            prod.category.name === category && prod.ingredients.length > 0,
+        ),
+      );
     }
   }, [category, data, deals]);
 
@@ -33,26 +38,26 @@ const Menu = () => {
     <section className="mb-10 flex flex-col gap-4 px-4 py-5 sm:px-10">
       {/* IF no type is selected */}
       {!type && (
-        <h1 className="mt-28 text-center text-[1.6rem] text-[600] text-primary-500">
+        <h1 className="mt-28 text-center text-[1.1rem] font-[500] text-primary-500">
           Please Select either Dine in, Take Away or Delivery.
         </h1>
       )}
       {/* if type and table is selected and no category is selected */}
       {type === 'dine in' && table && !category && (
-        <h1 className="mt-28 text-center text-[1.6rem] text-[600] text-primary-500">
+        <h1 className="mt-28 text-center text-[1.1rem] font-[500] text-primary-500">
           Please Select Category.
         </h1>
       )}
 
       {/* If type is selected and type is not dine and also user info is added but no category is selected */}
       {type !== 'dine in' && type && !category && userInfo && (
-        <h1 className="mt-28 text-center text-[1.6rem] text-[600] text-primary-500">
+        <h1 className="mt-28 text-center text-[1.1rem] font-[500] text-primary-500">
           Please Select Category.
         </h1>
       )}
       {/* If type is selcted and no table is selected */}
       {type === 'dine in' && !table && (
-        <h1 className="mt-28 text-center text-[1.6rem] text-[600] text-primary-500">
+        <h1 className="mt-28 text-center text-[1.1rem] font-[500] text-primary-500">
           Please Select Table.
         </h1>
       )}
@@ -63,18 +68,24 @@ const Menu = () => {
           <h1 className="text-[2rem] font-[700] uppercase tracking-wide">
             {category}
           </h1>
-          <ul className="menu-layout gap-4">
-            {products?.map((item, i) => (
-              <MenuItem item={item} key={i} category={category} />
-            ))}
-          </ul>
+          {products && products.length > 0 ? (
+            <ul className="menu-layout gap-4">
+              {products?.map((item, i) => (
+                <MenuItem item={item} key={i} category={category} />
+              ))}
+            </ul>
+          ) : (
+            <p>
+              No {category === 'deals' ? 'deals ' : 'products '} were found!
+            </p>
+          )}
         </>
       )}
 
       {/* If type is not dine in and type is selected and no user info is selected */}
       {type !== 'dine in' && type && !userInfo && (
         <div className="flex flex-col items-center gap-6">
-          <h1 className=" mt-28 text-center text-[1.6rem] text-[600] text-primary-500">
+          <h1 className=" mt-28 text-center text-[1.1rem] font-[500] text-primary-500">
             Please add your information.
           </h1>
           <Modal>
@@ -102,11 +113,17 @@ const Menu = () => {
           <h1 className="text-[2rem] font-[700] uppercase tracking-wide">
             {category}
           </h1>
-          <ul className="menu-layout gap-4">
-            {products?.map((item, i) => (
-              <MenuItem item={item} key={i} category={category} />
-            ))}
-          </ul>
+          {products && products.length > 0 ? (
+            <ul className="menu-layout gap-4">
+              {products?.map((item, i) => (
+                <MenuItem item={item} key={i} category={category} />
+              ))}
+            </ul>
+          ) : (
+            <p className="mt-20 text-center text-primary-500">
+              No {category === 'deals' ? 'deals' : 'products'} were found!
+            </p>
+          )}
         </>
       )}
     </section>

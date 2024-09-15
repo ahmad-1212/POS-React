@@ -4,10 +4,12 @@ const apiDeals = apiBase.injectEndpoints({
   endpoints: build => ({
     getDeals: build.query({
       query: () => '/deals/',
+      transformResponse: data => data.deals,
       providesTags: ['deals'],
     }),
     getDealWithId: build.query({
-      query: id => `/deals/${id}/`,
+      query: id => `/deals/${id}`,
+      transformResponse: data => data.deal,
       providesTags: (_, __, id) => [{ type: 'deal', id }],
     }),
     createDeal: build.mutation({
@@ -17,7 +19,7 @@ const apiDeals = apiBase.injectEndpoints({
     updateDeal: build.mutation({
       query: ({ id, data }) => ({
         url: `/deals/${id}/`,
-        method: 'PUT',
+        method: 'PATCH',
         body: data,
       }),
       invalidatesTags: (_, __, { id }) => [

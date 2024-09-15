@@ -10,9 +10,12 @@ import {
   useGetAllUsersQuery,
 } from '../../services/apiUsers';
 import DataTable from '../../Components/UI/DataTable';
+import { useSelector } from 'react-redux';
 
 const Settings = () => {
   const { data, isLoading } = useGetAllUsersQuery();
+  const me = useSelector(state => state.auth.user);
+
   const [deleteUser, { isLoading: isDeleting, isSuccess, reset }] =
     useDeleteUserMutation();
 
@@ -21,17 +24,19 @@ const Settings = () => {
       <section className="flex flex-col gap-8 py-10">
         <div className="flex-between flex-wrap gap-3 border-b-2 border-primary-100 pb-5">
           <h1 className="text-[2rem] font-[600]">Settings</h1>
-          <Modal>
-            <Modal.Open id="newUser">
-              <Button variant="dark" className="flex items-center gap-3">
-                <MdOutlineAddCircleOutline className="text-[1.3rem]" />
-                <span>Add New User</span>
-              </Button>
-            </Modal.Open>
-            <Modal.Window id="newUser" zIndex="z-50" closeOnOverlay>
-              <UserForm />
-            </Modal.Window>
-          </Modal>
+          {(me.role === 'admin' || me.role === 'manager') && (
+            <Modal>
+              <Modal.Open id="newUser">
+                <Button variant="dark" className="flex items-center gap-3">
+                  <MdOutlineAddCircleOutline className="text-[1.3rem]" />
+                  <span>Add New User</span>
+                </Button>
+              </Modal.Open>
+              <Modal.Window id="newUser" zIndex="z-50" closeOnOverlay>
+                <UserForm />
+              </Modal.Window>
+            </Modal>
+          )}
         </div>
       </section>
       <DataTable
@@ -45,12 +50,15 @@ const Settings = () => {
         errorMessage="No Users were found!"
         render={user => (
           <Modal>
-            <td className="px-4 py-2 text-start">{user.name}</td>
+            <td className="px-4 py-2 text-start">{user.username}</td>
             <td>{user.email}</td>
             <td>{user.role}</td>
 
             {/* Edit Button */}
-            {user.role !== 'admin' && (
+            {user.role !== 'admin' &&
+            (user._id === me._id ||
+              me.role === 'manager' ||
+              me.role === 'admin') ? (
               <td className="w-[10%] px-3 py-2">
                 <Modal.Open id="edit">
                   <IconButton className="text-[1.2rem] text-primary-500">
@@ -61,27 +69,31 @@ const Settings = () => {
                   <UserForm edit user={user} />
                 </Modal.Window>
               </td>
+            ) : (
+              <td></td>
             )}
             {/* Delete Button */}
-            {user.role !== 'admin' && (
-              <td className="w-[10%] px-3 py-2">
-                <Modal.Open id="delete">
-                  <IconButton className="text-[1.3rem] text-red-500 hover:bg-red-200">
-                    <MdDeleteForever />
-                  </IconButton>
-                </Modal.Open>
-                <Modal.Window id="delete" center closeOnOverlay zIndex="z-50">
-                  <ConfirmDelete
-                    onConfirm={() => deleteUser(user.id)}
-                    message="Are you sure you want to delete this User?"
-                    successMessage={`User "${user.name}" successfully Deleted!`}
-                    isLoading={isDeleting}
-                    isSuccess={isSuccess}
-                    reset={reset}
-                  />
-                </Modal.Window>
-              </td>
-            )}
+            {user.role !== 'admin' &&
+              (me.role === 'admin' ||
+                (me.role === 'manager' && user._id !== me._id)) && (
+                <td className="w-[10%] px-3 py-2">
+                  <Modal.Open id="delete">
+                    <IconButton className="text-[1.3rem] text-red-500 hover:bg-red-200">
+                      <MdDeleteForever />
+                    </IconButton>
+                  </Modal.Open>
+                  <Modal.Window id="delete" center closeOnOverlay zIndex="z-50">
+                    <ConfirmDelete
+                      onConfirm={() => deleteUser(user._id)}
+                      message="Are you sure you want to delete this User?"
+                      successMessage={`User "${user.username}" successfully Deleted!`}
+                      isLoading={isDeleting}
+                      isSuccess={isSuccess}
+                      reset={reset}
+                    />
+                  </Modal.Window>
+                </td>
+              )}
           </Modal>
         )}
       />

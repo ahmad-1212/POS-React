@@ -8,9 +8,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addUserInfo } from '../../features/cart/cartSlice';
 import ActiveOrders from '../../features/orders/ActiveOrders';
 import Menu from '../UI/Menu';
-import { removeItem } from '../../utils/localStorage';
 import { MdDashboard } from 'react-icons/md';
 import { IoLogOut } from 'react-icons/io5';
+import { useLogoutMutation } from '../../services/apiAuth';
+import Spinner from '../UI/Spinner';
 
 const RADIO_OPTION = ['dine in', 'take away', 'delivery'];
 
@@ -20,6 +21,7 @@ const Header = () => {
   const [selectValue, setSelectValue] = useState(
     searchParams.get('type') || '',
   );
+  const [userLogout, { isLoading }] = useLogoutMutation();
 
   const items = useSelector(state => state.cart.items);
   const isOrderPlaced = items.some(itm => itm.lock);
@@ -48,9 +50,15 @@ const Header = () => {
     setSelectValue(e.target.value);
   };
 
+  // set params to deals
   const handleDeals = () => {
     searchParams.set('category', 'deals');
     setSearchParams(searchParams);
+  };
+
+  //logout
+  const logout = () => {
+    userLogout().unwrap();
   };
 
   useEffect(() => {
@@ -153,21 +161,22 @@ const Header = () => {
                 <li>
                   <NavLink
                     to="/dashboard"
-                    className=" flex items-center gap-3 px-3 py-2 hover:bg-gray-800/10"
+                    className=" flex items-center gap-3 px-3 py-2 text-primary-500 hover:bg-primary-500/20"
                   >
-                    <MdDashboard />
+                    <MdDashboard className="text-[1.2rem] text-primary-500" />
                     <span>Dashboard</span>
                   </NavLink>
                 </li>
                 <li>
                   <button
-                    className=" flex items-center gap-3 px-3 py-2 hover:bg-gray-800/10"
-                    onClick={() => {
-                      removeItem('token');
-                      location.assign('/');
-                    }}
+                    className="flex w-full items-center gap-3 px-3 py-2 text-primary-500 hover:bg-primary-500/20"
+                    onClick={logout}
                   >
-                    <IoLogOut />
+                    {isLoading ? (
+                      <Spinner small={true} color={'orange'} />
+                    ) : (
+                      <IoLogOut className="text-[1.2rem] text-primary-500" />
+                    )}
                     <span>Logout</span>
                   </button>
                 </li>

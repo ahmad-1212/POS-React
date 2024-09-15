@@ -77,20 +77,21 @@ const MainLayout = ({ children }) => {
           </h2>
 
           <ul className="scrollbar-hidden flex flex-nowrap gap-3 overflow-x-auto">
-            {categories?.map((cat, i) => (
-              <li key={i}>
-                <button
-                  onClick={() => handleCategories(cat.name)}
-                  className={`w-max rounded-md px-7 py-2  font-[600] uppercase tracking-wider ${
-                    cat.name === category
-                      ? 'bg-gradient-to-br from-primary-400 to-primary-400 text-white'
-                      : 'bg-gray-200 shadow-lg'
-                  } from-primary-400 to-primary-400 hover:bg-gradient-to-br hover:text-white`}
-                >
-                  {cat.name}
-                </button>
-              </li>
-            ))}
+            {categories &&
+              categories?.map((cat, i) => (
+                <li key={i}>
+                  <button
+                    onClick={() => handleCategories(cat.name)}
+                    className={`w-max rounded-md px-7 py-2  font-[600] uppercase tracking-wider ${
+                      cat.name === category
+                        ? 'bg-gradient-to-br from-primary-400 to-primary-400 text-white'
+                        : 'bg-gray-200 shadow-lg'
+                    } from-primary-400 to-primary-400 hover:bg-gradient-to-br hover:text-white`}
+                  >
+                    {cat.name}
+                  </button>
+                </li>
+              ))}
           </ul>
         </section>
         {/* Main  */}
@@ -103,9 +104,9 @@ const MainLayout = ({ children }) => {
         </main>
         {/* Right sidebar with cart */}
         <aside
-          className={`fixed bottom-0 right-0 top-0 w-[90%] bg-white sm:w-[22rem] lg:top-[80px]  ${
+          className={`fixed bottom-0 right-0 top-0 z-20 w-[90%] bg-white sm:w-[22rem] lg:top-[80px] lg:z-0 ${
             showCart ? 'right-0' : 'right-[-100dvw] opacity-0'
-          } hight-screen z-0 overflow-y-auto overflow-x-hidden transition-all duration-[1s] lg:border-l-2`}
+          } hight-screen overflow-y-auto overflow-x-hidden transition-all duration-[1s] lg:border-l-2`}
         >
           <Cart onSidebarHide={handleShowCart} />
         </aside>

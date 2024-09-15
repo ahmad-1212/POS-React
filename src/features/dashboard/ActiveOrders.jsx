@@ -3,6 +3,8 @@ import DataTable from '../../Components/UI/DataTable';
 import Modal from '../../Components/UI/Modal';
 import { useGetActiveOrdersQuery } from '../../services/apiOrders';
 import OrderDetail from './OrderDetail';
+import { isToday } from '../../utils/isToday';
+
 const colors = {
   processing: 'text-primary-500',
   completed: 'text-green-500',
@@ -10,7 +12,7 @@ const colors = {
 };
 const ActiveOrders = () => {
   const { data: activeOrders, isLoading } = useGetActiveOrdersQuery();
-
+  console.log(activeOrders);
   return (
     <section className="rounded-md bg-white px-3 py-5 shadow-sm">
       <h2 className="text-[1.3rem] font-[600] capitalize">Active Orders</h2>
@@ -21,24 +23,24 @@ const ActiveOrders = () => {
         isLoading={isLoading}
         render={item => (
           <>
-            <td className="px-3 py-2 text-start">#{item.id}</td>
+            <td className="px-3 py-2 text-start">#{item.orderId}</td>
             <td className="px-3 py-2 capitalize">
-              {item.cart.option.replace('_', ' ')}
+              {item.type.replace('_', ' ')}
             </td>
-            <td className="px-3 py-2 capitalize">
-              {item.customer_name ?? '-'}
-            </td>
+            <td className="px-3 py-2 capitalize">{item.customerName ?? '-'}</td>
             <td className="px-3 py-2">
-              <div>{new Date(item.created_at).toLocaleDateString()} </div>
-              <div>{new Date(item.created_at).toLocaleTimeString()}</div>
+              <div>
+                {isToday(new Date(item.createdAt).toLocaleDateString())
+                  ? 'Today at '
+                  : new Date(item.createdAt).toLocaleDateString()}{' '}
+              </div>
+              <div>{new Date(item.createdAt).toLocaleTimeString()}</div>
             </td>
             <td
-              className={`font-[700] capitalize ${colors[item.order_status.toLowerCase()]}
+              className={`font-[700] capitalize ${colors[item.status.toLowerCase()]}
         `}
             >
-              {item.order_status === 'processing'
-                ? 'in progress'
-                : item.order_status}
+              {item.status === 'processing' ? 'in progress' : item.status}
             </td>
             <Modal>
               <Modal.Open id="view-order">

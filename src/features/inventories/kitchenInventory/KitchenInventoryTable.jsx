@@ -5,6 +5,7 @@ import SendToMainForm from './SendToMainForm';
 
 const KitchenInventoryTable = () => {
   const { data, isLoading } = useGetKitchenInventoryQuery();
+
   const filterdata = data?.filter(itm => +itm.quantity > 0);
   return (
     <DataTable

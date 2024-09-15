@@ -2,8 +2,7 @@ import PropTypes from 'prop-types';
 import Button from '../../Components/UI/Button';
 
 const OrderDetail = ({ order, onCloseModal }) => {
-  console.log(order);
-  const products = order.cart.products.map(prod => {
+  const products = order.products.map(prod => {
     const price = +prod.product.price * +prod.quantity;
     return {
       name: prod.product.name,
@@ -11,7 +10,7 @@ const OrderDetail = ({ order, onCloseModal }) => {
       quantity: prod.quantity,
     };
   });
-  const deals = order.cart.deals.map(deal => {
+  const deals = order.deals.map(deal => {
     return {
       name: deal.deal.name,
       price: +deal.deal.price * +deal.quantity,
@@ -20,6 +19,7 @@ const OrderDetail = ({ order, onCloseModal }) => {
     };
   });
   const items = [...deals, ...products];
+  const total = items.reduce((acc, itm) => (acc += itm.price), 0);
   return (
     <div>
       <h1 className="bg-primary-500 py-3 text-center text-[1.3rem] font-[600] text-white">
@@ -28,16 +28,16 @@ const OrderDetail = ({ order, onCloseModal }) => {
       <div className="p-4 ">
         <div className="mb-4 grid grid-cols-2 gap-3">
           <p>
-            <strong>Name:</strong> {order?.customer_name}
+            <strong>Name:</strong> {order?.customerName}
           </p>
           <p>
-            <strong>Table:</strong> {order?.cart?.table}
+            <strong>Table:</strong> {order?.table}
           </p>
           <p>
-            <strong>Phone:</strong> {order?.phone_number}
+            <strong>Phone:</strong> {order?.phoneNumber}
           </p>
           <p className="capitalize">
-            <strong>Type:</strong> {order?.cart.option.replace('_', ' ')}
+            <strong>Type:</strong> {order?.type.replace('_', ' ')}
           </p>
         </div>
         <div className="mt-8">
@@ -98,8 +98,7 @@ const OrderDetail = ({ order, onCloseModal }) => {
             {items.reduce((acc, itm) => acc + itm.quantity, 0)}
           </p>
           <p>
-            <strong>Total Price:</strong> Rs.{' '}
-            {Number(order.cart.price).toFixed(2)}
+            <strong>Total Price:</strong> Rs. {Number(total).toFixed(2)}
           </p>
         </div>
       </div>

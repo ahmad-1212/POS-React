@@ -25,18 +25,23 @@ const IngredientForm = ({ edit = false, ingredient, onCloseModal }) => {
       : {},
   });
 
-  const [createIngredient, { isLoading, isSuccess, reset }] =
+  const [createIngredient, { isLoading, isSuccess, reset, error }] =
     useCreateIngredientMutation();
   const [
     updateIngredient,
-    { isLoading: isUpdating, isSuccess: isUpdated, reset: resetUpdateState },
+    {
+      isLoading: isUpdating,
+      isSuccess: isUpdated,
+      reset: resetUpdateState,
+      error: updateError,
+    },
   ] = useUpdateIngredientMutation();
 
   // Handle submit
   const onSubmit = data => {
     if (edit) {
       updateIngredient({
-        id: ingredient.id,
+        id: ingredient._id,
         name: data.ingredient,
         quantity: data.quantity,
         unit: data.unit,
@@ -62,6 +67,18 @@ const IngredientForm = ({ edit = false, ingredient, onCloseModal }) => {
       resetUpdateState();
     }
   }, [isSuccess, isUpdated, onCloseModal, reset, resetUpdateState]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error?.message, { autoClose: 5000 });
+      reset();
+    }
+    if (updateError) {
+      toast.error(updateError?.message, { autoClose: 5000 });
+      resetUpdateState();
+    }
+  }, [error, updateError, reset, resetUpdateState]);
+
   return (
     <div>
       <div className="flex items-center justify-center gap-3 bg-primary-500 py-3 text-[1.4rem] font-[600] text-white">
@@ -79,6 +96,7 @@ const IngredientForm = ({ edit = false, ingredient, onCloseModal }) => {
           id="ingredient"
           type="text"
           error={errors?.ingredient?.message}
+          disabled={isLoading || isUpdating}
           showError
         />
 
@@ -88,18 +106,20 @@ const IngredientForm = ({ edit = false, ingredient, onCloseModal }) => {
           register={register}
           id="unit"
           type="text"
+          disabled={isLoading || isUpdating}
           error={errors?.unit?.message}
           showError
         />
 
         <div className="mt-5 flex justify-end">
           <Button
-            disabled={isLoading}
+            disabled={isLoading || isUpdating}
+            isLoading={isLoading || isUpdating}
             type="submit"
             className="px-10"
             variant="dark"
           >
-            {isLoading || isUpdating ? 'Loading...' : 'Save'}
+            Save
           </Button>
         </div>
       </form>

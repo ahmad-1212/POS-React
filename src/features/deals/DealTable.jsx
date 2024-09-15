@@ -47,7 +47,7 @@ const DealTable = () => {
           {/* Edit Button */}
           <td className="w-[10%] px-3 py-2">
             <IconButton
-              onClick={() => navigate(`add?deal=${itm.id}&edit=true`)}
+              onClick={() => navigate(`add?deal=${itm._id}&edit=true`)}
               className={`text-[1.3rem] text-primary-500 ${
                 i % 2 !== 0 ? 'hover:bg-primary-200' : ''
               }`}
@@ -64,7 +64,7 @@ const DealTable = () => {
             </Modal.Open>
             <Modal.Window zIndex="z-50" id="delete" center closeOnOverlay>
               <ConfirmDelete
-                onConfirm={() => deleteDeal(itm.id)}
+                onConfirm={() => deleteDeal(itm._id)}
                 message="Are you sure you want to delete this Deal?"
                 successMessage={`Deal "${itm.name}" successfully Deleted!`}
                 isLoading={isDeleting}
