@@ -23,7 +23,6 @@ const AddDeal = () => {
     isLoading,
   } = useGetDealWithIdQuery(dealId || skipToken);
   const navigate = useNavigate();
-  console.log(dealError);
   const addProduct = id => {
     if (!data) return;
 

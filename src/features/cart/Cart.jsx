@@ -43,7 +43,6 @@ const Cart = ({ onSidebarHide }) => {
     },
   ] = useUpdateOrderMutation();
   const dispatch = useDispatch();
-  console.log(updateError);
   const cart = useSelector(state => state.cart);
   const isLock = cart?.items.some(itm => itm.lock);
   const isOrderAlreadyCreated = cart.items.some(itm => itm.lock === true);
@@ -108,7 +107,6 @@ const Cart = ({ onSidebarHide }) => {
       resetUpdateOrder();
     }
     if (addError) {
-      console.log(addError);
       toast.error(addError?.message);
       resetAddOrder();
     }
@@ -177,14 +175,19 @@ const Cart = ({ onSidebarHide }) => {
             }
             variant="dark"
             onClick={handleOrder}
+            isLoading={isAdding || isUpdating}
           >
-            {isAdding || isUpdating ? 'Loading...' : 'Send to Kitchen'}
+            Send to Kitchen
           </Button>
           <Modal>
             <Modal.Open id="checkout">
               <Button
                 disabled={
-                  !cart?.items.length || isUpdated || !isLock || isAdding
+                  !cart?.items.length ||
+                  isUpdated ||
+                  !isLock ||
+                  isAdding ||
+                  isUpdating
                 }
                 variant="dark"
                 onClick={handleOrder}

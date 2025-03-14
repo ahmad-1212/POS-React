@@ -14,19 +14,26 @@ const ProtectedRoute = ({ children, authPage }) => {
   const isAuth = data;
 
   useEffect(() => {
+    // If is loading return
     if (isLoading) return;
+
+    // do not show login page when authenticated
     if (isAuth && authPage) {
       navigate('/home');
     }
 
+    // If not authenticated and not in auth page navigate to login
     if (!isAuth && !authPage) {
       navigate('/login');
     }
   }, [isAuth, authPage, navigate, isLoading]);
+
+  // If loading return spinner
   if (isLoading) return <FullPageLoading />;
 
   if (!isLoading && authPage && isAuth) return null;
   if (!isLoading && !authPage && !isAuth) return null;
+
   return children;
 };
 

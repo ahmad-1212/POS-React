@@ -1,13 +1,13 @@
 import { FaRegUser } from 'react-icons/fa';
 import PropTypes from 'prop-types';
 
-import Button from '../../Components/UI/Button';
-import Input from '../../Components/UI/Input';
+import Button from '../../../Components/UI/Button';
+import Input from '../../../Components/UI/Input';
 import { useForm } from 'react-hook-form';
 import {
   useCreateUserMutation,
   useUpdateUserMutation,
-} from '../../services/apiUsers';
+} from '../../../services/apiUsers';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
@@ -46,7 +46,7 @@ const UserForm = ({ edit, user, onCloseModal }) => {
 
   const onSubmit = data => {
     if (edit) {
-      updateUser({ id: user.id, data });
+      updateUser({ id: user._id, data });
     } else {
       createUser({ ...data, confirmPassword: data.password });
     }

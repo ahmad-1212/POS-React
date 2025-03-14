@@ -72,7 +72,6 @@ const MainInventoryForm = ({ edit, item, onCloseModal }) => {
   useEffect(() => {
     if (!ingData || !edit) return;
     setValue('ingredient', item.ingredient._id);
-    console.log(item.ingredient.unit);
     setValue('unit', item.ingredient.unit);
     setValue('quantity', item.quantity);
   }, [ingData, edit, item, setValue]);

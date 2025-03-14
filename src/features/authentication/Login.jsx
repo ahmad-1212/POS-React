@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { useLoginMutation } from '../../services/apiAuth';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
-import Spinner from '../../Components/UI/Spinner';
 
 const Login = () => {
   const {
@@ -48,6 +47,7 @@ const Login = () => {
         placeholder="name@example.com"
         register={register}
         id="email"
+        disabled={isLoading}
         error={errors?.email?.message}
       />
       {/* Password Input */}
@@ -58,6 +58,7 @@ const Login = () => {
         type="password"
         id="password"
         error={errors?.password?.message}
+        disabled={isLoading}
         placeholder="••••••••"
       />
 

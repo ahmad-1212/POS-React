@@ -3,6 +3,7 @@ import { authRoutes, dashboardRoutes, posRoutes } from './Routes';
 import MainLayout from '../Components/Layout/MainLayout';
 import DashboardLayout from '../Components/Layout/DashboardLayout';
 import ProtectedRoute from './ProtectedRoute';
+import NotFound from '../pages/NotFound';
 
 const Routes = () => {
   return (
@@ -44,6 +45,7 @@ const Routes = () => {
           <Route key={index} {...route} />
         ))}{' '}
       </Route>
+      <Route path="*" element={<NotFound />} />
     </SwitchRoutes>
   );
 };

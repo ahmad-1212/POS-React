@@ -14,6 +14,8 @@ import AddDealPage from '../pages/AddDealPage';
 import SettingsPage from '../pages/SettingsPage';
 import NotFound from '../pages/NotFound';
 import { Navigate } from 'react-router-dom';
+import Users from '../features/settings/users/Users';
+import Tables from '../features/settings/tables/Tables';
 
 const posRoutes = [
   {
@@ -76,16 +78,20 @@ const dashboardRoutes = [
     path: 'settings',
     element: <SettingsPage />,
   },
+  {
+    path: 'settings/users',
+    element: <Users />,
+  },
+  {
+    path: 'settings/tables',
+    element: <Tables />,
+  },
 ];
 
 const authRoutes = [
   {
     path: 'login',
     element: <LoginPage />,
-  },
-  {
-    path: '*',
-    element: <NotFound />,
   },
 ];
 

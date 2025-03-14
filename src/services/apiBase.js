@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import config from '../config';
 import { toast } from 'react-toastify';
-import { getItem, removeItem } from '../utils/localStorage';
+import { getItem } from '../utils/localStorage';
 
 // Custom error handling function
 const baseQueryWithErrorHandling = async (args, api, extraOptions) => {
@@ -18,7 +18,6 @@ const baseQueryWithErrorHandling = async (args, api, extraOptions) => {
   });
 
   const result = await baseQuery(args, api, extraOptions);
-  console.log(result);
   if (result && result.error) {
     switch (result.error.status) {
       case 'FETCH_ERROR': {
@@ -71,7 +70,6 @@ const baseQueryWithErrorHandling = async (args, api, extraOptions) => {
       }
     }
   }
-  console.log(result);
   return result.data.token ? result : result.data;
 };
 
