@@ -9,6 +9,7 @@ import Modal from '../../../Components/UI/Modal';
 import Button from '../../../Components/UI/Button';
 import DataTable from '../../../Components/UI/DataTable';
 import IconButton from '../../../Components/UI/IconButton';
+import ConfirmDelete from '../../../Components/UI/ConfirmDelete'
 import UserForm from './UserForm';
 
 const Users = () => {

@@ -72,6 +72,21 @@ const Login = () => {
       >
         Login
       </Button>
+      <div className="flex justify-end text-blue-600 underline">
+        <button
+          type="button"
+          variant="outline"
+          className="flex justify-end"
+          onClick={() =>
+            toast.error(
+              'You should contact your Admin to reset your password or create new account!',
+              { autoClose: false },
+            )
+          }
+        >
+          Forgot password?
+        </button>
+      </div>
     </form>
   );
 };

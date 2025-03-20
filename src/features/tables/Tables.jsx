@@ -33,13 +33,13 @@ const Tables = ({ onCloseModal }) => {
           className="flex flex-wrap justify-center gap-4 overflow-y-auto p-2 sm:p-5 md:p-10 
             "
         >
-          {[...tables].reverse().map((table, i) => (
+          {tables.map((table, i) => (
             <li
               onClick={() => !table.isReserved && handleClick(table.number)}
               key={i}
               className={`flex-center w-[80px] cursor-pointer rounded-lg ${table.isReserved ? 'cursor-not-allowed bg-red-400' : 'bg-green-400 hover:scale-105'} p-5 text-[1.3rem] font-[600] text-white `}
             >
-              <div>H{table.number}</div>
+              <div>T{table.number}</div>
             </li>
           ))}
         </ul>

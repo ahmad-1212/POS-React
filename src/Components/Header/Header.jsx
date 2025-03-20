@@ -108,7 +108,7 @@ const Header = () => {
           {isOrderPlaced ? (
             <Button disabled={true} variant="dark">
               {table
-                ? `H${table}`
+                ? `T${table}`
                 : `${screen < 500 ? 'Table' : 'Choose Table'}`}
             </Button>
           ) : (
@@ -116,7 +116,7 @@ const Header = () => {
               <Modal.Open id="chooseTable">
                 <Button variant="dark">
                   {table
-                    ? `H${table}`
+                    ? `T${table}`
                     : `${screen < 500 ? 'Table' : 'Choose Table'}`}
                 </Button>
               </Modal.Open>

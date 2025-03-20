@@ -43,7 +43,7 @@ const baseQueryWithErrorHandling = async (args, api, extraOptions) => {
       case 401: {
         if (location.pathname !== '/login' && location.pathname !== '/') {
           toast.error(
-            'You token has expired, you will be redirected to login page. Please login again to get access!',
+            'Your token has expired, you will be redirected to login page. Please login again to get access!',
             { autoClose: 3000 },
           );
           setTimeout(() => {

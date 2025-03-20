@@ -1,6 +1,6 @@
-export const isToday = _date => {
+export const isToday = date => {
   const today = new Date();
-  const inputDate = new Date(_date);
+  const inputDate = new Date(date);
 
   const todayYear = today.getFullYear();
   const todayMonth = today.getMonth();
