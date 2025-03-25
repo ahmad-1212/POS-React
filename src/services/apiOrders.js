@@ -22,7 +22,7 @@ const apiOrders = apiBase.injectEndpoints({
         method: 'POST',
         body: data,
       }),
-      transformErrorResponse: data => data.order,
+      transformResponse: data => data.order,
       invalidatesTags: ['active-orders', 'tables'],
     }),
 

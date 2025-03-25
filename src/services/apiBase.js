@@ -3,20 +3,19 @@ import config from '../config';
 import { toast } from 'react-toastify';
 import { getItem } from '../utils/localStorage';
 
+const baseQuery = fetchBaseQuery({
+  baseUrl: config.get('API_URL'),
+  prepareHeaders: (headers, api) => {
+    const isLogin = api.endpoint === 'login';
+    const token = getItem('token');
+    if (token && !isLogin) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
+    return headers;
+  },
+});
 // Custom error handling function
 const baseQueryWithErrorHandling = async (args, api, extraOptions) => {
-  const baseQuery = fetchBaseQuery({
-    baseUrl: config.get('API_URL'),
-    prepareHeaders: headers => {
-      const isLogin = api.endpoint === 'login';
-      const token = getItem('token');
-      if (token && !isLogin) {
-        headers.set('Authorization', `Bearer ${token}`);
-      }
-      return headers;
-    },
-  });
-
   const result = await baseQuery(args, api, extraOptions);
   if (result && result.error) {
     switch (result.error.status) {
