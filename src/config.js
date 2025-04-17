@@ -2,7 +2,7 @@ const _config = {
   API_URL: import.meta.env.VITE_API_URL,
 };
 const config = {
-  get: (key) => {
+  get: key => {
     const value = _config[key];
     if (!value)
       throw Error(
